@@ -1,8 +1,8 @@
-= PullRequest.Club
+# PullRequest.Club
 
 Sign up to receive monthly GitHub issues as your homework!
 
-= Development
+## Development
 
 Run the app locally:
 
