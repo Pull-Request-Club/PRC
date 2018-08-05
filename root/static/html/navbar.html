@@ -3,24 +3,21 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarToggler">
-    <a class="navbar-brand" href="#">PullRequest.Club</a>
+    <a class="navbar-brand" href="/">PullRequest.Club</a>
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item [% IF active_tab == 'home' -%]active[% END -%]">
-        <a class="nav-link" href="/">Home[% IF active_tab == 'home' -%] <span class="sr-only">(current)</span>[% END -%]</a>
-      </li>
       <li class="nav-item [% IF active_tab == 'about' -%]active[% END -%]">
         <a class="nav-link" href="/about">About[% IF active_tab == 'about' -%] <span class="sr-only">(current)</span>[% END -%]</a>
       </li>
       <li class="nav-item [% IF active_tab == 'browse' -%]active[% END -%]">
-        <a class="nav-link" href="#">Browse[% IF active_tab == 'browse' -%] <span class="sr-only">(current)</span>[% END -%]</a>
+        <a class="nav-link" href="/browse">Browse[% IF active_tab == 'browse' -%] <span class="sr-only">(current)</span>[% END -%]</a>
       </li>
       <li class="nav-item [% IF active_tab == 'leaderboard' -%]active[% END -%]">
-        <a class="nav-link" href="#">Leaderboard[% IF active_tab == 'leaderboard' -%] <span class="sr-only">(current)</span>[% END -%]</a>
+        <a class="nav-link" href="/leaderboard">Leaderboard[% IF active_tab == 'leaderboard' -%] <span class="sr-only">(current)</span>[% END -%]</a>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li class="nav-item [% IF active_tab == 'login' -%]active[% END -%]">
-        <a class="nav-link" href="#">Login with GitHub[% IF active_tab == 'login' -%] <span class="sr-only">(current)</span>[% END -%]</a>
+        <a class="nav-link" href="/login">Login with GitHub[% IF active_tab == 'login' -%] <span class="sr-only">(current)</span>[% END -%]</a>
       </li>
     </ul>
   </div>
