@@ -21,10 +21,24 @@ The root page (/)
 =cut
 
 sub index :Path :Args(0) {
-  my ( $self, $c ) = @_;
-
+  my ($self, $c) = @_;
   $c->stash({
-    template => 'static/html/hello.html'
+    template   => 'static/html/hello.html',
+    active_tab => 'home',
+  });
+}
+
+=head2 about
+
+/about
+
+=cut
+
+sub about :Local :Args(0) {
+  my ($self, $c) = @_;
+  $c->stash({
+    template   => 'static/html/about.html',
+    active_tab => 'about',
   });
 }
 
@@ -37,7 +51,7 @@ Standard 404 error page
 sub default :Path {
   my ( $self, $c ) = @_;
 
-  $c->response->body( 'Page not found' );
+  $c->response->body('Page not found');
   $c->response->status(404);
 }
 
