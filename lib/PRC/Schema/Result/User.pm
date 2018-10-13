@@ -62,6 +62,12 @@ __PACKAGE__->table("user");
   is_nullable: 1
   size: 255
 
+=head2 email_address
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -81,6 +87,8 @@ __PACKAGE__->add_columns(
   },
   "name",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "email_address",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -96,8 +104,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-12 17:22:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D7KbTDAAVPlcIX8sdigZvg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-13 18:04:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zVuexFuRCp7mBKN+A+xVRw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
