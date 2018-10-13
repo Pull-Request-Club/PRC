@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS user(
   email_address VARCHAR(255)
 );
 
-CREATE TRIGGER [UpdateLastTime]
+CREATE TRIGGER IF NOT EXISTS [UpdateLastTime]
   AFTER UPDATE ON user FOR EACH ROW WHEN NEW.update_time <= OLD.update_time
 BEGIN
   update user set update_time=CURRENT_TIMESTAMP where id=OLD.id;
