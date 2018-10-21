@@ -5,8 +5,9 @@ use namespace::autoclean;
 extends 'Catalyst::View::TT';
 
 __PACKAGE__->config(
-    TEMPLATE_EXTENSION => '.html',
-    render_die => 1,
+  TEMPLATE_EXTENSION => '.html',
+  render_die         => 1,
+  WRAPPER            => 'static/html/wrapper.html',
 );
 
 =head1 NAME
