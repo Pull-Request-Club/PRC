@@ -14,6 +14,20 @@ __PACKAGE__->config(namespace => '');
 
 =head1 METHODS
 
+=head2 auto
+
+=cut
+
+sub auto :Private {
+  my ($self, $c) = @_;
+
+  $c->stash({
+    logged_in => 0,
+  });
+
+}
+
+
 =head2 index
 
 The root page (/)
