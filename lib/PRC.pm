@@ -17,9 +17,9 @@ use Catalyst::Runtime 5.80;
 #                 directory
 
 use Catalyst qw/
-    -Debug
-    ConfigLoader
-    Static::Simple
+  -Debug
+  ConfigLoader
+  Static::Simple
 /;
 
 extends 'Catalyst';
@@ -36,10 +36,10 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config(
-    name => 'PRC',
-    # Disable deprecated behavior needed by old applications
-    disable_component_resolution_regex_fallback => 1,
-    enable_catalyst_header => 1, # Send X-Catalyst header
+  name => 'PRC',
+  # Disable deprecated behavior needed by old applications
+  disable_component_resolution_regex_fallback => 1,
+  enable_catalyst_header => 1, # Send X-Catalyst header
 );
 
 # Start the application
@@ -53,7 +53,7 @@ PRC - Catalyst based application
 
 =head1 SYNOPSIS
 
-    script/prc_server.pl
+  script/prc_server.pl
 
 =head1 SEE ALSO
 
