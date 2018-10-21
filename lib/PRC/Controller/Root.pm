@@ -23,8 +23,7 @@ The root page (/)
 sub index :Path :Args(0) {
   my ($self, $c) = @_;
   $c->stash({
-    template   => 'static/html/hello.html',
-    active_tab => 'home',
+    template => 'static/html/hello.html',
   });
 }
 
@@ -37,8 +36,7 @@ sub index :Path :Args(0) {
 sub about :Local :Args(0) {
   my ($self, $c) = @_;
   $c->stash({
-    template   => 'static/html/about.html',
-    active_tab => 'about',
+    template => 'static/html/about.html',
   });
 }
 

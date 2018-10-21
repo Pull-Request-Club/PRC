@@ -25,7 +25,10 @@ Catalyst Controller.
 
 sub my_profile :Path('/my-profile') :Args(0) {
   my ( $self, $c ) = @_;
-  $c->response->body('/my-profile');
+  $c->stash({
+    template   => 'static/html/my-profile.html',
+    active_tab => 'my-profile',
+  });
 }
 
 =head2 my_assignment
@@ -34,7 +37,10 @@ sub my_profile :Path('/my-profile') :Args(0) {
 
 sub my_assignment :Path('/my-assignment') :Args(0) {
   my ( $self, $c ) = @_;
-  $c->response->body('/my-assignment');
+  $c->stash({
+    template   => 'static/html/my-assignment.html',
+    active_tab => 'my-assignment',
+  });
 }
 
 =head2 my_profile
@@ -43,7 +49,10 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
 sub my_repos :Path('/my-repos') :Args(0) {
   my ( $self, $c ) = @_;
-  $c->response->body('/my-repos');
+  $c->stash({
+    template   => 'static/html/my-repos.html',
+    active_tab => 'my-repos',
+  });
 }
 
 __PACKAGE__->meta->make_immutable;
