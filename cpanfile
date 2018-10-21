@@ -1,0 +1,13 @@
+requires 'Task::Catalyst::Tutorial';
+requires 'Catalyst::Helper';
+requires 'Catalyst::Helper::View::TT';
+requires 'Catalyst::Plugin::Unicode';
+requires 'Catalyst::Plugin::Session::Store::Memcached';
+requires 'DBIx::Class::Schema::Loader';
+requires 'FCGI';
+requires 'FCGI::ProcManager';
+requires 'HTTP::Server::Simple';
+requires 'HTML::FormHandler';
+requires 'MooseX::NonMoose';
+requires 'WWW::Mechanize';
+requires 'WWW::Eksi';

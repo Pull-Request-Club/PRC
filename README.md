@@ -4,6 +4,10 @@ Sign up to receive monthly GitHub issues as your homework!
 
 ## Development
 
+Install CPAN module dependencies:
+
+    cpanm --installdeps .
+
 Building the database:
 
     sqlite3 prc.db < prc.sql
