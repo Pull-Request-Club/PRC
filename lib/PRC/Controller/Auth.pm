@@ -35,7 +35,7 @@ sub login :Path('/login') :Args(0) {
 
 sub callback :Path('/callback') :Args(0) {
   my ( $self, $c ) = @_;
-  my $code = $c->req->params('code') // '';
+  my $code = $c->req->params->{code} // '';
   $c->response->body('/callback with code=' . $code);
 }
 
