@@ -15,11 +15,19 @@ use Catalyst::Runtime 5.80;
 #                 application's home directory
 # Static::Simple: will serve static files from the application's root
 #                 directory
+# Authentication: required for authenticating users to site
+#        Session: required for having a $c->session
+#  State::Cookie: Keep sessionid in a cookie. Hi GDPR!
+# Str::Memcached: Store actual session data in memcached.
 
 use Catalyst qw/
   -Debug
   ConfigLoader
   Static::Simple
+  Authentication
+  Session
+  Session::State::Cookie
+  Session::Store::Memcached
 /;
 
 extends 'Catalyst';

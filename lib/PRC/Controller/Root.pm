@@ -40,6 +40,7 @@ The root page (/)
 
 sub index :Path :Args(0) {
   my ($self, $c) = @_;
+  # TODO: redirect to my assignment if logged in
   $c->stash({
     template => 'static/html/hello.html',
   });
