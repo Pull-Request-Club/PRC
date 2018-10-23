@@ -22,7 +22,11 @@ sub auto :Private {
   my ($self, $c) = @_;
 
   $c->stash({
-    logged_in => 0,
+    alert_success => delete $c->session->{alert_success},
+    alert_info    => delete $c->session->{alert_info},
+    alert_warning => delete $c->session->{alert_warning},
+    alert_danger  => delete $c->session->{alert_danger},
+    # logged_in   => ($c->user_exists ? 1 : 0),
   });
 
 }
