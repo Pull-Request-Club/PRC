@@ -18,7 +18,7 @@ Adding a new modal:
 
 Run the app locally:
 
-    script/prc_server.pl
+    script/prc_server.pl -r
 
 Running the app in the cloud:
 
