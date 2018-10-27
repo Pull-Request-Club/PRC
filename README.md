@@ -20,6 +20,10 @@ Run the app locally:
 
     script/prc_server.pl -r
 
+Run the app locally AND display running queries:
+
+    DBIC_TRACE=1 script/prc_server.pl -r
+
 Running the app in the cloud:
 
     script/prc_fastcgi.pl -l /tmp/prc.socket -n 5 -p /tmp/prc.pid -d
