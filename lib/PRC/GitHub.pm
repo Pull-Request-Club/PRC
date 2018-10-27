@@ -30,7 +30,7 @@ Returns URL for GitHub authentication. Puts client_id in.
 
 sub authenticate_url {
   my ($self) = @_;
-  my $client_id = LoadFile('secrets.yml')->{client_id};
+  my $client_id = YAML::LoadFile('secrets.yml')->{client_id};
   return "https://github.com/login/oauth/authorize?scope=user%3Aemail&client_id=$client_id";
 }
 
@@ -47,7 +47,7 @@ sub access_token {
   my ($self,$code) = @_;
   return undef unless $code;
 
-  my $secrets   = LoadFile('secrets.yml');
+  my $secrets   = YAML::LoadFile('secrets.yml');
   my $data_post = {
     code          => $code,
     client_id     => $secrets->{client_id},
