@@ -7,6 +7,7 @@ requires 'Catalyst::Plugin::Unicode';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Session::Store::Memcached';
 requires 'DBIx::Class::Schema::Loader';
+requires 'DBIx::Class::TimeStamp';
 requires 'FCGI';
 requires 'FCGI::ProcManager';
 requires 'HTTP::Server::Simple';
