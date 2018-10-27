@@ -16,4 +16,5 @@ requires 'MooseX::NonMoose';
 requires 'WWW::Mechanize';
 requires 'LWP::UserAgent';
 requires 'JSON::XS';
+requires 'Test2::V0';
 requires 'YAML';

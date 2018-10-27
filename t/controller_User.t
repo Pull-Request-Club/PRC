@@ -1,8 +1,4 @@
-use strict;
-use warnings;
-use Test::More;
-
-
+use Test2::V0;
 use Catalyst::Test 'PRC';
 use PRC::Controller::User;
 
