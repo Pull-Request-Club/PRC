@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::GitHub;
+use DateTime;
 
 =encoding utf8
 
@@ -20,16 +21,15 @@ Catalyst Controller.
 
 =head2 login
 
-See https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/
-for GitHub's documentation on Authorizing OAuth Apps.
+This is where "Login with GitHub" button sends. Immediately redirects.
 
 =cut
 
 sub login :Path('/login') :Args(0) {
   my ($self, $c) = @_;
 
-  #TODO: redirect only if not logged in.
-  $c->response->redirect(PRC::GitHub->authenticate_url,303);
+  my $redirect_url = $c->user_exists ? $c->uri_for('/') : PRC::GitHub->authenticate_url;
+  $c->response->redirect($redirect_url,303);
   $c->detach;
 }
 
@@ -40,44 +40,70 @@ A private action that sets an error message and detaches to '/'.
 =cut
 
 sub login_error :Private {
-  my ($self, $c) = @_;
+  my ($self, $c, $error) = @_;
 
-  my $error = 'Login was not successful, please try again. If the issue persists please contact us.';
+  $error ||= 'Login was not successful, please try again.';
   $c->session->{alert_danger} = $error;
   $c->response->redirect($c->uri_for('/'),303);
   $c->detach;
 }
 
-
 =head2 callback
+
+GitHub sends users here after authorization. We get a code.
 
 =cut
 
 sub callback :Path('/callback') :Args(0) {
   my ($self, $c) = @_;
 
+  # TODO rate limit this endpoint.
+
   my $code         = $c->req->params->{code}               or $c->forward('login_error');
   my $access_token = PRC::GitHub->access_token($code)      or $c->forward('login_error');
   my $user_data    = PRC::GitHub->user_data($access_token) or $c->forward('login_error');
-  my $github_email = ($user_data->{email} // PRC::GitHub->primary_email($access_token))
-    or $c->forward('login_error');
+  my $github_email = PRC::GitHub->get_email($access_token) or $c->forward('login_error',
+    ['We had trouble getting your primary verified email from GitHub. Please try again.']);
 
-  # TODO: create or update user, then authenticate
-  # github_id      => $user_data->{id}
-  # github_login   => $user_data->{login}
-  # github_email   => $user_data->{email} OR the second GET
-  # github_token   => $token
-  # github_profile => $user_data->{html_url}
+  # If existing user, update data. New user, add to DB.
+  my $db_args = {
+    last_login_time => DateTime->now->datetime,
+    github_id       => $user_data->{id},
+    github_login    => $user_data->{login},
+    github_email    => $github_email,
+    github_token    => $access_token,
+    github_profile  => $user_data->{html_url},
+  };
+  my $rs   = $c->model('PRCDB::User');
+  my $user = $rs->search({ github_id => $user_data->{id}})->first;
+  if ($user){
+    $user->update($db_args);
+  } else {
+    $user = $rs->create($db_args);
+    # If that didn't work, kick out
+    $c->forward('login_error') unless $user;
+  }
 
-  # TODO: Part 3: Get repositories of this user too
-  # https://api.github.com/user/repos
+  # TODO: Get repositories from https://api.github.com/user/repos
 
-  $c->session->{alert_info} = 'Done!';
+  # LOGIN HAPPENS!
+  $c->authenticate({ user_id => $user->id });
   $c->response->redirect($c->uri_for('/'),303);
   $c->detach;
+
+  # Now, a couple more things to do:
+  # - checking if user has deactivated their account
+  # - checking if user has agreed to legal (tos/pp/gdpr)
+  # - if all good, sending user to their homepage!
+
+  # In the meantime, we need to make sure they don't access anything in User Controller
+  # So we will set a session variable here, and check it in User's auto.
+
 }
 
 =head2 logout
+
+Clear session, logout, send to /.
 
 =cut
 

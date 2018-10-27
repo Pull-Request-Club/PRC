@@ -19,12 +19,25 @@ Catalyst Controller.
 =cut
 
 
+=head2 auto
+
+=cut
+
+sub auto :Private {
+  # TODO: If not logged in, kick out.
+  # If logged in but deactivated, ask.
+  # If logged in but not accepted legal, ask.
+  # Else, all good!
+  1;
+}
+
 =head2 my_profile
 
 =cut
 
 sub my_profile :Path('/my-profile') :Args(0) {
   my ( $self, $c ) = @_;
+
   $c->stash({
     template   => 'static/html/my-profile.html',
     active_tab => 'my-profile',
@@ -37,6 +50,7 @@ sub my_profile :Path('/my-profile') :Args(0) {
 
 sub my_assignment :Path('/my-assignment') :Args(0) {
   my ( $self, $c ) = @_;
+
   $c->stash({
     template   => 'static/html/my-assignment.html',
     active_tab => 'my-assignment',
@@ -49,6 +63,7 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
 sub my_repos :Path('/my-repos') :Args(0) {
   my ( $self, $c ) = @_;
+
   $c->stash({
     template   => 'static/html/my-repos.html',
     active_tab => 'my-repos',

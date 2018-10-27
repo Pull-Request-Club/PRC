@@ -17,6 +17,12 @@ This is a library to abstract GitHub calls, both POST and GET.
 This library can use some optimization, but I avoided doing so for now.
 Ideas: Don't create ua for each call, don't read secrets so many times, etc.
 
+See https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/
+for GitHub's documentation on Authorizing OAuth Apps.
+
+Authorizing an OAuth app on GitHub requires having a verified email address \o/
+Good call GitHub. Good call.
+
 =head1 METHODS
 
 =head2 authenticate_url
@@ -95,16 +101,16 @@ sub user_data {
   return $data;
 }
 
-=head2 primary_email
+=head2 get_email
 
-  my $primary_email = PRC::GitHub->primary_email($token);
+  my $github_email = PRC::GitHub->get_email($token);
 
-Makes a GET to /user/emails, returns primary email address.
-Returns undef on any error.
+Makes a GET to /user/emails, returns primary email address
+only if it's verified. Returns undef on any error.
 
 =cut
 
-sub primary_email {
+sub get_email {
   my ($self, $token) = @_;
   return undef unless $token;
 
@@ -121,10 +127,10 @@ sub primary_email {
 
   # "data" is an arrayref of hashes
   # each item has keys email, primary, verified, visibility.
-  # we will get email of first one that has primary = true
-  my @primary_emails = grep {$_->{primary}} @$data;
-  my $primary_email  = $primary_emails[0];
-  return $primary_email->{email};
+  # we will use the one that is primary and verified
+  my @primary_emails = grep {$_->{primary} && $_->{verified}} @$data;
+  return undef unless scalar @primary_emails;
+  return $primary_emails[0]->{email};
 }
 
 1;
