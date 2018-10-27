@@ -14,7 +14,7 @@ Building the database:
 
 Adding a new modal:
 
-    script/prc_create.pl model DB DBIC::Schema PRC::Schema create=static components=TimeStamp dbi:SQLite:prc.db on_connect_do="PRAGMA foreign_keys = ON"
+    script/prc_create.pl model PRCDB DBIC::Schema PRC::Schema create=static components=TimeStamp dbi:SQLite:prc.db on_connect_do="PRAGMA foreign_keys = ON"
 
 Run the app locally:
 
