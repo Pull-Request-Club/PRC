@@ -82,6 +82,12 @@ __PACKAGE__->table("user");
   default_value: null
   is_nullable: 1
 
+=head2 is_deactivated
+
+  data_type: 'boolean'
+  default_value: 0
+  is_nullable: 0
+
 =head2 github_id
 
   data_type: 'integer'
@@ -140,6 +146,8 @@ __PACKAGE__->add_columns(
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
   "scheduled_delete_time",
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
+  "is_deactivated",
+  { data_type => "boolean", default_value => 0, is_nullable => 0 },
   "github_id",
   { data_type => "integer", is_nullable => 0 },
   "github_login",
@@ -165,8 +173,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("user_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-27 10:05:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:c+Z3s+0Jiiuyqk16WDj2Dw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-27 20:55:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IH8hucIoA9i1qAoCqyA43g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
