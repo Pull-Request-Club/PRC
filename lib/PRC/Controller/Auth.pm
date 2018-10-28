@@ -106,7 +106,7 @@ Clear session, logout, send to /.
 =cut
 
 sub logout :Path('/logout') :Args(0) {
-  my ($self, $c) = @_;
+  my ($self, $c, $message) = @_;
 
   if (!$c->user_exists){
     $c->response->redirect($c->uri_for('/'));
@@ -115,6 +115,11 @@ sub logout :Path('/logout') :Args(0) {
 
   $c->delete_session;
   $c->logout;
+
+  if($message){
+    $c->session->{alert_warning} = $message;
+  }
+
   $c->response->redirect($c->uri_for('/'),303);
   $c->detach;
 }
@@ -138,7 +143,7 @@ sub reactivate :Path('/reactivate') :Args(0) {
   $form->process(params => $c->req->params);
   if($form->validated){
     $user->activate;
-    $c->session->{alert_success} = 'Your account is activated!';
+    $c->session->{alert_success} = 'Your account is now activated! Welcome back!';
     $c->response->redirect($c->uri_for('/my-assignment'));
     $c->detach;
   }

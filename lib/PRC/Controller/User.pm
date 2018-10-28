@@ -74,16 +74,16 @@ sub my_profile :Path('/my-profile') :Args(0) {
 
   $deactivate_form->process(params => $c->req->params);
   if($c->req->params->{submit_deactivate} && $deactivate_form->validated){
+    my $message = 'Your account is deactivated.';
     $user->deactivate;
-    $c->response->redirect($c->uri_for('/logout'));
-    $c->detach;
+    $c->forward('/auth/logout',[$message]);
   }
 
   $delete_account_form->process(params => $c->req->params);
   if($c->req->params->{submit_delete_account} && $delete_account_form->validated){
+    my $message = 'Your account is deactivated and scheduled for a deletion in 30 days.';
     $user->schedule_deletion;
-    $c->response->redirect($c->uri_for('/logout'));
-    $c->detach;
+    $c->forward('/auth/logout',[$message]);
   }
 
   $c->stash({

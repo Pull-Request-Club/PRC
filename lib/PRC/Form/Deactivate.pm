@@ -12,7 +12,7 @@ has_field '_token' => (
 has_field 'submit_deactivate' => (
   type  => 'Submit',
   value => 'Deactivate My Account',
-  element_attr => { class => 'btn btn-danger btn-lg' },
+  element_attr => { class => 'btn btn-danger' },
 );
 
 __PACKAGE__->meta->make_immutable;
