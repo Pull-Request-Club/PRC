@@ -1,0 +1,25 @@
+<div class="container">
+  <br><br>
+
+  <h1>Reactivate</h1>
+  <br>
+
+  <p class="lead">It seems your account is
+  [% IF scheduled_delete_time -%]
+    scheduled to be deleted on [% scheduled_delete_time -%].
+  [% ELSE -%]
+    deactivated.
+  [% END -%]
+  To continue using PullRequest.Club, you need to reactivate your account.
+  [% IF scheduled_delete_time -%]
+    Note that this will cancel your deletion request.
+  [% END -%]
+  </p>
+  <br>
+
+  <p class="lead">If you want to proceed, please click the button below.</p>
+  <br>
+
+  [% form.render -%]
+
+</div>

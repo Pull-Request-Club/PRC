@@ -176,6 +176,32 @@ __PACKAGE__->set_primary_key("user_id");
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-27 20:55:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IH8hucIoA9i1qAoCqyA43g
 
+=head1 METHODS
+
+=head2 is_active
+
+Returns true if user is not deactivated and did not schedule a deletion.
+
+=cut
+
+sub is_active {
+  my ($user) = @_;
+  return !$user->is_deactivated && !$user->scheduled_delete_time;
+}
+
+=head2 activate
+
+Clears is_deactivated and scheduled_delete_time.
+
+=cut
+
+sub activate {
+  my ($user) = @_;
+  $user->update({
+    is_deactivated        => 0,
+    scheduled_delete_time => undef,
+  });
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

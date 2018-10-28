@@ -46,7 +46,6 @@ sub check_user_status :Private {
 
   # check if user has deactivated their account
   if($user->is_deactivated || $user->scheduled_delete_time){
-    $c->session->{alert_danger} = 'You need to login first.';
     $c->response->redirect($c->uri_for('/reactivate'),303);
     $c->detach;
   }

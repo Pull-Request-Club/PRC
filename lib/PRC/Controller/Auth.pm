@@ -4,8 +4,9 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
-use PRC::GitHub;
 use DateTime;
+use PRC::GitHub;
+use PRC::Form::Reactivate;
 
 =encoding utf8
 
@@ -96,7 +97,6 @@ sub callback :Path('/callback') :Args(0) {
   $c->session->{alert_success} = 'You are now logged in!';
   $c->response->redirect($c->uri_for('/my-assignment'),303);
   $c->detach;
-
 }
 
 =head2 logout
@@ -117,6 +117,40 @@ sub logout :Path('/logout') :Args(0) {
   $c->logout;
   $c->response->redirect($c->uri_for('/'),303);
   $c->detach;
+}
+
+=head2 reactivate
+
+Page to redirect people who have deactivated their account and logged in.
+
+=cut
+
+sub reactivate :Path('/reactivate') :Args(0) {
+  my ($self, $c) = @_;
+
+  my $user = $c->user;
+  if (!$user || $user->is_active){
+    $c->response->redirect($c->uri_for('/'));
+    $c->detach;
+  }
+
+  my $form = PRC::Form::Reactivate->new;
+  $form->process(params => $c->req->params);
+  if($form->validated){
+    $user->activate;
+    $c->session->{alert_success} = 'Your account is activated!';
+    $c->response->redirect($c->uri_for('/my-assignment'));
+    $c->detach;
+  }
+
+  $c->stash({
+    template => 'static/html/reactivate.html',
+    form     => $form,
+    ($user->scheduled_delete_time
+      ? ( scheduled_delete_time => $user->scheduled_delete_time->ymd )
+      : ()
+    ),
+  });
 }
 
 __PACKAGE__->meta->make_immutable;
