@@ -57,7 +57,7 @@ GitHub sends users here after authorization. We get a code.
 sub callback :Path('/callback') :Args(0) {
   my ($self, $c) = @_;
 
-  # TODO rate limit this endpoint.
+  # TODO: rate limit this endpoint.
 
   my $code         = $c->req->params->{code}               or $c->forward('login_error');
   my $access_token = PRC::GitHub->access_token($code)      or $c->forward('login_error');
@@ -88,16 +88,9 @@ sub callback :Path('/callback') :Args(0) {
 
   # LOGIN HAPPENS!
   $c->authenticate({ user_id => $user->id });
+  $c->session->{alert_success} = 'You are now logged in!';
   $c->response->redirect($c->uri_for('/'),303);
   $c->detach;
-
-  # Now, a couple more things to do:
-  # - checking if user has deactivated their account
-  # - checking if user has agreed to legal (tos/pp/gdpr)
-  # - if all good, sending user to their homepage!
-
-  # In the meantime, we need to make sure they don't access anything in User Controller
-  # So we will set a session variable here, and check it in User's auto.
 
 }
 

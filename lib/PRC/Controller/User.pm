@@ -19,24 +19,55 @@ Catalyst Controller.
 =cut
 
 
-=head2 auto
+=head2 check_user_status
+
+A private action that can make sure user
+- is logged in
+- has an active account (not marked for deactivation/deletion)
+- has agreed to latest TOU/PP/GDPR.
+
+
+Otherwise, send them to correct places.
 
 =cut
 
-sub auto :Private {
-  # TODO: If not logged in, kick out.
-  # If logged in but deactivated, ask.
-  # If logged in but not accepted legal, ask.
-  # Else, all good!
-  1;
+sub check_user_status :Private {
+  my ($self, $c, $args) = @_;
+
+  $args  //= {};
+  my $user = $c->user;
+  my $skip_legal_check = $args->{skip_legal_check};
+
+  unless ($user){
+    $c->session->{alert_danger} = 'You need to login first.';
+    $c->response->redirect($c->uri_for('/'),303);
+    $c->detach;
+  }
+
+  # check if user has deactivated their account
+  if($user->is_deactivated || $user->scheduled_delete_time){
+    $c->session->{alert_danger} = 'You need to login first.';
+    $c->response->redirect($c->uri_for('/reactivate'),303);
+    $c->detach;
+  }
+
+  # Check if user has agreed to legal (tos/pp/gdpr)
+  unless($skip_legal_check){
+    # TODO
+  }
+
 }
+
 
 =head2 my_profile
 
 =cut
 
 sub my_profile :Path('/my-profile') :Args(0) {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
+
+  # must be logged in + activated
+  $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
 
   $c->stash({
     template   => 'static/html/my-profile.html',
@@ -44,12 +75,16 @@ sub my_profile :Path('/my-profile') :Args(0) {
   });
 }
 
+
 =head2 my_assignment
 
 =cut
 
 sub my_assignment :Path('/my-assignment') :Args(0) {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
+
+  # must be logged in + activated + agreed to legal
+  $c->forward('check_user_status');
 
   $c->stash({
     template   => 'static/html/my-assignment.html',
@@ -57,12 +92,16 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
   });
 }
 
-=head2 my_profile
+
+=head2 my_repos
 
 =cut
 
 sub my_repos :Path('/my-repos') :Args(0) {
-  my ( $self, $c ) = @_;
+  my ($self, $c) = @_;
+
+  # must be logged in + activated + agreed to legal
+  $c->forward('check_user_status');
 
   $c->stash({
     template   => 'static/html/my-repos.html',

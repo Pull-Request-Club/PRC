@@ -21,12 +21,14 @@ __PACKAGE__->config(namespace => '');
 sub auto :Private {
   my ($self, $c) = @_;
 
+  my $user = $c->user;
+
   $c->stash({
     alert_success => delete $c->session->{alert_success},
     alert_info    => delete $c->session->{alert_info},
     alert_warning => delete $c->session->{alert_warning},
     alert_danger  => delete $c->session->{alert_danger},
-    $c->user ? ( logged_in => 1, github_login => $c->user->github_login ) : (),
+    $user ? ( logged_in => 1, github_login => $user->github_login ) : (),
   });
 
 }
@@ -40,7 +42,12 @@ The root page (/)
 
 sub index :Path :Args(0) {
   my ($self, $c) = @_;
-  # TODO: redirect to my assignment if logged in
+
+  if($c->user_exists){
+    $c->response->redirect($c->uri_for('/my-assignment'),303);
+    $c->detach;
+  }
+
   $c->stash({
     template => 'static/html/hello.html',
   });
@@ -50,12 +57,38 @@ sub index :Path :Args(0) {
 
 /about
 
+Display a little more information about Pull Request Club.
+
 =cut
 
 sub about :Local :Args(0) {
   my ($self, $c) = @_;
+
   $c->stash({
     template => 'static/html/about.html',
+  });
+}
+
+=head2 legal
+
+/legal
+
+Display Terms of Use, Privacy Policy, GDPR Notice.
+Users will be redirected to here from my-assignment & my-repos
+if they have not agreed to terms yet. These will get a form,
+through which they can accept terms.
+
+=cut
+
+sub legal :Local :Args(0) {
+  my ($self, $c) = @_;
+
+  # TODO, if logged in
+  #  if agreed: show agreed date "you agreed on bla"
+  #  if not agreed: show a button to agree.
+
+  $c->stash({
+    template => 'static/html/legal.html',
   });
 }
 
@@ -68,7 +101,7 @@ Standard 404 error page
 sub default :Path {
   my ( $self, $c ) = @_;
 
-  $c->response->body('Page not found');
+  $c->response->body('Page not found.');
   $c->response->status(404);
 }
 
