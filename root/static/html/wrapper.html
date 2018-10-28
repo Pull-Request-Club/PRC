@@ -30,7 +30,7 @@
     <ul class="nav navbar-nav navbar-right">
       <li class="nav-item">
       [% IF logged_in -%]
-        <a class="nav-link" href="/logout">Logout [% github_login -%]</a>
+        <a class="nav-link" href="/logout">Logout [% github_login | html -%]</a>
       [% ELSE -%]
         <a class="nav-link" href="/login">Login with GitHub</a>
       [% END -%]
