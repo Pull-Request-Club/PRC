@@ -59,6 +59,11 @@ sub callback :Path('/callback') :Args(0) {
 
   # TODO: rate limit this endpoint.
 
+  if ($c->user_exists){
+    $c->response->redirect($c->uri_for('/my-assignment'));
+    $c->detach;
+  }
+
   my $code         = $c->req->params->{code}               or $c->forward('login_error');
   my $access_token = PRC::GitHub->access_token($code)      or $c->forward('login_error');
   my $user_data    = PRC::GitHub->user_data($access_token) or $c->forward('login_error');
@@ -102,6 +107,12 @@ Clear session, logout, send to /.
 
 sub logout :Path('/logout') :Args(0) {
   my ($self, $c) = @_;
+
+  if (!$c->user_exists){
+    $c->response->redirect($c->uri_for('/'));
+    $c->detach;
+  }
+
   $c->delete_session;
   $c->logout;
   $c->response->redirect($c->uri_for('/'),303);
