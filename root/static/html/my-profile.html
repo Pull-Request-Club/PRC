@@ -2,16 +2,26 @@
   <br><br>
 
   <h1>My Profile</h1>
-
-  <br><br>
+  <br>
 
   <p class="lead">You will be able to see your profile, update email settings, and delete your account here.</p>
+  <br>
 
-
-  <h3>Deactivate Your Account</h3>
+  <hr>
+  <h3>Deactivate My Account</h3>
 
   <p class="lead">You can deactivate your account by clicking the button below. Your current assignment & assignees will not be cancelled. However, you will not be receiving further assignments or assignees. You will be immediately logged out, and will need to login again to reactivate. This will not delete your data.</p>
-  <br>
-  [% deactivate_form.render -%]
+  <center>[% deactivate_form.render -%]</center>
 
+
+  <hr>
+  <h3>Delete My Account</h3>
+
+  <p class="lead">You can delete your account by clicking the button below. This is the same as deactivating your account, <i>and</i> it will schedule a deletion for your account in 30 days. If you change your mind, you can login before the scheduled date and reactivate your account. You can sign up from scratch once your data is deleted.</p>
+  <br>
+  <center>[% delete_account_form.render -%]</center>
+
+  <hr>
+
+</div>
 </div>

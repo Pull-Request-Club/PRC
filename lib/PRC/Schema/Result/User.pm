@@ -15,6 +15,8 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
+use DateTime;
+
 =head1 COMPONENTS LOADED
 
 =over 4
@@ -218,6 +220,22 @@ sub deactivate {
     github_token   => undef,
   });
 }
+
+=head2 schedule_deletion
+
+Sets is_deactivated to 1 & schedules a deletion for 30 days.
+
+=cut
+
+sub schedule_deletion {
+  my ($user) = @_;
+  $user->update({
+    is_deactivated        => 1,
+    github_token          => undef,
+    scheduled_delete_time => DateTime->now->add(days=>30)->datetime,
+  });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
