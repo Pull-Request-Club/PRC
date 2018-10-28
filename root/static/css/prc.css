@@ -1,8 +1,8 @@
 body {
-  background-color: #ddd;
+  background-color: aliceblue;
 }
 .jumbotron {
-  background-color: #ccc;
+  background-color: aliceblue;
 }
 
 /* Sticky Footer */
@@ -20,4 +20,5 @@ body {
   height: 40px; /* Set the fixed height of the footer here */
   line-height: 40px; /* Vertically center the text there */
   border-top: 1px solid #6c757d;
+  background-color: cornsilk;
 }
