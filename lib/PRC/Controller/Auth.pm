@@ -94,7 +94,7 @@ sub callback :Path('/callback') :Args(0) {
   # LOGIN HAPPENS!
   $c->authenticate({ user_id => $user->id });
   $c->session->{alert_success} = 'You are now logged in!';
-  $c->response->redirect($c->uri_for('/'),303);
+  $c->response->redirect($c->uri_for('/my-assignment'),303);
   $c->detach;
 
 }
