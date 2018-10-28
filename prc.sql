@@ -13,13 +13,3 @@ CREATE TABLE IF NOT EXISTS user(
   github_profile         VARCHAR(256) NOT NULL,
   github_token           VARCHAR(256) NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS legal(
-  legal_id     INTEGER PRIMARY KEY,
-  create_time  DATETIME NOT NULL,
-  is_latest    BOOLEAN NOT NULL,
-  version      VARCHAR(32) NOT NULL
-);
-
-INSERT INTO legal (create_time, is_latest, version)
-  VALUES ('2018-10-27', 1, 'October 2018');
