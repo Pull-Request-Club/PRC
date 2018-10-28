@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use PRC::Form::Deactivate;
+
 =encoding utf8
 
 =head1 NAME
@@ -15,9 +17,6 @@ PRC::Controller::User - Catalyst Controller
 Catalyst Controller.
 
 =head1 METHODS
-
-=cut
-
 
 =head2 check_user_status
 
@@ -67,10 +66,21 @@ sub my_profile :Path('/my-profile') :Args(0) {
 
   # must be logged in + activated
   $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
+  my $user = $c->user;
+
+  my $deactivate_form = PRC::Form::Deactivate->new;
+
+  $deactivate_form->process(params => $c->req->params);
+  if($deactivate_form->validated){
+    $user->deactivate;
+    $c->response->redirect($c->uri_for('/logout'));
+    $c->detach;
+  }
 
   $c->stash({
     template   => 'static/html/my-profile.html',
     active_tab => 'my-profile',
+    deactivate_form => $deactivate_form,
   });
 }
 

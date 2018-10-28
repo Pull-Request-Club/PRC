@@ -114,7 +114,8 @@ __PACKAGE__->table("user");
 =head2 github_token
 
   data_type: 'varchar'
-  is_nullable: 0
+  default_value: null
+  is_nullable: 1
   size: 256
 
 =cut
@@ -157,7 +158,12 @@ __PACKAGE__->add_columns(
   "github_profile",
   { data_type => "varchar", is_nullable => 0, size => 256 },
   "github_token",
-  { data_type => "varchar", is_nullable => 0, size => 256 },
+  {
+    data_type => "varchar",
+    default_value => \"null",
+    is_nullable => 1,
+    size => 256,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -173,8 +179,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("user_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-27 20:55:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IH8hucIoA9i1qAoCqyA43g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-28 13:12:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:op6PK1r0Izo2CSEq/UmmXg
 
 =head1 METHODS
 
@@ -203,6 +209,19 @@ sub activate {
   });
 }
 
+=head2 deactivate
+
+Sets is_deactivated to 1.
+
+=cut
+
+sub deactivate {
+  my ($user) = @_;
+  $user->update({
+    is_deactivated => 1,
+    github_token   => undef,
+  });
+}
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
