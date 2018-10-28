@@ -1,9 +1,6 @@
 use utf8;
 package PRC::Schema::Result::User;
 
-# Created by DBIx::Class::Schema::Loader
-# DO NOT MODIFY THE FIRST PART OF THIS FILE
-
 =head1 NAME
 
 PRC::Schema::Result::User
@@ -128,12 +125,14 @@ __PACKAGE__->add_columns(
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
+    set_on_create => 1,
   },
   "update_time",
   {
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
+    set_on_update => 1,
   },
   "last_login_time",
   {
@@ -178,9 +177,6 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("user_id");
 
-
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-10-28 13:12:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:op6PK1r0Izo2CSEq/UmmXg
 
 =head1 METHODS
 
