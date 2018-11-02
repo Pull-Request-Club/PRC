@@ -46,7 +46,7 @@ sub index :Path :Args(0) {
   my ($self, $c) = @_;
 
   if($c->user_exists){
-    $c->response->redirect($c->uri_for('/my-assignment'),303);
+    $c->response->redirect('/my-assignment',303);
     $c->detach;
   }
 
@@ -94,7 +94,7 @@ sub legal :Local :Args(0) {
 
     if($form->validated){
       $user->accept_latest_terms;
-      $c->response->redirect($c->uri_for('/my-assignment'));
+      $c->response->redirect('/my-assignment',303);
       $c->detach;
     }
   }

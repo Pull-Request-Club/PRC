@@ -40,19 +40,19 @@ sub check_user_status :Private {
 
   unless ($user){
     $c->session->{alert_danger} = 'You need to login first.';
-    $c->response->redirect($c->uri_for('/'),303);
+    $c->response->redirect('/',303);
     $c->detach;
   }
 
   # check if user has deactivated their account
   if($user->is_deactivated || $user->scheduled_delete_time){
-    $c->response->redirect($c->uri_for('/reactivate'),303);
+    $c->response->redirect('/reactivate',303);
     $c->detach;
   }
 
   # Check if user has agreed to legal (tos/pp/gdpr)
   if(!$skip_legal_check && !$user->has_accepted_latest_terms){
-    $c->response->redirect($c->uri_for('/legal'),303);
+    $c->response->redirect('/legal',303);
     $c->detach;
   }
 

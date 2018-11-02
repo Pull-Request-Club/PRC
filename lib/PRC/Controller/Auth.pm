@@ -31,7 +31,7 @@ sub login :Path('/login') :Args(0) {
 
   # TODO: add a "state" and keep it in session
 
-  my $redirect_url = $c->user_exists ? $c->uri_for('/') : PRC::GitHub->authenticate_url;
+  my $redirect_url = $c->user_exists ? '/' : PRC::GitHub->authenticate_url;
   $c->response->redirect($redirect_url,303);
   $c->detach;
 }
@@ -47,7 +47,7 @@ sub login_error :Private {
 
   $error ||= 'Login was not successful, please try again.';
   $c->session->{alert_danger} = $error;
-  $c->response->redirect($c->uri_for('/'),303);
+  $c->response->redirect('/',303);
   $c->detach;
 }
 
@@ -63,7 +63,7 @@ sub callback :Path('/callback') :Args(0) {
   # TODO: rate limit this endpoint.
 
   if ($c->user_exists){
-    $c->response->redirect($c->uri_for('/my-assignment'));
+    $c->response->redirect('/my-assignment',303);
     $c->detach;
   }
 
@@ -97,7 +97,7 @@ sub callback :Path('/callback') :Args(0) {
   # LOGIN HAPPENS!
   $c->authenticate({ user_id => $user->id });
   $c->session->{alert_success} = 'You are now logged in!';
-  $c->response->redirect($c->uri_for('/my-assignment'),303);
+  $c->response->redirect('/my-assignment',303);
   $c->detach;
 }
 
@@ -111,7 +111,7 @@ sub logout :Path('/logout') :Args(0) {
   my ($self, $c, $message) = @_;
 
   if (!$c->user_exists){
-    $c->response->redirect($c->uri_for('/'));
+    $c->response->redirect('/',303);
     $c->detach;
   }
 
@@ -122,7 +122,7 @@ sub logout :Path('/logout') :Args(0) {
     $c->session->{alert_warning} = $message;
   }
 
-  $c->response->redirect($c->uri_for('/'),303);
+  $c->response->redirect('/',303);
   $c->detach;
 }
 
@@ -137,7 +137,7 @@ sub reactivate :Path('/reactivate') :Args(0) {
 
   my $user = $c->user;
   if (!$user || $user->is_active){
-    $c->response->redirect($c->uri_for('/'));
+    $c->response->redirect('/',303);
     $c->detach;
   }
 
@@ -146,7 +146,7 @@ sub reactivate :Path('/reactivate') :Args(0) {
   if($form->validated){
     $user->activate;
     $c->session->{alert_success} = 'Your account is now activated! Welcome back!';
-    $c->response->redirect($c->uri_for('/my-assignment'));
+    $c->response->redirect('/my-assignment',303);
     $c->detach;
   }
 
