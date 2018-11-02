@@ -21,7 +21,6 @@ use Catalyst::Runtime 5.80;
 # Str::Memcached: Store actual session data in memcached.
 
 use Catalyst qw/
-  -Debug
   ConfigLoader
   Static::Simple
   Authentication

@@ -28,6 +28,10 @@ Running the app in the cloud:
 
     script/prc_fastcgi.pl -l /tmp/prc.socket -n 5 -p /tmp/prc.pid -d
 
+To run with debug, prepend your command with this:
+
+    PRC_DEBUG=1
+
 Run all tests:
 
     prove -lmv t/*
