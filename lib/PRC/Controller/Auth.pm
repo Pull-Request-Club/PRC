@@ -29,6 +29,8 @@ This is where "Login with GitHub" button sends. Immediately redirects.
 sub login :Path('/login') :Args(0) {
   my ($self, $c) = @_;
 
+  # TODO: add a "state" and keep it in session
+
   my $redirect_url = $c->user_exists ? $c->uri_for('/') : PRC::GitHub->authenticate_url;
   $c->response->redirect($redirect_url,303);
   $c->detach;

@@ -236,6 +236,33 @@ sub schedule_deletion {
   });
 }
 
+=head2 has_accepted_to_latest_terms
+
+Returns 1 if user has accepted latest terms.
+
+=cut
+
+sub has_accepted_latest_terms {
+  my ($user) = @_;
+  # TODO compare tos_agreed_version with latest_tos_version
+  return $user->tos_agree_time ? 1 : 0;
+}
+
+=head2 accept_latest_terms
+
+Accepts latest terms.
+
+=cut
+
+sub accept_latest_terms {
+  my ($user) = @_;
+  # TODO get tos_agreed_version from latest_tos_version
+  $user->update({
+    tos_agree_time     => DateTime->now->datetime,
+    tos_agreed_version => DateTime->new(year=>2018, month=>11, day=>1)->datetime,
+  });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

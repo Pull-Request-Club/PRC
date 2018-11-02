@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
+use PRC::Form::AcceptLegal;
+
 #
 # Sets the actions in this controller to be registered with no prefix
 # so they function identically to actions created in MyApp.pm
@@ -83,9 +85,22 @@ through which they can accept terms.
 sub legal :Local :Args(0) {
   my ($self, $c) = @_;
 
-  # TODO, if logged in
-  #  if agreed: show agreed date "you agreed on bla"
-  #  if not agreed: show a button to agree.
+  my $user = $c->user;
+
+  if ($user && !$user->has_accepted_latest_terms){
+    my $form = PRC::Form::AcceptLegal->new;
+    $form->process(params => $c->req->params);
+    $c->stash({ form => $form });
+
+    if($form->validated){
+      $user->accept_latest_terms;
+      $c->response->redirect($c->uri_for('/my-assignment'));
+      $c->detach;
+    }
+  }
+  elsif ($user){
+    $c->stash({ accepted_date => $user->tos_agree_time->ymd });
+  }
 
   $c->stash({
     template => 'static/html/legal.html',

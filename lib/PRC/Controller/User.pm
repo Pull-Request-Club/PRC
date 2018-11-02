@@ -51,8 +51,9 @@ sub check_user_status :Private {
   }
 
   # Check if user has agreed to legal (tos/pp/gdpr)
-  unless($skip_legal_check){
-    # TODO
+  if(!$skip_legal_check && !$user->has_accepted_latest_terms){
+    $c->response->redirect($c->uri_for('/legal'),303);
+    $c->detach;
   }
 
 }

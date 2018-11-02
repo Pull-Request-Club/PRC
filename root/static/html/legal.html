@@ -1,16 +1,22 @@
 <div class="container">
 
   <br><br>
-  <h1>October 29, 2018</h1>
+  <h1>November 1, 2018</h1>
   <br><br>
 
   <h2>Terms of Use</h2>
-  <p class="lead">This site is currently under construction. This means none of the functionalities are guaranteed to work. <strong>Unauthorized access is prohibited</strong>, if you think you are not authorized please do not log in (or if logged in, please log out) and close this window immediately. Site may go under heavy changes, which may include alterations/deletions to your data. Terms of Use will be updated in future. When that happens, you will be presented with new copy. You will be required to accept latest terms to be able to continue using most of this web site and its applications.</p>
+  <p class="lead">This site is currently under construction. <strong>Unauthorized access is prohibited</strong>, if you think you are not authorized please do not login (or if logged in, please logout) and close this window immediately. Site may go under heavy changes, which may include alterations/deletions to your data. Terms of Use will be updated in future. When that happens, you will be presented with new copy. You will be required to accept latest terms to be able to continue using most of this web site and its applications.</p>
 
   <h2>Privacy Policy</h2>
-  <p class="lead">We will collect some of your data through GitHub API. Most of the data we collect are data that are already public: GitHub Username, GitHub Profile URL etc. In addition, we will be collecting your "verified" email address (which may not be public) through another GitHub API. We respect your privacy, and will publish this data publicly. Your email address will be used to contact you. We will temporarily store your GitHub token, which lets us talk to GitHub about your public and private data. Just like Terms of Use, our Privacy Policy will be updated in future. When that happens, you will be presented with new copy. You will be required to accept 'newest' privacy policy to be able to continue using most of this web site and its applications. As this site is under construction, we may delete all your data without warning.</p>
+  <p class="lead">We will collect some of your data through GitHub API. Most of the data we collect are data that are already public: GitHub Username, GitHub Profile URL, your repositories on GitHub, and more data about your GitHub account. In addition, we will be collecting your "verified" email address (which may not be public) through GitHub. We respect your privacy, and will not publish this data publicly. Your email address will be used to contact you. We will temporarily store your GitHub token, which is used to communicate with GitHub APIs about your public and private data. Privacy Policy will be updated in future. When that happens, you will be presented with new copy. You will be required to accept latest privacy policy to be able to continue using most of this web site and its applications. As this site is under construction, we may delete all your data without warning.</p>
 
   <h2>Cookie Policy</h2>
   <p class="lead">We will utilize only what is called a 'session cookie', so that we know who is logged in. Currently we do not plan to use any advertising or tracking cookies. If this changes, you will be presented with new copy of our Cookie Policy.</p>
+
+  [% IF form -%]
+    [% form.render -%]
+  [% ELSIF accepted_date -%]
+    <p class="lead">You have accepted these terms on [% accepted_date -%].</p>
+  [% END -%]
 
 </div>
