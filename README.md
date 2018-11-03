@@ -6,7 +6,8 @@ Sign up to receive monthly GitHub issues as your homework!
 
 Install CPAN module dependencies:
 
-    cpanm --installdeps .
+    perl Makefile.PL
+    make installdeps
 
 Building the database:
 
