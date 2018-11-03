@@ -1,6 +1,7 @@
 package PRC::GitHub;
 use namespace::autoclean;
 
+use PRC::Secrets;
 use LWP::UserAgent;
 use JSON::XS;
 use YAML qw/LoadFile/;
@@ -15,7 +16,7 @@ PRC::GitHub - A Quick Library for GitHub calls
 
 This is a library to abstract GitHub calls, both POST and GET.
 This library can use some optimization, but I avoided doing so for now.
-Ideas: Don't create ua for each call, don't read secrets so many times, etc.
+Ideas: Don't create ua for each call.
 
 See https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/
 for GitHub's documentation on Authorizing OAuth Apps.
@@ -36,7 +37,7 @@ Returns URL for GitHub authentication. Puts client_id in.
 
 sub authenticate_url {
   my ($self) = @_;
-  my $client_id = YAML::LoadFile('secrets.yml')->{client_id};
+  my $client_id = PRC::Secrets->client_id;
   return "https://github.com/login/oauth/authorize?scope=user%3Aemail&client_id=$client_id";
 }
 
@@ -53,11 +54,10 @@ sub access_token {
   my ($self,$code) = @_;
   return undef unless $code;
 
-  my $secrets   = YAML::LoadFile('secrets.yml');
   my $data_post = {
     code          => $code,
-    client_id     => $secrets->{client_id},
-    client_secret => $secrets->{client_secret},
+    client_id     => PRC::Secrets->client_id,
+    client_secret => PRC::Secrets->client_secret,
   };
 
   my $ua = LWP::UserAgent->new;
