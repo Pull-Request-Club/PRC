@@ -18,6 +18,7 @@ requires 'HTML::FormHandler';
 requires 'IO::Socket::SSL';
 requires 'JSON::XS';
 requires 'LWP::UserAgent';
+requires 'LWP::Protocol::https';
 requires 'Moose';
 requires 'MooseX::NonMoose';
 requires 'namespace::autoclean';
