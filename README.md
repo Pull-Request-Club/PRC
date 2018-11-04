@@ -13,7 +13,7 @@ Building the database:
 
     sqlite3 prc.db < prc.sql
 
-Adding a new modal:
+Adding a new model:
 
     script/prc_create.pl model PRCDB DBIC::Schema PRC::Schema create=static components=TimeStamp dbi:SQLite:prc.db on_connect_do="PRAGMA foreign_keys = ON"
 
