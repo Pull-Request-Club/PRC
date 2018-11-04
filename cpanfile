@@ -1,4 +1,4 @@
-requires 'Catalyst::Runtime' => '5.90118';
+requires 'Catalyst::Runtime';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Action::RenderView';
@@ -15,6 +15,7 @@ requires 'FCGI';
 requires 'FCGI::ProcManager';
 requires 'HTTP::Server::Simple';
 requires 'HTML::FormHandler';
+requires 'IO::Socket::SSL';
 requires 'JSON::XS';
 requires 'LWP::UserAgent';
 requires 'Moose';
