@@ -126,11 +126,23 @@ sub get_email {
   my $data = eval { decode_json($res->content) };
 
   # "data" is an arrayref of hashes
-  # each item has keys email, primary, verified, visibility.
-  # we will use the one that is primary and verified
-  my @primary_emails = grep {$_->{primary} && $_->{verified}} @$data;
-  return undef unless scalar @primary_emails;
-  return $primary_emails[0]->{email};
+  # Each item has keys email, primary, verified, visibility.
+  # We will prefer ones that is both primary and verified
+  # If no such address is found, we will use any verified address.
+  # We will use the one that is primary and verified
+  my @verified_emails         = grep {$_->{verified}} @$data;
+  my @primary_verified_emails = grep {$_->{primary} } @verified_emails;
+
+  # if no primary + verified, then we will look for any verified.
+  if (scalar @primary_verified_emails){
+    return $primary_verified_emails[0]->{email};
+  }
+  elsif (scalar @verified_emails){
+    return $verified_emails[0]->{email};
+  }
+  else {
+    return undef;
+  }
 }
 
 1;
