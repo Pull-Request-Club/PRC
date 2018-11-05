@@ -6,6 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Form::Deactivate;
 use PRC::Form::DeleteAccount;
+use PRC::GitHub;
 
 =encoding utf8
 
@@ -122,6 +123,11 @@ sub my_repos :Path('/my-repos') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
+
+  my $user = $c->user;
+  my @repos = PRC::GitHub->get_repos($user->github_token);
+  # TODO: Create new repo rows, or update existing ones.
+  # If an existing one did not come back, mark gone_missing = 1
 
   $c->stash({
     template   => 'static/html/my-repos.html',

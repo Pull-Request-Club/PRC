@@ -17,108 +17,8 @@ extends 'DBIx::Class::Core';
 
 use DateTime;
 
-=head1 COMPONENTS LOADED
-
-=over 4
-
-=item * L<DBIx::Class::InflateColumn::DateTime>
-
-=item * L<DBIx::Class::TimeStamp>
-
-=back
-
-=cut
-
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
-
-=head1 TABLE: C<user>
-
-=cut
-
 __PACKAGE__->table("user");
-
-=head1 ACCESSORS
-
-=head2 user_id
-
-  data_type: 'integer'
-  is_auto_increment: 1
-  is_nullable: 0
-
-=head2 create_time
-
-  data_type: 'datetime'
-  default_value: current_timestamp
-  is_nullable: 0
-
-=head2 update_time
-
-  data_type: 'datetime'
-  default_value: current_timestamp
-  is_nullable: 0
-
-=head2 last_login_time
-
-  data_type: 'datetime'
-  default_value: current_timestamp
-  is_nullable: 0
-
-=head2 tos_agree_time
-
-  data_type: 'datetime'
-  default_value: null
-  is_nullable: 1
-
-=head2 tos_agreed_version
-
-  data_type: 'datetime'
-  default_value: null
-  is_nullable: 1
-
-=head2 scheduled_delete_time
-
-  data_type: 'datetime'
-  default_value: null
-  is_nullable: 1
-
-=head2 is_deactivated
-
-  data_type: 'boolean'
-  default_value: 0
-  is_nullable: 0
-
-=head2 github_id
-
-  data_type: 'integer'
-  is_nullable: 0
-
-=head2 github_login
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 128
-
-=head2 github_email
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 256
-
-=head2 github_profile
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 256
-
-=head2 github_token
-
-  data_type: 'varchar'
-  default_value: null
-  is_nullable: 1
-  size: 256
-
-=cut
-
 __PACKAGE__->add_columns(
   "user_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
@@ -167,18 +67,14 @@ __PACKAGE__->add_columns(
   },
 );
 
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</user_id>
-
-=back
-
-=cut
-
 __PACKAGE__->set_primary_key("user_id");
 
+__PACKAGE__->has_many(
+  "repos",
+  "PRC::Schema::Result::Repo",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head1 METHODS
 
@@ -263,6 +159,5 @@ sub accept_latest_terms {
   });
 }
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

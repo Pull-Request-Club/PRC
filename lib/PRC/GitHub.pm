@@ -124,6 +124,7 @@ sub get_email {
   my $res = $ua->request($req);
   return undef unless $res->is_success;
   my $data = eval { decode_json($res->content) };
+  return undef unless $data && ref $data eq 'ARRAY';
 
   # "data" is an arrayref of hashes
   # Each item has keys email, primary, verified, visibility.
@@ -144,5 +145,61 @@ sub get_email {
     return undef;
   }
 }
+
+=head2 get_repos
+
+  my $repos = PRC::GitHub->get_repos($token);
+
+Makes a GET to /user/repos, return an array.
+Exluces forks, archived repos, private repos.
+Returns data such that it matches our column names.
+
+=cut
+
+sub get_repos {
+  my ($self, $token) = @_;
+  return undef unless $token;
+
+  my $ua = LWP::UserAgent->new;
+  $ua->agent("PullRequestClub/0.1");
+
+  my $req = HTTP::Request->new(GET => 'https://api.github.com/user/repos');
+  $req->header(Authorization => "token $token");
+  $req->header(Accept => 'application/vnd.github.v3+json');
+
+  my $res = $ua->request($req);
+  return undef unless $res->is_success;
+  my $data = eval { decode_json($res->content) };
+  return undef unless $data && ref $data eq 'ARRAY';
+
+
+  # "data" is an arrayref of hashes.
+  # Filter repos that are archived, forked, or private
+  # Keep only a few items that are relevant to us
+  my @repos =
+    map  {{
+      github_id                => $_->{id},
+      github_name              => $_->{name},
+      github_full_name         => $_->{full_name},
+      github_language          => $_->{language},
+      github_html_url          => $_->{html_url},
+      github_pulls_url         => $_->{pulls_url},
+      github_events_url        => $_->{events_url},
+      github_issues_url        => $_->{issues_url},
+      github_issue_events_url  => $_->{issue_events_url},
+      github_open_issues_count => $_->{open_issues_count},
+      github_stargazers_count  => $_->{stargazers_count},
+    }}
+    grep {
+      !$_->{archived} &&
+      !$_->{fork}     &&
+      !$_->{private}
+    } @$data;
+
+  return @repos;
+
+}
+
+1;
 
 1;

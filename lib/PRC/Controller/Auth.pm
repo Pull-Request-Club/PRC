@@ -92,8 +92,6 @@ sub callback :Path('/callback') :Args(0) {
     $c->forward('login_error') unless $user;
   }
 
-  # TODO: Get repositories from https://api.github.com/user/repos
-
   # LOGIN HAPPENS!
   $c->authenticate({ user_id => $user->id });
   $c->session->{alert_success} = 'You are now logged in!';
