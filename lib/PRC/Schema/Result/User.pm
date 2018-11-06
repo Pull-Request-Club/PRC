@@ -16,6 +16,7 @@ use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
 use DateTime;
+use PRC::Constants 'LATEST_LEGAL_DATE';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 __PACKAGE__->table("user");
@@ -144,8 +145,8 @@ Returns 1 if user has accepted latest terms.
 
 sub has_accepted_latest_terms {
   my ($user) = @_;
-  # TODO compare tos_agreed_version with latest_tos_version
-  return $user->tos_agree_time ? 1 : 0;
+  return 0 unless $user->tos_agree_time;
+  return ( $user->tos_agree_time > LATEST_LEGAL_DATE ) ? 1 : 0;
 }
 
 =head2 accept_latest_terms
@@ -156,10 +157,9 @@ Accepts latest terms.
 
 sub accept_latest_terms {
   my ($user) = @_;
-  # TODO get tos_agreed_version from latest_tos_version
   $user->update({
     tos_agree_time     => DateTime->now->datetime,
-    tos_agreed_version => DateTime->new(year=>2018, month=>11, day=>1)->datetime,
+    tos_agreed_version => LATEST_LEGAL_DATE,
   });
 }
 

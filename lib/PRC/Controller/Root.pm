@@ -4,6 +4,7 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller' }
 
+use PRC::Constants 'LATEST_LEGAL_DATE';
 use PRC::Form::AcceptLegal;
 
 #
@@ -24,6 +25,11 @@ sub auto :Private {
   my ($self, $c) = @_;
 
   my $user = $c->user;
+
+  unless (my $has_seen_cookie_notice = $c->session->{has_seen_cookie_notice}){
+    $c->stash->{show_cookie_notice}       = 1;
+    $c->session->{has_seen_cookie_notice} = 1;
+  }
 
   $c->stash({
     alert_success => delete $c->session->{alert_success},
@@ -103,7 +109,8 @@ sub legal :Local :Args(0) {
   }
 
   $c->stash({
-    template => 'static/html/legal.html',
+    template       => 'static/html/legal.html',
+    effective_date => LATEST_LEGAL_DATE->ymd,
   });
 }
 

@@ -41,6 +41,14 @@
 </nav>
 
 
+[% IF show_cookie_notice -%]
+<div class="alert alert-primary alert-dismissable fade show" role="alert">
+  We only use <strong>'strictly necessary'</strong> cookies, which make login and other functions work. Without these cookies our service cannot be provided. To find out more, read our <a href='/legal'>Privacy Policy</a>.
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+[% END -%]
 [% IF alert_success -%]
 <div class="alert alert-success alert-dismissable fade show" role="alert">
   [% alert_success | html -%]
