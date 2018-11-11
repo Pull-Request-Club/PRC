@@ -60,11 +60,11 @@ sub check_user_status :Private {
 }
 
 
-=head2 my_profile
+=head2 settings
 
 =cut
 
-sub my_profile :Path('/my-profile') :Args(0) {
+sub settings :Path('/settings') :Args(0) {
   my ($self, $c) = @_;
 
   # must be logged in + activated
@@ -89,8 +89,8 @@ sub my_profile :Path('/my-profile') :Args(0) {
   }
 
   $c->stash({
-    template   => 'static/html/my-profile.html',
-    active_tab => 'my-profile',
+    template   => 'static/html/settings.html',
+    active_tab => 'settings',
     deactivate_form     => $deactivate_form,
     delete_account_form => $delete_account_form,
   });
