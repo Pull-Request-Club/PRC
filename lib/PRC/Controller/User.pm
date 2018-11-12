@@ -4,6 +4,7 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use PRC::Form::Settings;
 use PRC::Form::Deactivate;
 use PRC::Form::DeleteAccount;
 use PRC::GitHub;
@@ -71,6 +72,7 @@ sub settings :Path('/settings') :Args(0) {
   $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
   my $user = $c->user;
 
+  my $settings_form       = PRC::Form::Settings->new;
   my $deactivate_form     = PRC::Form::Deactivate->new;
   my $delete_account_form = PRC::Form::DeleteAccount->new;
 
@@ -88,9 +90,15 @@ sub settings :Path('/settings') :Args(0) {
     $c->forward('/auth/logout',[$message]);
   }
 
+  $settings_form->process(params => $c->req->params);
+  if($c->req->params->{submit_settings} && $settings_form->validated){
+    $c->session->{success_message} = 'Your settings are saved!';
+  }
+
   $c->stash({
     template   => 'static/html/settings.html',
     active_tab => 'settings',
+    settings_form       => $settings_form,
     deactivate_form     => $deactivate_form,
     delete_account_form => $delete_account_form,
   });

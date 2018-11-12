@@ -13,6 +13,7 @@ has_field 'submit_deactivate' => (
   type  => 'Submit',
   value => 'Deactivate My Account',
   element_attr => { class => 'btn btn-danger' },
+  wrapper_attr => { class => 'form-group' },
 );
 
 __PACKAGE__->meta->make_immutable;

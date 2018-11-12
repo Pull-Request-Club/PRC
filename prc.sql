@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS user (
   tos_agreed_version     DATETIME DEFAULT NULL,
   scheduled_delete_time  DATETIME DEFAULT NULL,
   is_deactivated         BOOLEAN NOT NULL DEFAULT 0,
+  assignment_level       INTEGER NOT NULL DEFAULT 0,
+  assignee_level         INTEGER NOT NULL DEFAULT 0,
 
   github_id              INTEGER NOT NULL,
   github_login           VARCHAR(128) NOT NULL,

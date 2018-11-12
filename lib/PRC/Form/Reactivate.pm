@@ -13,6 +13,7 @@ has_field 'submit' => (
   type  => 'Submit',
   value => 'Reactivate',
   element_attr => { class => 'btn btn-success btn-lg btn-block' },
+  wrapper_attr => { class => 'form-group' },
 );
 
 __PACKAGE__->meta->make_immutable;
