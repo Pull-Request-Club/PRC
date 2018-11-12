@@ -174,5 +174,16 @@ sub is_receiving_assignees {
   return ($user->assignee_level == USER_ASSIGNEE_ACTIVE) ? 1 : 0;
 }
 
+=head2 will_receive_assignment_next_month
+
+Returns true if user will receive an assignment next month.
+
+=cut
+
+sub will_receive_assignment_next_month {
+  my ($user) = @_;
+  return ($user->assignment_level == USER_ASSIGNMENT_ACTIVE) ? 1 : 0;
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

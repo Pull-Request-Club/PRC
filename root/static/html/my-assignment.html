@@ -5,6 +5,12 @@
 
   <br><br>
 
-  <p class="lead">You will be able to adjust your assignment settings and see your assignment history on this page.</p>
+  <p class="lead">
+  [% IF next_month -%]
+    You will receive your first assignment in January 2019.
+  [% ELSE -%]
+    You are not opted in to receive assignments.
+  [% END -%]
+  </p>
 
 </div>

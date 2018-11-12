@@ -128,10 +128,12 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
+  my $user = $c->user;
 
   $c->stash({
     template   => 'static/html/my-assignment.html',
     active_tab => 'my-assignment',
+    next_month => $user->will_receive_assignment_next_month,
   });
 }
 
