@@ -81,6 +81,7 @@ sub settings :Path('/settings') :Args(0) {
     my $message = 'Your account is now deactivated.';
     $user->deactivate;
     $c->forward('/auth/logout',[$message]);
+    $c->detach;
   }
 
   $delete_account_form->process(params => $c->req->params);
@@ -88,11 +89,24 @@ sub settings :Path('/settings') :Args(0) {
     my $message = 'Your account is now deactivated and scheduled for a deletion in 30 days.';
     $user->schedule_deletion;
     $c->forward('/auth/logout',[$message]);
+    $c->detach;
   }
 
-  $settings_form->process(params => $c->req->params);
+  $settings_form->process(
+    params   => $c->req->params,
+    defaults => {
+      assignment_level => $user->assignment_level,
+      assignee_level   => $user->assignee_level,
+    }
+  );
   if($c->req->params->{submit_settings} && $settings_form->validated){
-    $c->session->{success_message} = 'Your settings are saved!';
+    # Note that values are validated by HTML::FormHandler
+    my $values = $settings_form->values;
+    $user->update({
+      assignment_level => $values->{assignment_level},
+      assignee_level   => $values->{assignee_level},
+    });
+    $c->stash->{alert_success} = 'Your settings are saved!';
   }
 
   $c->stash({
