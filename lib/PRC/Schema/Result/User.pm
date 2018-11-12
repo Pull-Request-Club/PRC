@@ -16,7 +16,7 @@ use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
 use DateTime;
-use PRC::Constants 'LATEST_LEGAL_DATE';
+use PRC::Constants;
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 __PACKAGE__->table("user");
@@ -161,6 +161,17 @@ sub accept_latest_terms {
     tos_agree_time     => DateTime->now->datetime,
     tos_agreed_version => LATEST_LEGAL_DATE,
   });
+}
+
+=head2 is_receiving_assignees
+
+Returns true if assignee level is active.
+
+=cut
+
+sub is_receiving_assignees {
+  my ($user) = @_;
+  return ($user->assignee_level == USER_ASSIGNEE_ACTIVE) ? 1 : 0;
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -5,6 +5,10 @@
 
   <br><br>
 
-  <p class="lead">You will be able to see your repositories here, and opt their issues to be assigned to fellow contributors.</p>
+  [% IF not_receiving_assignees -%]
+    <p class="lead">Your settings indicate that you did not want your repositories to be assigned. To adjust your settings, please <a href='/settings'>click here</a>.
+  [% ELSE -%]
+    <p class="lead">You will be able to see your repositories here. You should select repositories that you want to be assigned.</p>
+  [% END -%]
 
 </div>
