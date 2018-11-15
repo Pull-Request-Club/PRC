@@ -171,6 +171,7 @@ Returns true if assignee level is active.
 
 sub is_receiving_assignees {
   my ($user) = @_;
+  #TODO add check for tos
   return ($user->assignee_level == USER_ASSIGNEE_ACTIVE) ? 1 : 0;
 }
 
@@ -182,6 +183,7 @@ Returns true if user will receive an assignment next month.
 
 sub will_receive_assignment_next_month {
   my ($user) = @_;
+  #TODO add check for tos
   return ($user->assignment_level == USER_ASSIGNMENT_ACTIVE) ? 1 : 0;
 }
 
