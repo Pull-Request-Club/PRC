@@ -9,7 +9,11 @@
   [% IF not_receiving_assignees -%]
     You are not opted in for your repositories to be assigned.
   [% ELSE -%]
-    You will be able to see your repositories here soon.
+
+    Please select repositories that you want to be assigned to other participants. You repository needs to have an open issue to receive assignees.
+
+    [% form.render -%]
+
   [% END -%]
   </p>
 

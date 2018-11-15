@@ -17,6 +17,8 @@ extends 'DBIx::Class::Core';
 
 use DateTime;
 use PRC::Constants;
+use PRC::GitHub;
+use List::Util qw/any first/;
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 __PACKAGE__->table("user");
@@ -185,6 +187,56 @@ sub will_receive_assignment_next_month {
   my ($user) = @_;
   #TODO add check for tos
   return ($user->assignment_level == USER_ASSIGNMENT_ACTIVE) ? 1 : 0;
+}
+
+=head2 fetch_repos
+
+Fetch repositories from GitHub. Add/update repo table.
+Returns undef if something went wrong.
+
+=cut
+
+sub fetch_repos {
+  my ($user) = @_;
+
+  my @existing_repos = $user->repos;
+  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token);
+  return undef unless defined $fetched_repos;
+
+  # Add or update each of fetched repositories
+  foreach my $fetched_repo (@$fetched_repos){
+    my $matching_existing_repo =
+      first {$_->github_id == $fetched_repo->{github_id}} @existing_repos;
+    if ($matching_existing_repo){
+      $matching_existing_repo->update($fetched_repo);
+    } else {
+      $user->create_related('repos',$fetched_repo);
+    }
+  }
+
+  # Mark repositories that didn't come back as "gone missing"
+  foreach my $existing_repo (@existing_repos){
+    my $existing_repo_is_fetched =
+      any {$_->{github_id} == $existing_repo->github_id} @$fetched_repos;
+    if (!$existing_repo_is_fetched){
+      $existing_repo->update({ gone_missing => 1 });
+    }
+  }
+
+  return 1;
+}
+
+=head2 available_repos
+
+Returns an array of repositories that are not gone missing.
+
+=cut
+
+sub available_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    gone_missing => 0
+  })->all;
 }
 
 __PACKAGE__->meta->make_immutable;

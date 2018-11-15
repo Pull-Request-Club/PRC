@@ -192,6 +192,7 @@ sub get_repos {
       github_issue_events_url  => $_->{issue_events_url},
       github_open_issues_count => $_->{open_issues_count},
       github_stargazers_count  => $_->{stargazers_count},
+      gone_missing             => 0,
     }}
     grep {
       !$_->{archived} &&

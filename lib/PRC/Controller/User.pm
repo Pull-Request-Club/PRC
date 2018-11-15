@@ -4,10 +4,13 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use PRC::Form::Repos;
 use PRC::Form::Settings;
 use PRC::Form::Deactivate;
 use PRC::Form::DeleteAccount;
 use PRC::GitHub;
+
+use List::Util qw/any/;
 
 =encoding utf8
 
@@ -150,10 +153,32 @@ sub my_repos :Path('/my-repos') :Args(0) {
   my $user = $c->user;
 
   if($user->is_receiving_assignees){
-    # my @repos = PRC::GitHub->get_repos($user->github_token);
-    # TODO: Create new repo rows, or update existing ones.
-    # If an existing one did not come back, mark gone_missing = 1
-  } else {
+
+    my $form  = PRC::Form::Repos->new(user => $user);
+    $form->process(params => $c->req->params);
+
+    # Form is submitted and valid
+    if($form->validated){
+      my $selected_repos = $form->values->{repo_select};
+
+      foreach my $repo ($user->available_repos){
+        my $github_id   = $repo->github_id;
+        my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
+        $repo->update({ accepting_assignees => $is_selected });
+      }
+      $c->stash->{alert_success} = 'Your repository settings are updated!';
+
+    }
+    # Throw an alert if GitHub fetch errors
+    elsif (!$user->fetch_repos){
+      $c->stash->{alert_danger} = 'Something went wrong, try logging out and logging in again';
+    }
+    $c->stash->{form} = $form;
+
+  }
+
+  # User not receiving assignees anyway
+  else {
     $c->stash->{not_receiving_assignees} = 1;
   }
 
