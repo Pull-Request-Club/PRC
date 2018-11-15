@@ -150,8 +150,8 @@ sub get_email {
 
   my $repos = PRC::GitHub->get_repos($token);
 
-Makes a GET to /user/repos, return an array.
-Exluces forks, archived repos, private repos.
+Makes a GET to /user/repos, return an arrayref.
+Excludes forks, archived repos, private repos.
 Returns data such that it matches our column names.
 
 =cut
@@ -172,6 +172,9 @@ sub get_repos {
   my $data = eval { decode_json($res->content) };
   return undef unless $data && ref $data eq 'ARRAY';
 
+  # Return empty hashref if we got no repos, or [{}]
+  return [] unless scalar @$data;
+  return [] unless $data->[0]->{id};
 
   # "data" is an arrayref of hashes.
   # Filter repos that are archived, forked, or private
@@ -196,7 +199,7 @@ sub get_repos {
       !$_->{private}
     } @$data;
 
-  return @repos;
+  return \@repos;
 
 }
 
