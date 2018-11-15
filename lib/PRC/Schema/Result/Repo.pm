@@ -15,6 +15,8 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
+# TODO ADD uniq constraint to github_id
+
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 __PACKAGE__->table("repo");
 __PACKAGE__->add_columns(
