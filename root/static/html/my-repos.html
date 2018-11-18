@@ -5,15 +5,10 @@
 
   <br><br>
 
-  <p class="lead">
   [% IF not_receiving_assignees -%]
-    You are not opted in for your repositories to be assigned.
+    <p class="lead">You are not opted in for your repositories to be assigned.</p>
   [% ELSE -%]
-
-    Please select repositories that you want to be assigned to other participants. You repository needs to have an open issue to receive assignees.
-
     [% form.render -%]
-
   [% END -%]
   </p>
 

@@ -7,6 +7,8 @@ use namespace::autoclean;
 use PRC::Constants;
 use List::Util qw/none/;
 
+has '+widget_wrapper' => ( default => 'Bootstrap3' );
+
 has_field '_token' => (
   type  => 'RequestToken',
 );
@@ -24,12 +26,10 @@ has_field 'assignment_level' => (
       value => USER_ASSIGNMENT_SKIP,
     },
     {
-      label => 'ACTIVE: I want to receive assignments every month \o/',
+      label => 'ACTIVE: I want to receive assignments every month.',
       value => USER_ASSIGNMENT_ACTIVE,
     },
   ],
-  element_attr => { class => 'form-control form-control-lg' },
-  wrapper_attr => { class => 'form-group' },
 );
 
 has_field 'assignee_level' => (
@@ -45,8 +45,6 @@ has_field 'assignee_level' => (
       value => USER_ASSIGNEE_ACTIVE,
     },
   ],
-  element_attr => { class => 'form-control form-control-lg' },
-  wrapper_attr => { class => 'form-group' },
 );
 
 
@@ -54,7 +52,6 @@ has_field 'submit_settings' => (
   type  => 'Submit',
   value => 'Save my settings',
   element_attr => { class => 'btn btn-success btn-lg btn-block' },
-  wrapper_attr => { class => 'form-group' },
 );
 
 __PACKAGE__->meta->make_immutable;

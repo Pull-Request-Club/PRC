@@ -5,6 +5,8 @@ with 'HTML::FormHandler::Field::Role::RequestToken';
 
 use namespace::autoclean;
 
+has '+widget_wrapper' => ( default => 'Bootstrap3' );
+
 has_field '_token' => (
   type  => 'RequestToken',
 );
