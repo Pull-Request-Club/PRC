@@ -154,6 +154,10 @@ sub my_repos :Path('/my-repos') :Args(0) {
 
   if($user->is_receiving_assignees){
 
+    # Fetch repos
+    # TODO: throw away if errors
+    $user->fetch_repos;
+
     my $form  = PRC::Form::Repos->new(user => $user);
     $form->process(params => $c->req->params);
 
@@ -169,10 +173,7 @@ sub my_repos :Path('/my-repos') :Args(0) {
       $c->stash->{alert_success} = 'Your repository settings are updated!';
 
     }
-    # Throw an alert if GitHub fetch errors
-    elsif (!$user->fetch_repos){
-      $c->stash->{alert_danger} = 'Something went wrong, try logging out and logging in again';
-    }
+
     $c->stash->{form} = $form;
 
   }
