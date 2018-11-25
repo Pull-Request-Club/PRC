@@ -163,45 +163,59 @@ sub get_repos {
   my $ua = LWP::UserAgent->new;
   $ua->agent("PullRequestClub/0.1");
 
-  my $req = HTTP::Request->new(GET => 'https://api.github.com/user/repos');
-  $req->header(Authorization => "token $token");
-  $req->header(Accept => 'application/vnd.github.v3+json');
+  # Loop through pages
+  # TODO look at $res->header('link') that GitHub returns
+  my $done = 0;
+  my $page = 1;
+  my @repos;
 
-  my $res = $ua->request($req);
-  return undef unless $res->is_success;
-  my $data = eval { decode_json($res->content) };
-  return undef unless $data && ref $data eq 'ARRAY';
+  while (!$done){
+    my $req = HTTP::Request->new(GET => "https://api.github.com/user/repos?visibility=public&affiliation=owner&page=$page");
+    $page++;
+    $req->header(Authorization => "token $token");
+    $req->header(Accept => 'application/vnd.github.v3+json');
 
-  # Return empty hashref if we got no repos, or [{}]
-  return [] unless scalar @$data;
-  return [] unless $data->[0]->{id};
+    my $res = $ua->request($req);
+    return undef unless $res->is_success;
 
-  # "data" is an arrayref of hashes.
-  # Filter repos that are archived, forked, or private
-  # Keep only a few items that are relevant to us
-  my @repos =
-    map  {{
-      github_id                => $_->{id},
-      github_name              => $_->{name},
-      github_full_name         => $_->{full_name},
-      github_language          => $_->{language},
-      github_html_url          => $_->{html_url},
-      github_pulls_url         => $_->{pulls_url},
-      github_events_url        => $_->{events_url},
-      github_issues_url        => $_->{issues_url},
-      github_issue_events_url  => $_->{issue_events_url},
-      github_open_issues_count => $_->{open_issues_count},
-      github_stargazers_count  => $_->{stargazers_count},
-      gone_missing             => 0,
-    }}
-    grep {
-      !$_->{archived} &&
-      !$_->{fork}     &&
-      !$_->{private}
-    } @$data;
+    my $data = eval { decode_json($res->content) };
+    return undef unless $data && ref $data eq 'ARRAY';
+    if (scalar @$data){
+      # Return empty hashref if we got [{}]
+      return [] unless $data->[0]->{id};
+    }
+    else {
+      $done = 1;
+      next;
+    }
+
+    # "data" is an arrayref of hashes.
+    # Filter repos that are archived, forked, or private
+    # Keep only a few items that are relevant to us
+    my @new_repos =
+      map  {{
+        github_id                => $_->{id},
+        github_name              => $_->{name},
+        github_full_name         => $_->{full_name},
+        github_language          => $_->{language},
+        github_html_url          => $_->{html_url},
+        github_pulls_url         => $_->{pulls_url},
+        github_events_url        => $_->{events_url},
+        github_issues_url        => $_->{issues_url},
+        github_issue_events_url  => $_->{issue_events_url},
+        github_open_issues_count => $_->{open_issues_count},
+        github_stargazers_count  => $_->{stargazers_count},
+        gone_missing             => 0,
+      }}
+      grep {
+        !$_->{archived} &&
+        !$_->{fork}     &&
+        !$_->{private}
+      } @$data;
+    push @repos, @new_repos;
+  }
 
   return \@repos;
-
 }
 
 1;

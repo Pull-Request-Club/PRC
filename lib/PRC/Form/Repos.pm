@@ -55,8 +55,8 @@ sub build_repo_option_label {
   # TODO Make these clickable to GitHub
   # TODO make it into a table
 
-  my $label = $name;
-  $label   .=  " ($lang, ";
+  my $label = $name . ' (';
+  $label   .= "$lang, " if $lang;
   $label   .= ($count == 0) ? "No issues!)"
             : ($count == 1) ? "1 issue only)"
                             : "$count issues)";
