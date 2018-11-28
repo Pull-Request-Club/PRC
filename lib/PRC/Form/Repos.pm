@@ -66,7 +66,7 @@ sub build_repo_option_label {
 has_field 'submit_repos' => (
   type  => 'Submit',
   value => 'Save my selected repositories',
-  element_attr => { class => 'btn btn-success btn-lg btn-block' },
+  element_attr => { class => 'btn btn-success' },
 );
 
 __PACKAGE__->meta->make_immutable;

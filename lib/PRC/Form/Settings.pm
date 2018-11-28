@@ -51,7 +51,7 @@ has_field 'assignee_level' => (
 has_field 'submit_settings' => (
   type  => 'Submit',
   value => 'Save my settings',
-  element_attr => { class => 'btn btn-success btn-lg btn-block' },
+  element_attr => { class => 'btn btn-success' },
 );
 
 __PACKAGE__->meta->make_immutable;
