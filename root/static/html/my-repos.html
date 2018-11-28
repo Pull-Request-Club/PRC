@@ -3,9 +3,8 @@
 
   <h1>My Repos</h1>
 
-  <br><br>
-
   [% IF not_receiving_assignees -%]
+    <br>
     <p class="lead">You are not opted in for your repositories to be assigned.</p>
   [% ELSE -%]
     [% form.render -%]
