@@ -22,7 +22,7 @@ Catalyst Controller.
 
 =head2 login
 
-This is where "Login with GitHub" button sends. Immediately redirects.
+This is where the "Log in with GitHub" link goes to. Immediately redirects.
 
 =cut
 
