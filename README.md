@@ -14,5 +14,5 @@ Kivanc Yazan
 
 # Contributors
 
-Andrew Grangaard
-Karen Etheridge
+- Andrew Grangaard
+- Karen Etheridge
