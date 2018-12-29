@@ -41,3 +41,16 @@ CREATE TABLE IF NOT EXISTS repo (
 
   FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
+
+CREATE TABLE IF NOT EXISTS assignment (
+  assignment_id            INTEGER PRIMARY KEY,
+  repo_id                  INTEGER NOT NULL,
+  user_id                  INTEGER NOT NULL,
+  create_time              DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  update_time              DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  month                    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status                   INTEGER NOT NULL DEFAULT 0,
+
+  FOREIGN KEY(repo_id) REFERENCES repo(repo_id),
+  FOREIGN KEY(user_id) REFERENCES user(user_id)
+);
