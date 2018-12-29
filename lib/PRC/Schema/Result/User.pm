@@ -83,6 +83,13 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->has_many(
+  "assignments",
+  "PRC::Schema::Result::Assignment",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head1 METHODS
 
 =head2 is_active
@@ -139,7 +146,7 @@ sub schedule_deletion {
   });
 }
 
-=head2 has_accepted_to_latest_terms
+=head2 has_accepted_latest_terms
 
 Returns 1 if user has accepted latest terms.
 
@@ -165,28 +172,90 @@ sub accept_latest_terms {
   });
 }
 
-=head2 is_receiving_assignees
+=head2 can_receive_assignees
 
-Returns true if assignee level is active.
+This reflects whether this user's repositories can be assigned.
+It does not reflect whether user has any repo, or is selected.
 
 =cut
 
-sub is_receiving_assignees {
+sub can_receive_assignees {
   my ($user) = @_;
-  #TODO add check for tos
-  return ($user->assignee_level == USER_ASSIGNEE_ACTIVE) ? 1 : 0;
+  my $assignee_active = ($user->assignee_level == USER_ASSIGNEE_ACTIVE) ? 1 : 0;
+  my $accepted_terms  = $user->has_accepted_latest_terms;
+  return $assignee_active && $accepted_terms;
 }
 
-=head2 will_receive_assignment_next_month
+=head2 can_receive_assignments
 
-Returns true if user will receive an assignment next month.
+This reflects whether this user can receive an assignment next month.
+It will be false if user chose not to receive an assignment.
+It will also be false if user currently has an open assignment.
 
 =cut
 
-sub will_receive_assignment_next_month {
+sub can_receive_assignments {
   my ($user) = @_;
-  #TODO add check for tos
+  return $user->has_accepted_latest_terms
+    && $user->has_assignment_level_active
+    && !$user->has_open_assignment;
+}
+
+=head2 open_assignment
+
+Return open (current) assignment object assigned to user, if any.
+
+=cut
+
+sub open_assignment {
+  my ($user) = @_;
+  return $user->assignments->search({
+    status => ASSIGNMENT_OPEN,
+  })->first;
+}
+
+=head2 has_open_assignment
+
+Returns if user has an OPEN assignment assigned to them.
+
+=cut
+
+sub has_open_assignment {
+  my ($user) = @_;
+  return $user->open_assignment ? 1 : 0;
+}
+
+=head2 has_assignment_level_active
+
+Returns true if assignment level is active.
+
+=cut
+
+sub has_assignment_level_active {
+  my ($user) = @_;
   return ($user->assignment_level == USER_ASSIGNMENT_ACTIVE) ? 1 : 0;
+}
+
+=head2 has_assignment_level_skip
+
+Returns true if assignment level is skip.
+
+=cut
+
+sub has_assignment_level_skip {
+  my ($user) = @_;
+  return ($user->assignment_level == USER_ASSIGNMENT_SKIP) ? 1 : 0;
+}
+
+=head2 has_assignment_level_quit
+
+Returns true if assignment level is quit.
+
+=cut
+
+sub has_assignment_level_quit {
+  my ($user) = @_;
+  return ($user->assignment_level == USER_ASSIGNMENT_QUIT) ? 1 : 0;
 }
 
 =head2 fetch_repos

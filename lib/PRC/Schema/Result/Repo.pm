@@ -80,5 +80,12 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+__PACKAGE__->has_many(
+  "assignments",
+  "PRC::Schema::Result::Assignment",
+  { "foreign.repo_id" => "self.repo_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 __PACKAGE__->meta->make_immutable;
 1;
