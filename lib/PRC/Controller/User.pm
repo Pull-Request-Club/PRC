@@ -134,9 +134,13 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
   my $user = $c->user;
 
   $c->stash({
+    assignment => $user->open_assignment,
+    user_can_receive_assignments   => $user->can_receive_assignments,
+    user_has_open_assignment       => $user->has_open_assignment,
+    user_has_assignment_level_skip => $user->has_assignment_level_skip,
+    user_has_assignment_level_quit => $user->has_assignment_level_quit,
     template   => 'static/html/my-assignment.html',
     active_tab => 'my-assignment',
-    next_month => $user->will_receive_assignment_next_month,
   });
 }
 
@@ -152,7 +156,7 @@ sub my_repos :Path('/my-repos') :Args(0) {
   $c->forward('check_user_status');
   my $user = $c->user;
 
-  if($user->is_receiving_assignees){
+  if($user->can_receive_assignees){
 
     # Fetch repos
     # TODO: throw away if errors

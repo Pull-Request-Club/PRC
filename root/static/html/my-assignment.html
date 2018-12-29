@@ -3,14 +3,40 @@
 
   <h1>My Assignment</h1>
 
-  <br>
-
   <p class="lead">
-  [% IF next_month -%]
-    You will receive your first assignment in January 2019.
-  [% ELSE -%]
-    You are not opted in to receive assignments.
+
+  [% IF assignment -%]
+
+    <div class="card text-center" style="max-width: 30rem;">
+      <div class="card-header">
+        [% assignment.month_pretty -%]
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">[% assignment.repo.github_name | html -%]</h5>
+        <p class="card-text"><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_html_url -%]</a></p>
+        <a href="/help" class="btn btn-info">Help</a>
+        <a href="#" class="btn btn-danger">Skip</a>
+        <a href="#" class="btn btn-success">Done</a>
+      </div>
+      <div class="card-footer">
+        Assignment Status: <strong>[% assignment.status_string -%]</strong>
+      </div>
+    </div>
+
+    <br>
+
   [% END -%]
+
+  [% IF user_can_receive_assignments -%]
+    You are set to receive your next assignment on 1st of next month.
+  [% ELSIF user_has_assignment_level_skip -%]
+    You will skip next month, but receive an assignment the month after.
+  [% ELSIF user_has_assignment_level_quit -%]
+    You will not receive assignments because of your <a href='/settings'>assignment settings</a>.
+  [% ELSIF user_has_open_assignment -%]
+    You will receive a new assignment next month if you complete your current assignment.
+  [% END -%]
+  <br><br>
   </p>
 
 </div>
