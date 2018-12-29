@@ -27,6 +27,10 @@ use constant USER_ASSIGNMENT_ACTIVE => 10;
 use constant USER_ASSIGNEE_QUIT   => 0;
 use constant USER_ASSIGNEE_ACTIVE => 10;
 
+use constant ASSIGNMENT_OPEN    => 0;
+use constant ASSIGNMENT_SKIPPED => 1;
+use constant ASSIGNMENT_DONE    => 10;
+
 our @EXPORT = qw/
   LATEST_LEGAL_DATE
 
@@ -36,6 +40,10 @@ our @EXPORT = qw/
 
   USER_ASSIGNEE_QUIT
   USER_ASSIGNEE_ACTIVE
+
+  ASSIGNMENT_OPEN
+  ASSIGNMENT_SKIPPED
+  ASSIGNMENT_DONE
 /;
 
 1;
