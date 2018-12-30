@@ -61,19 +61,19 @@ sub index :Path :Args(0) {
   });
 }
 
-=head2 about
+=head2 help
 
-/about
+/help
 
-Display a little more information about Pull Request Club.
+Show some information about PRC + help users.
 
 =cut
 
-sub about :Local :Args(0) {
+sub help :Local :Args(0) {
   my ($self, $c) = @_;
 
   $c->stash({
-    template => 'static/html/about.html',
+    template => 'static/html/help.html',
   });
 }
 
