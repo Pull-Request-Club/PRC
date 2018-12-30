@@ -30,6 +30,7 @@ has_field 'assignment_level' => (
       value => USER_ASSIGNMENT_ACTIVE,
     },
   ],
+  element_attr => { style => "max-width:500px;" },
 );
 
 has_field 'assignee_level' => (
@@ -45,6 +46,7 @@ has_field 'assignee_level' => (
       value => USER_ASSIGNEE_ACTIVE,
     },
   ],
+  element_attr => { style => "max-width:500px;" },
 );
 
 
