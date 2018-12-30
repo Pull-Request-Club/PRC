@@ -113,12 +113,16 @@ sub logout :Path('/logout') :Args(0) {
     $c->detach;
   }
 
+  my $has_seen_cookie_notice = $c->session->{has_seen_cookie_notice};
+
   $c->delete_session;
   $c->logout;
 
-  if($message){
-    $c->session->{alert_warning} = $message;
+  if ($has_seen_cookie_notice){
+    $c->session->{has_seen_cookie_notice} = 1;
   }
+
+  $c->session->{alert_success} = $message || "You are now logged out.";
 
   $c->response->redirect('/',303);
   $c->detach;
