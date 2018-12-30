@@ -269,6 +269,9 @@ Joined with repos and repo-owner users.
 sub assignments_taken {
   my ($user) = @_;
   return $user->assignments->search({},{
+    # Join "repo" on assignment, then "user" on "repo".
+    # So that we get repo details of assignment, and also
+    # user details of (owner of the) repo.
     prefetch => {repo  => 'user' },
     order_by => {-desc => 'month'},
   })->all;
@@ -288,6 +291,9 @@ sub assignments_given {
   return $user->result_source->schema->resultset('Assignment')->search({
     'repo.user_id' => $user->id,
   },{
+    # Join "repo" on assignment to get repo details.
+    # Join "user" on assignment as well, so that we get details of
+    # user who got the repository as their assignment.
     prefetch => ['user', 'repo'],
     order_by => {-desc => 'month'},
   })->all;
