@@ -88,6 +88,29 @@ sub status_string {
   }
 }
 
+=head2 status_color
+
+Returns bootstrap class that represents color for assignment.
+Open    = Blue  = Primary
+Skipped = Grey  = Secondary
+Done    = Green = Success
+
+=cut
+
+sub status_color {
+  my ($assignment) = @_;
+  my $status = $assignment->status;
+  if ($status == ASSIGNMENT_OPEN){
+    return "primary";
+  } elsif ($status == ASSIGNMENT_SKIPPED){
+    return "secondary";
+  } elsif ($status == ASSIGNMENT_DONE){
+    return "success";
+  } else {
+    return "info" ;
+  }
+}
+
 =head2 month_pretty
 
 Returns pretty string for month row like "January 2019".

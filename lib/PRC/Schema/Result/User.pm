@@ -258,6 +258,41 @@ sub has_assignment_level_quit {
   return ($user->assignment_level == USER_ASSIGNMENT_QUIT) ? 1 : 0;
 }
 
+=head2 assignments_taken
+
+Returns all assignments assigned to this user.
+Sorted by descending date.
+Joined with repos and repo-owner users.
+
+=cut
+
+sub assignments_taken {
+  my ($user) = @_;
+  return $user->assignments->search({},{
+    prefetch => {repo  => 'user' },
+    order_by => {-desc => 'month'},
+  })->all;
+}
+
+=head2 assignments_given
+
+Returns all assignments of this user's repositories.
+These are assignments assigned to other users.
+Sorted by descending date.
+Joined with repos and assignment-owner users.
+
+=cut
+
+sub assignments_given {
+  my ($user) = @_;
+  return $user->result_source->schema->resultset('Assignment')->search({
+    'repo.user_id' => $user->id,
+  },{
+    prefetch => ['user', 'repo'],
+    order_by => {-desc => 'month'},
+  })->all;
+}
+
 =head2 fetch_repos
 
 Fetch repositories from GitHub. Add/update repo table.

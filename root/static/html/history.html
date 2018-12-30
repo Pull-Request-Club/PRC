@@ -1,0 +1,73 @@
+<div class="container">
+  <br><br>
+
+  <h1>History</h1>
+  <br>
+
+  <h3>Assignment History</h3>
+
+  [% IF taken.size -%]
+  <table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Maintainer</th>
+        <th scope="col">Repository</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH assignment IN taken -%]
+      <tr class="table-[% assignment.status_color -%]">
+        <th scope="row">[% assignment.month_pretty -%]</th>
+        <td>[% assignment.repo.user.github_login -%]</td>
+        <td><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_name -%]</a></td>
+        <td>[% assignment.status_string -%]</td>
+      </tr>
+    [% END -%]
+    </tbody>
+  </table>
+
+  [% ELSE -%]
+
+    You do not have any assignment history.
+
+  [% END -%]
+
+  <br>
+
+  <h3>Assignee History</h3>
+
+  [% IF given.size -%]
+
+  <table class="table table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Assignee</th>
+        <th scope="col">Repository</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH assignment IN given -%]
+      <tr class="table-[% assignment.status_color -%]">
+        <th scope="row">[% assignment.month_pretty -%]</th>
+        <td>[% assignment.user.github_login -%]</td>
+        <td><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_name -%]</a></td>
+        <td>[% assignment.status_string -%]</td>
+      </tr>
+    [% END -%]
+    </tbody>
+  </table>
+
+  [% ELSE -%]
+
+    You do not have any assignee history.
+
+  [% END -%]
+
+  <br>
+
+</div>
+</div>
