@@ -8,6 +8,8 @@ use PRC::Form::Repos;
 use PRC::Form::Settings;
 use PRC::Form::Deactivate;
 use PRC::Form::DeleteAccount;
+use PRC::Form::SkipConfirm;
+use PRC::Form::DoneConfirm;
 use PRC::GitHub;
 
 use List::Util qw/any/;
@@ -30,6 +32,7 @@ A private action that can make sure user
 - is logged in
 - has an active account (not marked for deactivation/deletion)
 - has agreed to latest TOU/PP/GDPR.
+- has an open assignment (if requested)
 
 
 Otherwise, send them to correct places.
@@ -42,6 +45,7 @@ sub check_user_status :Private {
   $args  //= {};
   my $user = $c->user;
   my $skip_legal_check = $args->{skip_legal_check};
+  my $check_open_assignment = $args->{check_open_assignment};
 
   unless ($user){
     $c->session->{alert_danger} = 'You need to login first.';
@@ -58,6 +62,12 @@ sub check_user_status :Private {
   # Check if user has agreed to legal (tos/pp/gdpr)
   if(!$skip_legal_check && !$user->has_accepted_latest_terms){
     $c->response->redirect('/legal',303);
+    $c->detach;
+  }
+
+  # Check if user has an open assignment
+  if($check_open_assignment && !$user->has_open_assignment){
+    $c->response->redirect('/my-assignment',303);
     $c->detach;
   }
 
@@ -215,6 +225,57 @@ sub history :Path('/history') :Args(0) {
   });
 }
 
+=head2 skip_confirm
+
+=cut
+
+sub skip_confirm :Path('/skip-confirm') :Args(0) {
+  my ($self, $c) = @_;
+
+  # must be logged in + activated + agreed to legal + has open assignment
+  $c->forward('check_user_status',[{ check_open_assignment => 1 }]);
+  my $user = $c->user;
+
+  my $form = PRC::Form::SkipConfirm->new;
+  $form->process(params => $c->req->params);
+  if($form->validated){
+    $user->open_assignment->mark_as_skipped;
+    $c->session->{alert_success} = 'You have skipped your assignment.';
+    $c->response->redirect('/history',303);
+    $c->detach;
+  }
+
+  $c->stash({
+    template => 'static/html/skip-confirm.html',
+    form     => $form,
+  });
+}
+
+=head2 done_confirm
+
+=cut
+
+sub done_confirm :Path('/done-confirm') :Args(0) {
+  my ($self, $c) = @_;
+
+  # must be logged in + activated + agreed to legal + has open assignment
+  $c->forward('check_user_status',[{ check_open_assignment => 1 }]);
+  my $user = $c->user;
+
+  my $form = PRC::Form::DoneConfirm->new;
+  $form->process(params => $c->req->params);
+  if($form->validated){
+    $user->open_assignment->mark_as_done;
+    $c->session->{alert_success} = 'You have completed your assignment!';
+    $c->response->redirect('/history',303);
+    $c->detach;
+  }
+
+  $c->stash({
+    template => 'static/html/done-confirm.html',
+    form     => $form,
+  });
+}
 __PACKAGE__->meta->make_immutable;
 
 1;
