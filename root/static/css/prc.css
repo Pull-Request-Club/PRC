@@ -21,3 +21,7 @@ body {
   line-height: 40px; /* Vertically center the text there */
   background-color: aliceblue;
 }
+
+table {
+  word-break: break-word; /* Make tables readable on mobile */
+}

@@ -193,6 +193,28 @@ sub my_repos :Path('/my-repos') :Args(0) {
   });
 }
 
+=head2 history
+
+=cut
+
+sub history :Path('/history') :Args(0) {
+  my ($self, $c) = @_;
+
+  # must be logged in + activated + agreed to legal
+  $c->forward('check_user_status');
+  my $user = $c->user;
+
+  my @taken = $user->assignments_taken;
+  my @given = $user->assignments_given;
+
+  $c->stash({
+    taken       => \@taken,
+    given       => \@given,
+    template    => 'static/html/history.html',
+    active_tab  => 'history',
+  });
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
