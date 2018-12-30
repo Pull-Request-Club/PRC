@@ -124,5 +124,31 @@ sub month_pretty {
   return $pretty;
 }
 
+=head2 mark_as_skipped
+
+Updates assignment status as "SKIPPED".
+
+=cut
+
+sub mark_as_skipped {
+  my ($assignment) = @_;
+  $assignment->update({
+    status => ASSIGNMENT_SKIPPED,
+  });
+}
+
+=head2 mark_as_done
+
+Updates assignment status as "DONE".
+
+=cut
+
+sub mark_as_done {
+  my ($assignment) = @_;
+  $assignment->update({
+    status => ASSIGNMENT_DONE,
+  });
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
