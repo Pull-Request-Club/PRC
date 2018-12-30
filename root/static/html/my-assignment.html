@@ -3,11 +3,11 @@
 
   <h1>My Assignment</h1>
 
-  <p class="lead">
+  <br>
 
   [% IF assignment -%]
 
-    <div class="card text-center" style="max-width: 30rem;">
+    <div class="card text-center" style="max-width: 100%;">
       <div class="card-header">
         [% assignment.month_pretty -%]
       </div>
@@ -15,8 +15,8 @@
         <h5 class="card-title">[% assignment.repo.github_name | html -%]</h5>
         <p class="card-text"><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_html_url -%]</a></p>
         <a href="/help" class="btn btn-info">Help</a>
-        <a href="#" class="btn btn-danger">Skip</a>
-        <a href="#" class="btn btn-success">Done</a>
+        <a href="/skip-confirm" class="btn btn-danger">Skip</a>
+        <a href="/done-confirm" class="btn btn-success">Done</a>
       </div>
       <div class="card-footer">
         Assignment Status: <strong>[% assignment.status_string -%]</strong>
@@ -27,6 +27,7 @@
 
   [% END -%]
 
+  <p class="lead">
   [% IF user_can_receive_assignments -%]
     You are set to receive your next assignment on 1st of next month.
   [% ELSIF user_has_assignment_level_skip -%]
@@ -36,7 +37,8 @@
   [% ELSIF user_has_open_assignment -%]
     You will receive a new assignment next month if you complete your current assignment.
   [% END -%]
-  <br><br>
   </p>
+
+  <br><br>
 
 </div>
