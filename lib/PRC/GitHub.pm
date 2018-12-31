@@ -218,6 +218,45 @@ sub get_repos {
   return \@repos;
 }
 
-1;
+=head2 confirm_pr
+
+Makes a call to events API and confirms whether assignee
+has submitted a PR after assignment date.
+Takes in repo, assignee, assignment.
+Returns 0 or 1.
+
+=cut
+
+sub confirm_pr {
+  my ($self, $repo, $assignee, $assignment) = @_;
+  return undef unless $repo && $assignee && $assignment;
+
+  my $ua = LWP::UserAgent->new;
+  $ua->agent("PullRequestClub/0.1");
+
+  my $req   = HTTP::Request->new(GET => $repo->github_events_url);
+  my $token = $repo->user->github_token;
+  $req->header(Authorization => "token $token");
+  $req->header(Accept => 'application/vnd.github.v3+json');
+
+  my $res = $ua->request($req);
+  return undef unless $res->is_success;
+
+  my $data = eval { decode_json($res->content) };
+  return undef unless $data && ref $data eq 'ARRAY';
+
+  my $strp = DateTime::Format::Strptime->new( pattern => '%FT%H:%M:%SZ' );
+
+  my @prs = grep {
+    ($_->{type}             eq  'PullRequestEvent'    )  &&
+    ($_->{payload}{action}  eq  'opened'              )  &&
+    ($_->{actor}{id}        ==  $assignee->github_id  )  &&
+    ($strp->parse_datetime($_->{created_at}) > $assignment->create_time)
+  } @$data;
+  my $pr_count  = scalar @prs;
+  my $pr_exists = ($pr_count > 0) ? 1 : 0;
+
+  return $pr_exists;
+}
 
 1;
