@@ -13,7 +13,7 @@ has_field '_token' => (
 
 has_field 'submit' => (
   type  => 'Submit',
-  value => 'Yes, continue.',
+  value => 'Yes, continue',
   element_attr => { class => 'btn btn-success' },
 );
 
