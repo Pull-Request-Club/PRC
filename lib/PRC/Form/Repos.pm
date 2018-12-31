@@ -11,7 +11,7 @@ has '+widget_wrapper' => ( default => 'Bootstrap3' );
 has 'user' => (
   is       => 'ro',
   isa      => 'Catalyst::Authentication::Store::DBIx::Class::User',
-  required => 1
+  required => 1,
 );
 
 has_field '_token' => (

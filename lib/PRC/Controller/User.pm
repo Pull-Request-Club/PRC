@@ -10,7 +10,6 @@ use PRC::Form::Deactivate;
 use PRC::Form::DeleteAccount;
 use PRC::Form::SkipConfirm;
 use PRC::Form::DoneConfirm;
-use PRC::GitHub;
 
 use List::Util qw/any/;
 
