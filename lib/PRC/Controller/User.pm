@@ -260,8 +260,7 @@ sub done_confirm :Path('/done-confirm') :Args(0) {
   # must be logged in + activated + agreed to legal + has open assignment
   $c->forward('check_user_status',[{ check_open_assignment => 1 }]);
   my $user = $c->user;
-
-  my $form = PRC::Form::DoneConfirm->new;
+  my $form = PRC::Form::DoneConfirm->new(assignment => $user->open_assignment);
   $form->process(params => $c->req->params);
   if($form->validated){
     $user->open_assignment->mark_as_done;
