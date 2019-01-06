@@ -72,6 +72,8 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 256,
   },
+  "last_repos_sync",
+  { data_type => "datetime", default_value => \"null", is_nullable => 1 },
 );
 
 __PACKAGE__->set_primary_key("user_id");
@@ -309,6 +311,9 @@ Returns undef if something went wrong.
 sub fetch_repos {
   my ($user) = @_;
 
+  return 1 if $user->last_repos_sync
+    && $user->last_repos_sync > DateTime->now->add(days=>-1);
+
   my @existing_repos = $user->repos;
   my $fetched_repos  = PRC::GitHub->get_repos($user->github_token);
   return undef unless defined $fetched_repos;
@@ -332,6 +337,8 @@ sub fetch_repos {
       $existing_repo->update({ gone_missing => 1 });
     }
   }
+
+  $user->update({ last_repos_sync => DateTime->now->datetime });
 
   return 1;
 }
