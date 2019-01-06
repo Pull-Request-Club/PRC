@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS user (
   github_login           VARCHAR(128) NOT NULL,
   github_email           VARCHAR(256) NOT NULL,
   github_profile         VARCHAR(256) NOT NULL,
-  github_token           VARCHAR(256) DEFAULT NULL
+  github_token           VARCHAR(256) DEFAULT NULL,
+  last_repos_sync        DATETIME DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS repo (
