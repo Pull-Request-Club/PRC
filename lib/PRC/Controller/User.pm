@@ -167,6 +167,10 @@ sub my_repos :Path('/my-repos') :Args(0) {
 
   if($user->can_receive_assignees){
 
+    if($c->req->params->{reload_repos}){
+      $user->update({last_repos_sync => undef});
+      $c->stash->{alert_success} = 'Your repositories were reloaded!';
+    }
     # Fetch repos
     # TODO: throw away if errors
     $user->fetch_repos;
@@ -175,7 +179,7 @@ sub my_repos :Path('/my-repos') :Args(0) {
     $form->process(params => $c->req->params);
 
     # Form is submitted and valid
-    if($form->validated){
+    if($form->params->{submit_repos} && $form->validated){
       my $selected_repos = $form->values->{repo_select};
 
       foreach my $repo ($user->available_repos){
