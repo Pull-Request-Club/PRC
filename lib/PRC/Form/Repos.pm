@@ -63,6 +63,12 @@ sub build_repo_option_label {
   return $label;
 }
 
+has_field 'reload_repos' => (
+  type => 'Submit',
+  value => 'Reload repositories',
+  element_attr => { class => 'btn btn-primary' },
+);
+
 has_field 'submit_repos' => (
   type  => 'Submit',
   value => 'Save my selected repositories',
