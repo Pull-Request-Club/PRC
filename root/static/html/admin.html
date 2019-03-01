@@ -1,0 +1,71 @@
+<div class="container">
+    <h2>Admin Panel</h2>
+    <div style="margin-top: 50px;">
+        [% IF user -%]
+            <table>
+                <th>
+                    [% user.github_login -%]
+                </th>
+                <th>
+                    <img src="https://avatars2.githubusercontent.com/u/[% user.github_id -%]" height=100 width=100 style="border-radius: 50%"/>
+                </th>
+                <tr>
+                    <td>
+                        <strong>Username</strong>
+                    </td>
+                    <td>
+                        <a href="[% user.github_profile -%]" target="_blank">[% user.github_login %]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Github User ID</strong>
+                    </td>
+                    <td>
+                        [% user.github_id -%]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Email</strong>
+                    </td>
+                    <td>
+                        [% user.github_email %]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Last Login Time</strong>
+                    </td>
+                    <td>
+                        [% user.last_login_time -%]   
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Created at</strong>
+                    </td>
+                    <td>
+                        [% user.create_time -%]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Updated at</strong>
+                    </td>
+                    <td>
+                        [% user.update_time -%]
+                    </td>
+                </tr>
+            </table>
+        [% END -%]
+        [% IF users -%]
+        <h4>All Users</h4>
+        <ul>
+            [% FOREACH user IN users -%]
+            <li><a href="/admin/users/[% user.user_id -%]">[% user.github_login -%]</a></li>
+            [% END -%]
+        </ul>
+        [% END -%]
+    </div>
+</div>

@@ -25,3 +25,8 @@ body {
 table {
   word-break: break-word; /* Make tables readable on mobile */
 }
+
+td {
+  padding-top: 20px;
+  padding-right: 20px;
+}

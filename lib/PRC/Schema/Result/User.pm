@@ -53,6 +53,8 @@ __PACKAGE__->add_columns(
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
   "is_deactivated",
   { data_type => "boolean", default_value => 0, is_nullable => 0 },
+  "is_admin",
+  { data_type => "boolean", default_value => 0, is_nullable => 0},
   "assignment_level",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "assignee_level",
@@ -354,6 +356,20 @@ sub available_repos {
   return $user->repos->search({
     gone_missing => 0
   })->all;
+}
+
+
+=head2 make_admin
+
+gives admin rights to the user
+
+=cut
+
+sub make_admin {
+  my ($user) = @_;
+  $user->update({
+    is_admin => 1
+  });
 }
 
 __PACKAGE__->meta->make_immutable;
