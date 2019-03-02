@@ -54,6 +54,7 @@ sub users: Path('/admin/users'): Args(0) {
     $c->stash({
         template => 'static/html/admin.html',
         users => \@users,
+        active_tab => 'admin'
     });
     $c->detach;
 }
@@ -79,6 +80,7 @@ sub user_data: Path('/admin/users'): Args(1) {
             $c->stash({
                 template => 'static/html/admin.html',
                 user => $user,
+                active_tab => 'admin'
             });
             $c->detach;
         }else {
@@ -89,7 +91,7 @@ sub user_data: Path('/admin/users'): Args(1) {
     }
 }
 =encoding utf8
-
+=cut
 
 __PACKAGE__->meta->make_immutable;
 

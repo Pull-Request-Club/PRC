@@ -36,7 +36,7 @@ sub auto :Private {
     alert_info    => delete $c->session->{alert_info},
     alert_warning => delete $c->session->{alert_warning},
     alert_danger  => delete $c->session->{alert_danger},
-    $user ? ( logged_in => 1, github_login => $user->github_login ) : (),
+    $user ? ( logged_in => 1, github_login => $user->github_login, is_admin => $user->is_admin ) : (),
   });
 
 }

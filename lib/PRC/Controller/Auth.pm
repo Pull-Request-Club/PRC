@@ -6,6 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use DateTime;
 use PRC::GitHub;
+use PRC::Secrets;
 use PRC::Form::Reactivate;
 
 =encoding utf8
@@ -91,7 +92,9 @@ sub callback :Path('/callback') :Args(0) {
     # If that didn't work, kick out
     $c->forward('login_error') unless $user;
   }
-
+  if($user->github_login eq PRC::Secrets->init_admin) {
+    $user->make_admin;
+  }
   # LOGIN HAPPENS!
   $c->authenticate({ user_id => $user->id });
   $c->session->{alert_success} = 'You are now logged in!';

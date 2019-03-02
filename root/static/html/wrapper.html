@@ -30,6 +30,11 @@
       <li class="nav-item [% IF active_tab == 'settings' -%]active[% END -%]">
         <a class="nav-link" href="/settings">Settings[% IF active_tab == 'settings' -%] <span class="sr-only">(current)</span>[% END -%]</a>
       </li>
+      [% IF is_admin -%]
+      <li class="nav-item [% IF active_tab == 'admin' -%]active[% END -%]">
+        <a class="nav-link" href="/admin/users">Admin[% IF active_tab == 'admin' -%] <span class="sr-only">(current)</span>[% END -%]</a>
+      </li>
+      [% END -%]
    [% END -%]
     </ul>
     <ul class="nav navbar-nav navbar-right">

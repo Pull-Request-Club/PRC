@@ -37,6 +37,15 @@ sub client_secret {
   return shift->_read('CLIENT_SECRET');
 }
 
+=head2 init_admin
+
+Subroutine that returns the initial admin's github id
+
+=cut
+
+sub init_admin {
+  return shift->_read('INIT_ADMIN');
+}
 =head2 _read
 
 Subroutine that does the actual reading.
