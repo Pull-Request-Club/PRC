@@ -1,7 +1,8 @@
 <div class="container">
-    <h2>Admin Panel</h2>
-    <div style="margin-top: 50px;">
+    <div style="margin-top: 20px;">
         [% IF user -%]
+        <h2>User Details</h2>
+        <br>
             <table>
                 <th>
                     [% user.github_login -%]
@@ -59,13 +60,139 @@
                 </tr>
             </table>
         [% END -%]
+        [% IF repo -%]
+        <h2>Repository Details</h2>
+        <br>
+            <table>
+                <th>
+                    [% repo_owner.github_login -%]
+                </th>
+                <th>
+                    <img src="https://avatars2.githubusercontent.com/u/[% repo_owner.github_id -%]" height=100 width=100 style="border-radius: 50%"/>
+                </th>
+                <tr>
+                    <td>
+                        <strong>Github ID</strong>
+                    </td>
+                    <td>
+                        [% repo.github_id -%]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Github Name</strong>
+                    </td>
+                    <td>
+                        [% repo.github_name -%]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Github Full Name</strong>
+                    </td>
+                    <td>
+                        <a href="[% repo.github_html_url -%]" target="_blank">[% repo.github_full_name -%]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Accepting Assignees</strong>
+                    </td>
+                    <td>
+                        [% IF repo.accepting_assignees -%]
+                            Yes
+                        [% ELSE -%]
+                            No
+                        [% END -%]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Stargazers</strong>
+                    </td>
+                    <td>
+                        [% repo.github_stargazers_count -%]
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Open Issues</strong>
+                    </td>
+                    <td>
+                        [% repo.github_open_issues_count -%]
+                    </td>
+                </tr>
+            </table>
+        [% END -%]
         [% IF users -%]
-        <h4>All Users</h4>
-        <ul>
-            [% FOREACH user IN users -%]
-            <li><a href="/admin/users/[% user.user_id -%]">[% user.github_login -%]</a></li>
-            [% END -%]
-        </ul>
+        <table cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td>
+                    <table cellspacing="0" cellpadding="1" border="0" style="width: 100%">
+                        <tr>
+                            <th>
+                                <strong>Github Users</strong>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="height: 40vh; overflow:auto;">
+                        <table cellspacing="0" cellpadding="1" border="0">
+                            [% FOREACH user IN users -%]
+                                <tr>
+                                    <td>
+                                            <a href="/admin/users/[% user.user_id -%]">[% user.github_login -%]</a>
+                                    </td>
+                                </tr>
+                            [% END -%]
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        [% END -%]
+        [% IF repos -%]
+            <table cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                    <td>
+                        <table cellspacing="0" cellpadding="1" border="0" style="width: 100%">
+                            <tr>
+                                <th>
+                                    <strong>Repository</strong>
+                                </th>
+                                <th style="text-align: right">
+                                    <strong>Accepting Assignees</strong>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="height: 40vh; overflow:auto;">
+                            <table cellspacing="0" cellpadding="1" border="0">
+                                [% FOREACH repo IN repos -%]
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/repos/[% repo.repo_id -%]">[% repo.github_full_name -%]</a>
+                                        </td>
+                                        <td>
+                                            [% IF repo.accepting_assignees -%]
+                                                Yes
+                                            [% ELSE -%]
+                                                No
+                                            [% END -%]
+                                        </td>
+                                    </tr>
+                                [% END -%]
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         [% END -%]
     </div>
 </div>

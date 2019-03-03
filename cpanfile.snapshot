@@ -333,14 +333,12 @@ DISTRIBUTIONS
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
       DBIx::Class 0.08114
-      DBIx::Class::Schema::Loader 0.04005
       ExtUtils::MakeMaker 6.59
       Hash::Merge 0
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
       MooseX::MarkAsMethods 0.13
-      MooseX::NonMoose 0.16
       MooseX::Types 0
       MooseX::Types::LoadableClass 0.009
       Storable 0
@@ -859,7 +857,6 @@ DISTRIBUTIONS
       Config::Any::XML undef
       Config::Any::YAML undef
     requirements:
-      Config::General 2.47
       Module::Pluggable::Object 3.6
   Config-General-2.63
     pathname: T/TL/TLINDEN/Config-General-2.63.tar.gz
@@ -3015,6 +3012,14 @@ DISTRIBUTIONS
       Encode 2.10
       Exporter 5.57
       ExtUtils::MakeMaker 6.30
+  IO-Socket-IP-0.39
+    pathname: P/PE/PEVANS/IO-Socket-IP-0.39.tar.gz
+    provides:
+      IO::Socket::IP 0.39
+    requirements:
+      IO::Socket 0
+      Socket 1.97
+      Test::More 0.88
   IO-Socket-SSL-2.060
     pathname: S/SU/SULLR/IO-Socket-SSL-2.060.tar.gz
     provides:
@@ -3029,7 +3034,6 @@ DISTRIBUTIONS
       IO::Socket::SSL::Utils 2.014
     requirements:
       ExtUtils::MakeMaker 0
-      Mozilla::CA 0
       Net::SSLeay 1.46
       Scalar::Util 0
   IO-stringy-2.111
@@ -5008,6 +5012,17 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       perl 5.006
+  Scalar-List-Utils-1.50
+    pathname: P/PE/PEVANS/Scalar-List-Utils-1.50.tar.gz
+    provides:
+      List::Util 1.50
+      List::Util::XS 1.50
+      Scalar::Util 1.50
+      Sub::Util 1.50
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0
+      perl 5.006
   Scope-Guard-0.21
     pathname: C/CH/CHOCOLATE/Scope-Guard-0.21.tar.gz
     provides:
@@ -6224,6 +6239,13 @@ DISTRIBUTIONS
       XML::Writer::_String 0.625
     requirements:
       ExtUtils::MakeMaker 0
+  XSLoader-0.24
+    pathname: S/SA/SAPER/XSLoader-0.24.tar.gz
+    provides:
+      XSLoader 0.24
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0.47
   YAML-1.27
     pathname: T/TI/TINITA/YAML-1.27.tar.gz
     provides:

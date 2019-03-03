@@ -31,10 +31,17 @@
         <a class="nav-link" href="/settings">Settings[% IF active_tab == 'settings' -%] <span class="sr-only">(current)</span>[% END -%]</a>
       </li>
       [% IF is_admin -%]
-      <li class="nav-item [% IF active_tab == 'admin' -%]active[% END -%]">
-        <a class="nav-link" href="/admin/users">Admin[% IF active_tab == 'admin' -%] <span class="sr-only">(current)</span>[% END -%]</a>
+      <li class="nav-item dropdown [% IF active_tab == 'admin' -%]active[% END -%]">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Admin
+          </a>      
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="/admin/users">Users</a>
+            <a class="dropdown-item" href="/admin/repos">Repositories</a>
+          </div>
       </li>
       [% END -%]
+
    [% END -%]
     </ul>
     <ul class="nav navbar-nav navbar-right">

@@ -43,7 +43,9 @@ sub check_admin_status : Private {
 }
 
 =head2 users
+
 returns all the registered users
+
 =cut
 
 sub users: Path('/admin/users'): Args(0) {
@@ -60,7 +62,9 @@ sub users: Path('/admin/users'): Args(0) {
 }
 
 =head2 users_data
+
 returns the details about user with user_id=$id
+
 =cut
 
 
@@ -72,24 +76,87 @@ sub user_data: Path('/admin/users'): Args(1) {
         $c->log->debug('id not given');
         $c->response->redirect('/admin/users', 303);
         $c->detach;
+    }
+
+    my $user = $rs->search({
+        user_id => $id
+    })->first;
+
+    if($user) {
+        $c->stash({
+            template => 'static/html/admin.html',
+            user => $user,
+            active_tab => 'admin'
+        });
+        $c->detach;
     }else {
-        my $user = $rs->search({
-            user_id => $id
-        })->first;
-        if($user) {
-            $c->stash({
-                template => 'static/html/admin.html',
-                user => $user,
-                active_tab => 'admin'
-            });
-            $c->detach;
-        }else {
-            $c->log->debug('user not found');
-            $c->response->redirect('/admin/users', 303);
-            $c->detach;
-        }
+        $c->log->debug('user not found');
+        $c->response->redirect('/admin/users', 303);
+        $c->detach;
     }
 }
+
+
+=head2 repos
+
+returns all the repositories accepting assignees
+
+=cut
+
+sub repos: Path('/admin/repos'): Args(0) {
+    my ( $self, $c ) = @_;
+    $c->forward('check_admin_status');
+    my $rs = $c->model('PRCDB::Repo');
+    my @repos = $rs->all();
+
+    $c->stash({
+        template => 'static/html/admin.html',
+        active_tab => 'admin',
+        repos => \@repos
+    });
+    $c->detach;
+}
+
+
+=head2 repos_data
+
+returns the details about repository with repo_id=$id
+
+=cut
+
+sub repos_data: Path('/admin/repos'): Args(1) {
+    my ( $self, $c, $id ) = @_;
+    $c->forward('check_admin_status');
+    my $rs = $c->model('PRCDB::Repo');
+    if(not defined $id) {
+        $c->log->debug('id not given');
+        $c->response->redirect('/admin/repos', 303);
+        $c->detach;
+    }
+
+    my $repo = $rs->search({
+        repo_id => $id
+    })->first;
+
+    if($repo) {
+        my $repo_owner = $c->model('PRCDB::User')->search({
+            user_id => $repo->user_id
+        })->first;
+
+        $c->stash({
+            template => 'static/html/admin.html',
+            active_tab => 'admin',
+            repo => $repo,
+            repo_owner => $repo_owner
+        });
+        $c->detach;
+    }else {
+        $c->log->debug('repo not found');
+        $c->response->redirect('/admin/repos', 303);
+        $c->detach;
+    }
+}
+
 =encoding utf8
 =cut
 
