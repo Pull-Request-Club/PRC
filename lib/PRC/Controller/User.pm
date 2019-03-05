@@ -10,6 +10,7 @@ use PRC::Form::Deactivate;
 use PRC::Form::DeleteAccount;
 use PRC::Form::SkipConfirm;
 use PRC::Form::DoneConfirm;
+use PRC::Form::ShareEmailAddress;
 
 use List::Util qw/any/;
 
@@ -87,6 +88,7 @@ sub settings :Path('/settings') :Args(0) {
   my $settings_form       = PRC::Form::Settings->new;
   my $deactivate_form     = PRC::Form::Deactivate->new;
   my $delete_account_form = PRC::Form::DeleteAccount->new;
+  my $share_email_form    = PRC::Form::ShareEmailAddress->new;
 
   $deactivate_form->process(params => $c->req->params);
   if($c->req->params->{submit_deactivate} && $deactivate_form->validated){
@@ -104,6 +106,17 @@ sub settings :Path('/settings') :Args(0) {
     $c->detach;
   }
 
+  $share_email_form->process(params => $c->req->params);
+  if($c->req->params->{submit_sharing} && $share_email_form->validated) {
+    my $message = 'Your sharing settings have been saved';
+    my $values = $share_email_form->values;
+    $user->update({
+      share_email_user_assigned => $values->{share_email_user_assigned},
+      share_email_user_assignment => $values->{share_email_user_assignment}
+    });
+    $c->stash->{alert_success} = $message;
+  }
+
   $settings_form->process(
     params   => $c->req->params,
     defaults => {
@@ -111,6 +124,15 @@ sub settings :Path('/settings') :Args(0) {
       assignee_level   => $user->assignee_level,
     }
   );
+
+  $share_email_form->process(
+    params => $c->req->params,
+    defaults => {
+      share_email_user_assignment => $user->share_email_user_assignment,
+      share_email_user_assigned => $user->share_email_user_assigned
+    }
+  );
+  
   if($c->req->params->{submit_settings} && $settings_form->validated){
     # Note that values are validated by HTML::FormHandler
     my $values = $settings_form->values;
@@ -127,6 +149,7 @@ sub settings :Path('/settings') :Args(0) {
     settings_form       => $settings_form,
     deactivate_form     => $deactivate_form,
     delete_account_form => $delete_account_form,
+    share_email_form    => $share_email_form
   });
 }
 

@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS user (
   assignment_level       INTEGER NOT NULL DEFAULT 0,
   assignee_level         INTEGER NOT NULL DEFAULT 0,
 
+  share_email_user_assignment  BOOLEAN NOT NULL DEFAULT 0,
+  share_email_user_assigned    BOOLEAN NOT NULL DEFAULT 0,
+
   github_id              INTEGER NOT NULL,
   github_login           VARCHAR(128) NOT NULL,
   github_email           VARCHAR(256) NOT NULL,
