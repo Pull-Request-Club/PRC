@@ -26,6 +26,121 @@ DISTRIBUTIONS
       POSIX::strftime::Compiler 0.30
       Time::Local 0
       perl 5.008001
+  App-Sqitch-0.9999
+    pathname: D/DW/DWHEELER/App-Sqitch-0.9999.tar.gz
+    provides:
+      App::Sqitch 0.9999
+      App::Sqitch::Command 0.9999
+      App::Sqitch::Command::add 0.9999
+      App::Sqitch::Command::bundle 0.9999
+      App::Sqitch::Command::checkout 0.9999
+      App::Sqitch::Command::config 0.9999
+      App::Sqitch::Command::deploy 0.9999
+      App::Sqitch::Command::engine 0.9999
+      App::Sqitch::Command::help 0.9999
+      App::Sqitch::Command::init 0.9999
+      App::Sqitch::Command::log 0.9999
+      App::Sqitch::Command::plan 0.9999
+      App::Sqitch::Command::rebase 0.9999
+      App::Sqitch::Command::revert 0.9999
+      App::Sqitch::Command::rework 0.9999
+      App::Sqitch::Command::show 0.9999
+      App::Sqitch::Command::status 0.9999
+      App::Sqitch::Command::tag 0.9999
+      App::Sqitch::Command::target 0.9999
+      App::Sqitch::Command::upgrade 0.9999
+      App::Sqitch::Command::verify 0.9999
+      App::Sqitch::Config 0.9999
+      App::Sqitch::DateTime 0.9999
+      App::Sqitch::Engine 0.9999
+      App::Sqitch::Engine::exasol 0.9999
+      App::Sqitch::Engine::firebird 0.9999
+      App::Sqitch::Engine::mysql 0.9999
+      App::Sqitch::Engine::oracle 0.9999
+      App::Sqitch::Engine::pg 0.9999
+      App::Sqitch::Engine::snowflake 0.9999
+      App::Sqitch::Engine::sqlite 0.9999
+      App::Sqitch::Engine::vertica 0.9999
+      App::Sqitch::ItemFormatter 0.9999
+      App::Sqitch::Plan 0.9999
+      App::Sqitch::Plan::Blank 0.9999
+      App::Sqitch::Plan::Change 0.970
+      App::Sqitch::Plan::ChangeList 0.970
+      App::Sqitch::Plan::Depend 0.9999
+      App::Sqitch::Plan::Line 0.9999
+      App::Sqitch::Plan::LineList 0.9999
+      App::Sqitch::Plan::Pragma 0.9999
+      App::Sqitch::Plan::Tag 0.9999
+      App::Sqitch::Role::ConnectingCommand 0.9999
+      App::Sqitch::Role::ContextCommand 0.9999
+      App::Sqitch::Role::DBIEngine 0.9999
+      App::Sqitch::Role::RevertDeployCommand 0.9999
+      App::Sqitch::Role::TargetConfigCommand 0.9999
+      App::Sqitch::Target 0.9999
+      App::Sqitch::Types 0.9999
+      App::Sqitch::X 0.9999
+    requirements:
+      Clone 0
+      Config::GitLike 1.11
+      DBI 0
+      DateTime 1.04
+      DateTime::TimeZone 0
+      Devel::StackTrace 1.30
+      Digest::SHA 0
+      Encode 0
+      Encode::Locale 0
+      File::Basename 0
+      File::Copy 0
+      File::HomeDir 0
+      File::Path 0
+      File::Temp 0
+      Getopt::Long 0
+      Hash::Merge 0
+      IO::Handle 0
+      IPC::Run3 0
+      IPC::System::Simple 1.17
+      List::MoreUtils 0
+      List::Util 0
+      Locale::Messages 0
+      Locale::TextDomain 1.20
+      Module::Build 0.35
+      Moo 1.002000
+      Moo::Role 0
+      POSIX 0
+      Path::Class 0.33
+      PerlIO::utf8_strict 0
+      Pod::Escapes 1.04
+      Pod::Find 0
+      Pod::Usage 0
+      Scalar::Util 0
+      StackTrace::Auto 0
+      String::Formatter 0
+      String::ShellQuote 0
+      Sub::Exporter 0
+      Sub::Exporter::Util 0
+      Sys::Hostname 0
+      Template::Tiny 0.11
+      Term::ANSIColor 2.02
+      Throwable 0.200009
+      Time::HiRes 0
+      Time::Local 0
+      Try::Tiny 0
+      Type::Library 0.040
+      Type::Utils 0
+      Types::Standard 0
+      URI 0
+      URI::QueryParam 0
+      URI::db 0.19
+      User::pwent 0
+      constant 0
+      if 0
+      namespace::autoclean 0.16
+      overload 0
+      parent 0
+      perl 5.010
+      strict 0
+      utf8 0
+      warnings 0
   AppConfig-1.71
     pathname: N/NE/NEILB/AppConfig-1.71.tar.gz
     provides:
@@ -333,14 +448,12 @@ DISTRIBUTIONS
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
       DBIx::Class 0.08114
-      DBIx::Class::Schema::Loader 0.04005
       ExtUtils::MakeMaker 6.59
       Hash::Merge 0
       List::MoreUtils 0
       Module::Runtime 0.012
       Moose 1.12
       MooseX::MarkAsMethods 0.13
-      MooseX::NonMoose 0.16
       MooseX::Types 0
       MooseX::Types::LoadableClass 0.009
       Storable 0
@@ -873,6 +986,18 @@ DISTRIBUTIONS
       File::Spec::Functions 0
       FileHandle 0
       IO::File 0
+  Config-GitLike-1.17
+    pathname: A/AL/ALEXMV/Config-GitLike-1.17.tar.gz
+    provides:
+      Config::GitLike 1.17
+      Config::GitLike::Cascaded undef
+      Config::GitLike::Git undef
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      Moo 0
+      MooX::Types::MooseLike 0
+      Test::Exception 0
+      perl 5.008
   Context-Preserve-0.03
     pathname: E/ET/ETHER/Context-Preserve-0.03.tar.gz
     provides:
@@ -2224,6 +2349,30 @@ DISTRIBUTIONS
       Number::Compare 0
       Test::More 0
       Text::Glob 0.07
+  File-HomeDir-1.004
+    pathname: R/RE/REHSACK/File-HomeDir-1.004.tar.gz
+    provides:
+      File::HomeDir 1.004
+      File::HomeDir::Darwin 1.004
+      File::HomeDir::Darwin::Carbon 1.004
+      File::HomeDir::Darwin::Cocoa 1.004
+      File::HomeDir::Driver 1.004
+      File::HomeDir::FreeDesktop 1.004
+      File::HomeDir::MacOS9 1.004
+      File::HomeDir::Test 1.004
+      File::HomeDir::Unix 1.004
+      File::HomeDir::Windows 1.004
+    requirements:
+      Carp 0
+      Cwd 3.12
+      ExtUtils::MakeMaker 0
+      File::Basename 0
+      File::Path 2.01
+      File::Spec 3.12
+      File::Temp 0.19
+      File::Which 0.05
+      POSIX 0
+      perl 5.008003
   File-Listing-6.04
     pathname: G/GA/GAAS/File-Listing-6.04.tar.gz
     provides:
@@ -2278,6 +2427,13 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  File-Which-1.23
+    pathname: P/PL/PLICEASE/File-Which-1.23.tar.gz
+    provides:
+      File::Which 1.23
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.006
   Filesys-Notify-Simple-0.13
     pathname: M/MI/MIYAGAWA/Filesys-Notify-Simple-0.13.tar.gz
     provides:
@@ -3048,6 +3204,29 @@ DISTRIBUTIONS
       IO::WrapTie::Slave 2.111
     requirements:
       ExtUtils::MakeMaker 0
+  IPC-Run3-0.048
+    pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
+    provides:
+      IPC::Run3 0.048
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0.31
+      Time::HiRes 0
+  IPC-System-Simple-1.25
+    pathname: P/PJ/PJF/IPC-System-Simple-1.25.tar.gz
+    provides:
+      IPC::System::Simple 1.25
+    requirements:
+      Carp 0
+      Exporter 0
+      ExtUtils::MakeMaker 6.30
+      List::Util 0
+      POSIX 0
+      Scalar::Util 0
+      constant 0
+      re 0
+      strict 0
+      warnings 0
   Import-Into-1.002005
     pathname: H/HA/HAARG/Import-Into-1.002005.tar.gz
     provides:
@@ -3587,6 +3766,14 @@ DISTRIBUTIONS
       Sub::Defer 2.003001
       Sub::Quote 2.003001
       perl 5.006
+  MooX-Types-MooseLike-0.29
+    pathname: M/MA/MATEU/MooX-Types-MooseLike-0.29.tar.gz
+    provides:
+      MooX::Types::MooseLike 0.29
+      MooX::Types::MooseLike::Base 0.29
+    requirements:
+      ExtUtils::MakeMaker 0
+      Module::Runtime 0.014
   Moose-2.2011
     pathname: E/ET/ETHER/Moose-2.2011.tar.gz
     provides:
@@ -5142,6 +5329,17 @@ DISTRIBUTIONS
       String::CRC32 1.7
     requirements:
       ExtUtils::MakeMaker 0
+  String-Formatter-0.102084
+    pathname: R/RJ/RJBS/String-Formatter-0.102084.tar.gz
+    provides:
+      String::Formatter 0.102084
+      String::Formatter::Cookbook 0.102084
+    requirements:
+      ExtUtils::MakeMaker 6.30
+      Params::Util 0
+      Sub::Exporter 0
+      strict 0
+      warnings 0
   String-RewritePrefix-0.007
     pathname: R/RJ/RJBS/String-RewritePrefix-0.007.tar.gz
     provides:
@@ -5152,6 +5350,12 @@ DISTRIBUTIONS
       Sub::Exporter 0.972
       strict 0
       warnings 0
+  String-ShellQuote-1.04
+    pathname: R/RO/ROSCH/String-ShellQuote-1.04.tar.gz
+    provides:
+      String::ShellQuote 1.04
+    requirements:
+      ExtUtils::MakeMaker 0
   String-ToIdentifier-EN-0.12
     pathname: R/RK/RKITOVER/String-ToIdentifier-EN-0.12.tar.gz
     provides:
@@ -5307,6 +5511,14 @@ DISTRIBUTIONS
       Template 0
       Test::More 0
       Time::HiRes 0
+  Template-Tiny-1.12
+    pathname: A/AD/ADAMK/Template-Tiny-1.12.tar.gz
+    provides:
+      Template::Tiny 1.12
+    requirements:
+      ExtUtils::MakeMaker 0
+      Test::More 0.47
+      perl 5.00503
   Template-Toolkit-2.28
     pathname: A/AT/ATOOMIC/Template-Toolkit-2.28.tar.gz
     provides:
@@ -5892,6 +6104,22 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008
+  Throwable-0.200013
+    pathname: R/RJ/RJBS/Throwable-0.200013.tar.gz
+    provides:
+      StackTrace::Auto 0.200013
+      Throwable 0.200013
+      Throwable::Error 0.200013
+    requirements:
+      Carp 0
+      Devel::StackTrace 1.32
+      ExtUtils::MakeMaker 0
+      Module::Runtime 0.002
+      Moo 1.000001
+      Moo::Role 0
+      Scalar::Util 0
+      Sub::Quote 0
+      overload 0
   Tie-IxHash-1.23
     pathname: C/CH/CHORNY/Tie-IxHash-1.23.tar.gz
     provides:
@@ -6141,6 +6369,65 @@ DISTRIBUTIONS
       strict 0
       utf8 0
       warnings 0
+  URI-Nested-0.10
+    pathname: D/DW/DWHEELER/URI-Nested-0.10.tar.gz
+    provides:
+      URI::Nested 0.10
+    requirements:
+      Module::Build 0.30
+      Test::More 0.88
+      URI 1.40
+      perl 5.008001
+  URI-db-0.19
+    pathname: D/DW/DWHEELER/URI-db-0.19.tar.gz
+    provides:
+      URI::cassandra 0.19
+      URI::couch 0.19
+      URI::couchdb 0.19
+      URI::cubrid 0.19
+      URI::db 0.19
+      URI::db2 0.19
+      URI::derby 0.19
+      URI::exasol 0.19
+      URI::firebird 0.19
+      URI::hive 0.19
+      URI::impala 0.19
+      URI::informix 0.19
+      URI::ingres 0.19
+      URI::interbase 0.19
+      URI::ldapdb 0.19
+      URI::maria 0.19
+      URI::mariadb 0.19
+      URI::max 0.19
+      URI::maxdb 0.19
+      URI::monet 0.19
+      URI::monetdb 0.19
+      URI::mongo 0.19
+      URI::mongodb 0.19
+      URI::mssql 0.19
+      URI::mysql 0.19
+      URI::oracle 0.19
+      URI::pg 0.19
+      URI::pgsql 0.19
+      URI::pgxc 0.19
+      URI::postgres 0.19
+      URI::postgresql 0.19
+      URI::postgresxc 0.19
+      URI::redshift 0.19
+      URI::snowflake 0.19
+      URI::sqlite 0.19
+      URI::sqlite3 0.19
+      URI::sqlserver 0.19
+      URI::sybase 0.19
+      URI::teradata 0.19
+      URI::unify 0.19
+      URI::vertica 0.19
+    requirements:
+      Module::Build 0.30
+      Test::More 0.88
+      URI 1.40
+      URI::Nested 0.10
+      perl 5.008001
   URI-ws-0.03
     pathname: P/PL/PLICEASE/URI-ws-0.03.tar.gz
     provides:
@@ -6339,6 +6626,164 @@ DISTRIBUTIONS
       XSLoader 0
       lib 0
       perl 5.008001
+  libintl-perl-1.31
+    pathname: G/GU/GUIDO/libintl-perl-1.31.tar.gz
+    provides:
+      Locale::Messages 1.31
+      Locale::Recode undef
+      Locale::Recode::_Aliases undef
+      Locale::Recode::_Conversions undef
+      Locale::RecodeData undef
+      Locale::RecodeData::ASMO_449 undef
+      Locale::RecodeData::ATARI_ST undef
+      Locale::RecodeData::ATARI_ST_EURO undef
+      Locale::RecodeData::CP10007 undef
+      Locale::RecodeData::CP1250 undef
+      Locale::RecodeData::CP1251 undef
+      Locale::RecodeData::CP1252 undef
+      Locale::RecodeData::CP1253 undef
+      Locale::RecodeData::CP1254 undef
+      Locale::RecodeData::CP1256 undef
+      Locale::RecodeData::CP1257 undef
+      Locale::RecodeData::CSN_369103 undef
+      Locale::RecodeData::CWI undef
+      Locale::RecodeData::DEC_MCS undef
+      Locale::RecodeData::EBCDIC_AT_DE undef
+      Locale::RecodeData::EBCDIC_AT_DE_A undef
+      Locale::RecodeData::EBCDIC_CA_FR undef
+      Locale::RecodeData::EBCDIC_DK_NO undef
+      Locale::RecodeData::EBCDIC_DK_NO_A undef
+      Locale::RecodeData::EBCDIC_ES undef
+      Locale::RecodeData::EBCDIC_ES_A undef
+      Locale::RecodeData::EBCDIC_ES_S undef
+      Locale::RecodeData::EBCDIC_FI_SE undef
+      Locale::RecodeData::EBCDIC_FI_SE_A undef
+      Locale::RecodeData::EBCDIC_FR undef
+      Locale::RecodeData::EBCDIC_IS_FRISS undef
+      Locale::RecodeData::EBCDIC_IT undef
+      Locale::RecodeData::EBCDIC_PT undef
+      Locale::RecodeData::EBCDIC_UK undef
+      Locale::RecodeData::EBCDIC_US undef
+      Locale::RecodeData::ECMA_CYRILLIC undef
+      Locale::RecodeData::GEORGIAN_ACADEMY undef
+      Locale::RecodeData::GEORGIAN_PS undef
+      Locale::RecodeData::GOST_19768_74 undef
+      Locale::RecodeData::GREEK7 undef
+      Locale::RecodeData::GREEK7_OLD undef
+      Locale::RecodeData::GREEK_CCITT undef
+      Locale::RecodeData::HP_ROMAN8 undef
+      Locale::RecodeData::IBM037 undef
+      Locale::RecodeData::IBM038 undef
+      Locale::RecodeData::IBM1004 undef
+      Locale::RecodeData::IBM1026 undef
+      Locale::RecodeData::IBM1047 undef
+      Locale::RecodeData::IBM256 undef
+      Locale::RecodeData::IBM273 undef
+      Locale::RecodeData::IBM274 undef
+      Locale::RecodeData::IBM275 undef
+      Locale::RecodeData::IBM277 undef
+      Locale::RecodeData::IBM278 undef
+      Locale::RecodeData::IBM280 undef
+      Locale::RecodeData::IBM281 undef
+      Locale::RecodeData::IBM284 undef
+      Locale::RecodeData::IBM285 undef
+      Locale::RecodeData::IBM290 undef
+      Locale::RecodeData::IBM297 undef
+      Locale::RecodeData::IBM420 undef
+      Locale::RecodeData::IBM423 undef
+      Locale::RecodeData::IBM424 undef
+      Locale::RecodeData::IBM437 undef
+      Locale::RecodeData::IBM500 undef
+      Locale::RecodeData::IBM850 undef
+      Locale::RecodeData::IBM851 undef
+      Locale::RecodeData::IBM852 undef
+      Locale::RecodeData::IBM855 undef
+      Locale::RecodeData::IBM857 undef
+      Locale::RecodeData::IBM860 undef
+      Locale::RecodeData::IBM861 undef
+      Locale::RecodeData::IBM862 undef
+      Locale::RecodeData::IBM863 undef
+      Locale::RecodeData::IBM864 undef
+      Locale::RecodeData::IBM865 undef
+      Locale::RecodeData::IBM866 undef
+      Locale::RecodeData::IBM868 undef
+      Locale::RecodeData::IBM869 undef
+      Locale::RecodeData::IBM870 undef
+      Locale::RecodeData::IBM871 undef
+      Locale::RecodeData::IBM874 undef
+      Locale::RecodeData::IBM875 undef
+      Locale::RecodeData::IBM880 undef
+      Locale::RecodeData::IBM891 undef
+      Locale::RecodeData::IBM903 undef
+      Locale::RecodeData::IBM904 undef
+      Locale::RecodeData::IBM905 undef
+      Locale::RecodeData::IBM918 undef
+      Locale::RecodeData::IEC_P27_1 undef
+      Locale::RecodeData::INIS undef
+      Locale::RecodeData::INIS_8 undef
+      Locale::RecodeData::INIS_CYRILLIC undef
+      Locale::RecodeData::ISO_10367_BOX undef
+      Locale::RecodeData::ISO_2033_1983 undef
+      Locale::RecodeData::ISO_5427 undef
+      Locale::RecodeData::ISO_5427_EXT undef
+      Locale::RecodeData::ISO_5428 undef
+      Locale::RecodeData::ISO_8859_1 undef
+      Locale::RecodeData::ISO_8859_10 undef
+      Locale::RecodeData::ISO_8859_11 undef
+      Locale::RecodeData::ISO_8859_13 undef
+      Locale::RecodeData::ISO_8859_14 undef
+      Locale::RecodeData::ISO_8859_15 undef
+      Locale::RecodeData::ISO_8859_16 undef
+      Locale::RecodeData::ISO_8859_2 undef
+      Locale::RecodeData::ISO_8859_3 undef
+      Locale::RecodeData::ISO_8859_4 undef
+      Locale::RecodeData::ISO_8859_5 undef
+      Locale::RecodeData::ISO_8859_6 undef
+      Locale::RecodeData::ISO_8859_7 undef
+      Locale::RecodeData::ISO_8859_8 undef
+      Locale::RecodeData::ISO_8859_9 undef
+      Locale::RecodeData::KOI8_R undef
+      Locale::RecodeData::KOI8_RU undef
+      Locale::RecodeData::KOI8_T undef
+      Locale::RecodeData::KOI8_U undef
+      Locale::RecodeData::KOI_8 undef
+      Locale::RecodeData::LATIN_GREEK undef
+      Locale::RecodeData::LATIN_GREEK_1 undef
+      Locale::RecodeData::MACARABIC undef
+      Locale::RecodeData::MACCROATIAN undef
+      Locale::RecodeData::MACCYRILLIC undef
+      Locale::RecodeData::MACGREEK undef
+      Locale::RecodeData::MACHEBREW undef
+      Locale::RecodeData::MACICELAND undef
+      Locale::RecodeData::MACINTOSH undef
+      Locale::RecodeData::MACROMANIA undef
+      Locale::RecodeData::MACTHAI undef
+      Locale::RecodeData::MACTURKISH undef
+      Locale::RecodeData::MACUKRAINE undef
+      Locale::RecodeData::MAC_IS undef
+      Locale::RecodeData::MAC_SAMI undef
+      Locale::RecodeData::MAC_UK undef
+      Locale::RecodeData::NATS_DANO undef
+      Locale::RecodeData::NATS_SEFI undef
+      Locale::RecodeData::NEXTSTEP undef
+      Locale::RecodeData::SAMI_WS2 undef
+      Locale::RecodeData::TIS_620 undef
+      Locale::RecodeData::US_ASCII undef
+      Locale::RecodeData::UTF_8 undef
+      Locale::RecodeData::VISCII undef
+      Locale::RecodeData::_Encode undef
+      Locale::TextDomain 1.31
+      Locale::Util undef
+      Locale::gettext_dumb undef
+      Locale::gettext_pp undef
+      Locale::gettext_xs undef
+      MyInstall undef
+      SimpleCal undef
+      libintl::perl undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      File::Spec 0
+      version 0.77
   libwww-perl-6.36
     pathname: E/ET/ETHER/libwww-perl-6.36.tar.gz
     provides:

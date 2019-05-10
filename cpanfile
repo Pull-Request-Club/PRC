@@ -22,6 +22,7 @@ requires 'LWP::Protocol::https';
 requires 'Moose';
 requires 'MooseX::NonMoose';
 requires 'namespace::autoclean';
+requires 'App::Sqitch';
 requires 'Task::Catalyst::Tutorial';
 requires 'Test2::V0';
 requires 'WWW::Mechanize';
