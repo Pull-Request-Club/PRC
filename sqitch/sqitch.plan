@@ -1,3 +1,4 @@
 %syntax-version=1.0.0
 %project=prc
 
+initial-ddl 2019-05-10T06:28:01Z Kivanc Yazan <kyzn@cpan.org> # Move existing DDL to Sqitch

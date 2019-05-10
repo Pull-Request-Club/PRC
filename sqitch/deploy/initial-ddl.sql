@@ -1,3 +1,7 @@
+-- Deploy prc:initial-ddl to sqlite
+
+BEGIN;
+
 CREATE TABLE IF NOT EXISTS user (
   user_id                INTEGER PRIMARY KEY,
   create_time            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -55,3 +59,5 @@ CREATE TABLE IF NOT EXISTS assignment (
   FOREIGN KEY(repo_id) REFERENCES repo(repo_id),
   FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
+
+COMMIT;
