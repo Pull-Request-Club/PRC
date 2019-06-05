@@ -25,3 +25,8 @@ body {
 table {
   word-break: break-word; /* Make tables readable on mobile */
 }
+
+input[type=checkbox] {
+  height: 15px;
+  width: 15px;
+}

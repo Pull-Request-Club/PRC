@@ -15,14 +15,14 @@ has_field '_token' => (
 
 has_field 'assignment_level' => (
   type  => 'Checkbox',
-  label => 'Give me assignments!',
+  label => 'Get assignments?',
   checkbox_value      => USER_ASSIGNMENT_ACTIVE,
   input_without_param => USER_ASSIGNMENT_QUIT,
 );
 
 has_field 'assignee_level' => (
   type  => 'Checkbox',
-  label => 'Assign my repositories to other people!',
+  label => 'Get assignees?',
   checkbox_value      => USER_ASSIGNEE_ACTIVE,
   input_without_param => USER_ASSIGNEE_QUIT,
 );
