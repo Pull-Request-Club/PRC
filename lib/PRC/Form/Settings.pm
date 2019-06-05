@@ -22,10 +22,6 @@ has_field 'assignment_level' => (
       value =>  USER_ASSIGNMENT_QUIT,
     },
     {
-      label => 'SKIP: I want to stop receiving assignments for one month.',
-      value => USER_ASSIGNMENT_SKIP,
-    },
-    {
       label => 'ACTIVE: I want to receive assignments every month.',
       value => USER_ASSIGNMENT_ACTIVE,
     },

@@ -238,17 +238,6 @@ sub has_assignment_level_active {
   return ($user->assignment_level == USER_ASSIGNMENT_ACTIVE) ? 1 : 0;
 }
 
-=head2 has_assignment_level_skip
-
-Returns true if assignment level is skip.
-
-=cut
-
-sub has_assignment_level_skip {
-  my ($user) = @_;
-  return ($user->assignment_level == USER_ASSIGNMENT_SKIP) ? 1 : 0;
-}
-
 =head2 has_assignment_level_quit
 
 Returns true if assignment level is quit.

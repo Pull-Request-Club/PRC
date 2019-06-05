@@ -146,7 +146,6 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
     assignment => $user->open_assignment,
     user_can_receive_assignments   => $user->can_receive_assignments,
     user_has_open_assignment       => $user->has_open_assignment,
-    user_has_assignment_level_skip => $user->has_assignment_level_skip,
     user_has_assignment_level_quit => $user->has_assignment_level_quit,
     template   => 'static/html/my-assignment.html',
     active_tab => 'my-assignment',
