@@ -14,35 +14,17 @@ has_field '_token' => (
 );
 
 has_field 'assignment_level' => (
-  type    => 'Select',
-  label   => 'Please select an option for your assignments.',
-  options => [
-    {
-      label => 'QUIT: I don\'t want to receive any assignments.',
-      value =>  USER_ASSIGNMENT_QUIT,
-    },
-    {
-      label => 'ACTIVE: I want to receive assignments every month.',
-      value => USER_ASSIGNMENT_ACTIVE,
-    },
-  ],
-  element_attr => { style => "max-width:500px;" },
+  type  => 'Checkbox',
+  label => 'Give me assignments!',
+  checkbox_value      => USER_ASSIGNMENT_ACTIVE,
+  input_without_param => USER_ASSIGNMENT_QUIT,
 );
 
 has_field 'assignee_level' => (
-  type    => 'Select',
-  label   => 'Please select an option for your repositories.',
-  options => [
-    {
-      label => 'QUIT: I don\'t want my repositories to be assigned.',
-      value => USER_ASSIGNEE_QUIT,
-    },
-    {
-      label => 'ACTIVE: I want my selected repositories to be assigned.' ,
-      value => USER_ASSIGNEE_ACTIVE,
-    },
-  ],
-  element_attr => { style => "max-width:500px;" },
+  type  => 'Checkbox',
+  label => 'Assign my repositories to other people!',
+  checkbox_value      => USER_ASSIGNEE_ACTIVE,
+  input_without_param => USER_ASSIGNEE_QUIT,
 );
 
 
