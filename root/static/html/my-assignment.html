@@ -29,9 +29,9 @@
 
   <p class="lead">
   [% IF user_can_receive_assignments -%]
-    You are set to receive your next assignment on 1st of next month.
+    Yay! You will get your next assignment on 1st of next month.
   [% ELSIF user_has_assignment_level_quit -%]
-    You will not receive further assignments because of your <a href='/settings'>assignment settings</a>.
+    Oh no :( Looks like you did not opt in to receive assignments. <a href='/settings'>Let's fix it!</a>
   [% ELSIF user_has_open_assignment -%]
     You will receive a new assignment next month if you complete or skip your current assignment.
   [% END -%]

@@ -5,7 +5,7 @@
 
   [% IF not_receiving_assignees -%]
     <br>
-    <p class="lead">You are not opted in for your repositories to be assigned.</p>
+    <p class="lead">Oh no :( Looks like you did not opt in for your repositories to be assigned to other people. <a href='/settings'>Let's fix it!</a></p>
   [% ELSE -%]
     [% form.render -%]
   [% END -%]
