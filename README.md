@@ -16,10 +16,6 @@ We are always looking forward to your contributions.
 
 See [wiki](https://github.com/kyzn/PRC/wiki) for further development instructions.
 
-# IRC
-
-We are on [Freenode channel #pullrequestclub](https://webchat.freenode.net/?channels=pullrequestclub) to answer your questions.
-
 # License
 
 MIT. See License file in repository.
