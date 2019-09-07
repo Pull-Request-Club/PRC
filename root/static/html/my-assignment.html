@@ -2,14 +2,13 @@
   <br><br>
 
   <h1>My Assignment</h1>
-
   <br>
 
   [% IF assignment -%]
 
     <div class="card text-center" style="max-width: 100%;">
       <div class="card-header">
-        [% assignment.month_pretty -%]
+        Your <strong>open</strong> assignment for <strong>[% assignment.month_pretty -%]</strong>
       </div>
       <div class="card-body">
         <h5 class="card-title">[% assignment.repo.github_name | html -%]</h5>
@@ -19,23 +18,33 @@
         <a href="/done-confirm" class="btn btn-success">Done</a>
       </div>
       <div class="card-footer">
-        Assignment Status: <strong>[% assignment.status_string -%]</strong>
+        [% IF opted_in -%]
+          You will receive a new assignment next month if you complete or skip your current assignment.
+        [% ELSE -%]
+          Looks like you did not opt in to receive further assignments.
+          <br>
+          <a class="btn btn-success" href="/settings">Let's fix it!</a>
+        [% END -%]
       </div>
     </div>
 
     <br>
 
-  [% END -%]
+  [% ELSIF opted_in -%]
 
   <p class="lead">
-  [% IF user_can_receive_assignments -%]
-    Yay! You will get your next assignment on 1st of next month.
-  [% ELSIF user_has_assignment_level_quit -%]
-    Oh no :( Looks like you did not opt in to receive assignments. <a href='/settings'>Let's fix it!</a>
-  [% ELSIF user_has_open_assignment -%]
-    You will receive a new assignment next month if you complete or skip your current assignment.
-  [% END -%]
+    You will get a new assignment next month. Check back soon!
   </p>
+
+  [% ELSE -%]
+
+  <p class="lead">
+    Looks like you did not opt in to receive assignments.
+    <br><br>
+    <a class="btn btn-success btn-lg" href="/settings">Let's fix it!</a>
+  </p>
+
+  [% END -%]
 
   <br><br>
 

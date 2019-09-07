@@ -144,9 +144,7 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
   $c->stash({
     assignment => $user->open_assignment,
-    user_can_receive_assignments   => $user->can_receive_assignments,
-    user_has_open_assignment       => $user->has_open_assignment,
-    user_has_assignment_level_quit => $user->has_assignment_level_quit,
+    opted_in   => $user->has_assignment_level_active,
     template   => 'static/html/my-assignment.html',
     active_tab => 'my-assignment',
   });
