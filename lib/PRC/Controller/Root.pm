@@ -41,14 +41,32 @@ sub auto :Private {
 
 }
 
-
 =head2 index
 
 The root page (/)
+For some reason, this also catches directories like "help/" or "foo/bar/"
 
 =cut
 
 sub index :Path :Args(0) {
+  my ($self, $c) = @_;
+  if($c->user_exists){
+    $c->response->redirect('/my-assignment',303);
+    $c->detach;
+  } else {
+    $c->response->redirect('/hello',303);
+    $c->detach;
+  }
+}
+
+
+=head2 hello
+
+The landing page
+
+=cut
+
+sub hello :Local :Args(0) {
   my ($self, $c) = @_;
 
   if($c->user_exists){
