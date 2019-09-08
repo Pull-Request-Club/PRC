@@ -4,8 +4,14 @@
   <h1>My Repos</h1>
 
   [% IF not_receiving_assignees -%]
-    <br>
-    <p class="lead">Oh no :( Looks like you did not opt in for your repositories to be assigned to other people. <a href='/settings'>Let's fix it!</a></p>
+
+  <br>
+  <p class="lead">
+    Looks like you did not opt in to receive assignees.
+    <br><br>
+    <a class="btn btn-success btn-lg" href="/settings">Let's fix it!</a>
+  </p>
+
   [% ELSE -%]
     [% form.render -%]
   [% END -%]
