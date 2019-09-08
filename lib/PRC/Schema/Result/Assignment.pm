@@ -124,6 +124,24 @@ sub month_pretty {
   return $pretty;
 }
 
+=head2 month_sortable
+
+Returns string for month row as "2019-08".
+
+=cut
+
+sub month_sortable {
+  my ($assignment) = @_;
+  my $dt    = $assignment->month;
+  my $year  = $dt->year;
+  my $month = $dt->month;
+  if ($month < 10){
+    $month = '0' . $month;
+  }
+  my $sortable = $year . '-' . $month;
+  return $sortable;
+}
+
 =head2 mark_as_skipped
 
 Updates assignment status as "SKIPPED".
