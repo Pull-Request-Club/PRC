@@ -4,6 +4,7 @@ use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller'; }
 
+use PRC::Constants;
 use PRC::Form::Repos;
 use PRC::Form::Settings;
 use PRC::Form::Deactivate;
@@ -24,6 +25,38 @@ PRC::Controller::User - Catalyst Controller
 Catalyst Controller.
 
 =head1 METHODS
+
+=head2 add_no_repositories_selected_banner
+
+Adds banner if conditions are satisfied, otherwise clears warning in stash.
+
+=cut
+
+sub add_no_repositories_selected_banner :Private {
+  my ($self, $c) = @_;
+  my $user = $c->user;
+  my $add_banner = 0;
+
+  if ($user && $user->assignee_level == USER_ASSIGNEE_ACTIVE){
+    my $count = $c->model('PRCDB::Repo')->search({
+      user_id             => $user->id,
+      gone_missing        => REPO_NOT_GONE_MISSING,
+      accepting_assignees => REPO_ACCEPTING,
+    })->count;
+
+    if ($count == 0){
+      $add_banner = 1;
+    }
+  }
+
+  if ($add_banner){
+    $c->stash->{alert_warning} = 'You opted in to get assignees, but you haven\'t selected any repositories yet. Go to "My Repos" above to fix this.';
+  } else {
+    delete $c->stash->{alert_warning};
+  }
+
+  return 1;
+}
 
 =head2 check_user_status
 
@@ -82,6 +115,7 @@ sub settings :Path('/settings') :Args(0) {
 
   # must be logged in + activated
   $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
+  $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
 
   my $settings_form       = PRC::Form::Settings->new;
@@ -118,6 +152,7 @@ sub settings :Path('/settings') :Args(0) {
       assignment_level => $values->{assignment_level},
       assignee_level   => $values->{assignee_level},
     });
+    $c->forward('add_no_repositories_selected_banner');
     $c->stash->{alert_success} = 'Your settings are saved!';
   }
 
@@ -140,6 +175,7 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
+  $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
 
   $c->stash({
@@ -212,6 +248,7 @@ sub history :Path('/history') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
+  $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
 
   my @taken = $user->assignments_taken;
