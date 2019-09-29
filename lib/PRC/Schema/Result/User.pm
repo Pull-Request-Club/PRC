@@ -323,7 +323,7 @@ sub fetch_repos {
     my $existing_repo_is_fetched =
       any {$_->{github_id} == $existing_repo->github_id} @$fetched_repos;
     if (!$existing_repo_is_fetched){
-      $existing_repo->update({ gone_missing => 1 });
+      $existing_repo->update({ gone_missing => REPO_GONE_MISSING });
     }
   }
 

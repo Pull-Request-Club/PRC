@@ -1,6 +1,7 @@
 package PRC::GitHub;
 use namespace::autoclean;
 
+use PRC::Constants;
 use PRC::Secrets;
 use LWP::UserAgent;
 use JSON::XS;
@@ -205,7 +206,7 @@ sub get_repos {
         github_issue_events_url  => $_->{issue_events_url},
         github_open_issues_count => $_->{open_issues_count},
         github_stargazers_count  => $_->{stargazers_count},
-        gone_missing             => 0,
+        gone_missing             => REPO_NOT_GONE_MISSING,
       }}
       grep {
         !$_->{archived} &&
