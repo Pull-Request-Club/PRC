@@ -123,6 +123,47 @@ sub _get_assignees_total_and_done {
   };
 }
 
+=head2 /admin/user/$id
+
+List details about a given user
+
+=cut
+
+sub user :Path('/admin/user') :Args(1) {
+  my ($self, $c, $id) = @_;
+
+  my $user = $c->model('PRCDB::User')->find($id);
+  unless ($user){
+    $c->response->body('Page not found.');
+    $c->response->status(404);
+    $c->detach;
+  }
+  my @assignments = $user->assignments;
+  my @repos       = $user->repos;
+
+  $c->stash({
+    template => 'static/html/admin-user.html',
+    user => {
+      user_id               => $user->user_id,
+      github_login          => $user->github_login,
+      last_login_time       => $user->last_login_time =~ s/T/ /r,
+      accepted_latest_tos   => $user->has_accepted_latest_terms ? "Yes" : "",
+      deactivation_status   => $user->scheduled_delete_time
+                               ? "Delete by ".$user->scheduled_delete_time =~ s/T.*//r
+                               : $user->is_deactivated ? "Deactivated" : "",
+      assignment_status     => $user->assignment_level == USER_ASSIGNMENT_ACTIVE ? "Yes" : "",
+      open_assignment_month => _get_open_assignment_month_sortable(@assignments),
+      assignments_total     => scalar(@assignments),
+      assignments_done      => scalar(grep {$_->status == ASSIGNMENT_DONE} @assignments),
+      assignee_status       => $user->assignee_level == USER_ASSIGNEE_ACTIVE ? "Yes" : "",
+      repos_total           => scalar(@repos),
+      repos_opted_in        => scalar(grep {$_->accepting_assignees == REPO_ACCEPTING} @repos),
+      %{_get_assignees_total_and_done($user,@assignments)},
+    }
+  });
+
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

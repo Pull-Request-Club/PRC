@@ -1,0 +1,51 @@
+<script src="/static/js/table-sort.js" type="text/javascript"></script>
+
+<div class="container">
+  <br>
+
+  <h3>User details</h1>
+  <br>
+
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">GitHub</th>
+        <th scope="col">Login</th>
+        <th scope="col">TOS</th>
+        <th scope="col">Deact</th>
+        <th scope="col">Get?</th>
+        <th scope="col">Open?</th>
+        <th scope="col">#Got</th>
+        <th scope="col">#Done</th>
+        <th scope="col">Give?</th>
+        <th scope="col">#Repo</th>
+        <th scope="col">#Opted</th>
+        <th scope="col">#Got</th>
+        <th scope="col">#Done</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[% user.user_id -%]</a></th>
+        <td><a href="https://github.com/[% user.github_login -%]">[% user.github_login -%]</a></td>
+        <td>[% user.last_login_time -%]</td>
+        <td>[% user.accepted_latest_tos -%]</td>
+        <td>[% user.deactivation_status -%]</td>
+        <td>[% user.assignment_status -%]</td>
+        <td>[% user.open_assignment_month -%]</td>
+        <td>[% user.assignments_total -%]</td>
+        <td>[% user.assignments_done -%]</td>
+        <td>[% user.assignee_status -%]</td>
+        <td>[% user.repos_total -%]</td>
+        <td>[% user.repos_opted_in -%]</td>
+        <td>[% user.assignees_total -%]</td>
+        <td>[% user.assignees_done -%]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+
+</div>
+</div>
