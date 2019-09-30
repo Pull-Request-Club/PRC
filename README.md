@@ -1,6 +1,6 @@
 # PullRequest.Club
 
-![](root/static/images/home-s.jpg)
+![](root/static/images/home-2019-09-29.png)
 
 Pull Request Club is a web application written with Perl on Catalyst Framework. Users can sign up with their GitHub accounts, and do two things:
 - Receive monthly assignments, and
