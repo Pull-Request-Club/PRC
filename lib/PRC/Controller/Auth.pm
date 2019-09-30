@@ -124,7 +124,7 @@ sub logout :Path('/logout') :Args(0) {
 
   $c->session->{alert_success} = $message || "You are now logged out.";
 
-  $c->response->redirect('/',303);
+  $c->response->redirect('/hello',303);
   $c->detach;
 }
 

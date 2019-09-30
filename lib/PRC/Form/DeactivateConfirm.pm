@@ -1,4 +1,4 @@
-package PRC::Form::DeleteAccount;
+package PRC::Form::DeactivateConfirm;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
@@ -11,9 +11,9 @@ has_field '_token' => (
   type  => 'RequestToken',
 );
 
-has_field 'submit_delete_account' => (
+has_field 'submit' => (
   type  => 'Submit',
-  value => 'Delete My Account',
+  value => 'Yes, deactivate my account and log me out',
   element_attr => { class => 'btn btn-danger' },
 );
 

@@ -7,8 +7,8 @@ BEGIN { extends 'Catalyst::Controller'; }
 use PRC::Constants;
 use PRC::Form::Repos;
 use PRC::Form::Settings;
-use PRC::Form::Deactivate;
-use PRC::Form::DeleteAccount;
+use PRC::Form::DeactivateConfirm;
+use PRC::Form::DeleteConfirm;
 use PRC::Form::SkipConfirm;
 use PRC::Form::DoneConfirm;
 
@@ -118,26 +118,7 @@ sub settings :Path('/settings') :Args(0) {
   $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
 
-  my $settings_form       = PRC::Form::Settings->new;
-  my $deactivate_form     = PRC::Form::Deactivate->new;
-  my $delete_account_form = PRC::Form::DeleteAccount->new;
-
-  $deactivate_form->process(params => $c->req->params);
-  if($c->req->params->{submit_deactivate} && $deactivate_form->validated){
-    my $message = 'Your account is now deactivated.';
-    $user->deactivate;
-    $c->forward('/auth/logout',[$message]);
-    $c->detach;
-  }
-
-  $delete_account_form->process(params => $c->req->params);
-  if($c->req->params->{submit_delete_account} && $delete_account_form->validated){
-    my $message = 'Your account is now deactivated and scheduled for a deletion in 30 days.';
-    $user->schedule_deletion;
-    $c->forward('/auth/logout',[$message]);
-    $c->detach;
-  }
-
+  my $settings_form = PRC::Form::Settings->new;
   $settings_form->process(
     params   => $c->req->params,
     defaults => {
@@ -160,8 +141,6 @@ sub settings :Path('/settings') :Args(0) {
     template   => 'static/html/settings.html',
     active_tab => 'settings',
     settings_form       => $settings_form,
-    deactivate_form     => $deactivate_form,
-    delete_account_form => $delete_account_form,
   });
 }
 
@@ -309,6 +288,56 @@ sub done_confirm :Path('/done-confirm') :Args(0) {
 
   $c->stash({
     template => 'static/html/done-confirm.html',
+    form     => $form,
+  });
+}
+
+=head2 deactivate_confirm
+
+=cut
+
+sub deactivate_confirm :Path('/deactivate-confirm') :Args(0) {
+  my ($self, $c) = @_;
+
+  # must be logged in + activated
+  $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
+  my $user = $c->user;
+  my $form = PRC::Form::DeactivateConfirm->new;
+  $form->process(params => $c->req->params);
+  if($form->validated){
+    $user->deactivate;
+    my $message = 'Your account is now deactivated. We hope to see you again soon!';
+    $c->forward('/auth/logout',[$message]);
+    $c->detach;
+  }
+
+  $c->stash({
+    template => 'static/html/deactivate-confirm.html',
+    form     => $form,
+  });
+}
+
+=head2 delete_confirm
+
+=cut
+
+sub delete_confirm :Path('/delete-confirm') :Args(0) {
+  my ($self, $c) = @_;
+
+  # must be logged in + activated
+  $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
+  my $user = $c->user;
+  my $form = PRC::Form::DeleteConfirm->new;
+  $form->process(params => $c->req->params);
+  if($form->validated){
+    $user->schedule_deletion;
+    my $message = 'Your account is now deactivated and will be deleted in 30 days. We hope to see you again!';
+    $c->forward('/auth/logout',[$message]);
+    $c->detach;
+  }
+
+  $c->stash({
+    template => 'static/html/deactivate-confirm.html',
     form     => $form,
   });
 }
