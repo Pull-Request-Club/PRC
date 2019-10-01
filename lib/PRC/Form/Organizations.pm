@@ -21,7 +21,8 @@ has_field '_token' => (
 has_field 'org_select' => (
   type     => 'Select',
   label    => 'Please select organizations whose repositories
-               you want to load for assignments.',
+               you want to load for assignments. If your organization is
+               already claimed by another user, we won\'t show it here.',
   widget   => 'CheckboxGroup',
   multiple => 1,
 );
