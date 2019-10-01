@@ -77,11 +77,10 @@ sub users :Path('/admin/users') :Args(0) {
     deactivation_status   => $_->scheduled_delete_time
                              ? "Delete by ".$_->scheduled_delete_time =~ s/T.*//r
                              : $_->is_deactivated ? "Deactivated" : "",
-    assignment_status     => $_->assignment_level == USER_ASSIGNMENT_ACTIVE ? "Yes" : "",
+    assignment_status     => $_->is_receiving_assignments ? "Yes" : "",
     open_assignment_month => _get_open_assignment_month_sortable($_->assignments),
     assignments_total     => $_->assignments->count,
     assignments_done      => scalar(grep {$_->status == ASSIGNMENT_DONE} $_->assignments),
-    assignee_status       => $_->assignee_level == USER_ASSIGNEE_ACTIVE ? "Yes" : "",
     repos_total           => scalar($_->repos),
     repos_opted_in        => scalar(grep {$_->accepting_assignees == REPO_ACCEPTING} $_->repos),
     %{_get_assignees_total_and_done($_,@assignments)},

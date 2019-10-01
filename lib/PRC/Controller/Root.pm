@@ -100,7 +100,7 @@ sub help :Local :Args(0) {
 /legal
 
 Display Terms of Use, Privacy Policy, GDPR Notice.
-Users will be redirected to here from my-assignment & my-repos
+Users will be redirected to here from my-assignment
 if they have not agreed to terms yet. These will get a form,
 through which they can accept terms.
 

@@ -5,7 +5,25 @@
   <br>
 
   <h3>Assignment Settings</h3>
-  [% settings_form.render -%]
+  [% IF has_accepted_latest_terms -%]
+    [% assignment_form.render -%]
+  [% ELSE -%]
+    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your assignment settings.</p>
+  [% END -%]
+
+  <br>
+  <h3>Repositories</h3>
+  [% IF has_accepted_latest_terms -%]
+    [% UNLESS hide_repos -%]
+      [% repositories_form.render -%]
+    [% END -%]
+    [% IF never_synced_repos -%]
+      <p class="lead">Looks like you have never synced your repositories. Click "Reload Repositories" below to get started.</p>
+    [% END -%]
+    [% reload_repositories_form.render -%]
+  [% ELSE -%]
+    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your repositories.</p>
+  [% END -%]
 
   <br>
   <h3>Danger Zone</h3>

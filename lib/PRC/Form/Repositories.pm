@@ -1,4 +1,4 @@
-package PRC::Form::Repos;
+package PRC::Form::Repositories;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
@@ -21,8 +21,7 @@ has_field '_token' => (
 has_field 'repo_select' => (
   type     => 'Select',
   label    => 'Please select repositories that you want to be
-               assigned to other participants. Your repository
-               needs to have an open issue to receive assignees.',
+               assigned to other participants.',
   widget   => 'CheckboxGroup',
   multiple => 1,
 );
@@ -57,21 +56,15 @@ sub build_repo_option_label {
 
   my $label = $name . ' (';
   $label   .= "$lang, " if $lang;
-  $label   .= ($count == 0) ? "No issues!)"
-            : ($count == 1) ? "1 issue only)"
+  $label   .= ($count == 0) ? "No issues)"
+            : ($count == 1) ? "1 issue)"
                             : "$count issues)";
   return $label;
 }
 
-has_field 'reload_repos' => (
-  type => 'Submit',
-  value => 'Reload repositories',
-  element_attr => { class => 'btn btn-primary' },
-);
-
-has_field 'submit_repos' => (
+has_field 'submit_repositories' => (
   type  => 'Submit',
-  value => 'Save my selected repositories',
+  value => 'Save my repositories',
   element_attr => { class => 'btn btn-success' },
 );
 

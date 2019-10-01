@@ -1,10 +1,9 @@
-package PRC::Form::Settings;
+package PRC::Form::Assignment;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
 
 use namespace::autoclean;
-use PRC::Constants;
 use List::Util qw/none/;
 
 has '+widget_wrapper' => ( default => 'Bootstrap3' );
@@ -13,24 +12,16 @@ has_field '_token' => (
   type  => 'RequestToken',
 );
 
-has_field 'assignment_level' => (
+has_field 'is_receiving_assignments' => (
   type  => 'Checkbox',
   label => 'Get assignments?',
-  checkbox_value      => USER_ASSIGNMENT_ACTIVE,
-  input_without_param => USER_ASSIGNMENT_QUIT,
+  checkbox_value      => 1,
+  input_without_param => 0,
 );
 
-has_field 'assignee_level' => (
-  type  => 'Checkbox',
-  label => 'Get assignees?',
-  checkbox_value      => USER_ASSIGNEE_ACTIVE,
-  input_without_param => USER_ASSIGNEE_QUIT,
-);
-
-
-has_field 'submit_settings' => (
+has_field 'submit_assignment' => (
   type  => 'Submit',
-  value => 'Save my settings',
+  value => 'Save my assignment setting',
   element_attr => { class => 'btn btn-success' },
 );
 

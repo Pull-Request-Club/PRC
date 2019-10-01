@@ -5,12 +5,13 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Constants;
-use PRC::Form::Repos;
-use PRC::Form::Settings;
+use PRC::Form::Assignment;
 use PRC::Form::DeactivateConfirm;
 use PRC::Form::DeleteConfirm;
-use PRC::Form::SkipConfirm;
 use PRC::Form::DoneConfirm;
+use PRC::Form::ReloadRepositories;
+use PRC::Form::Repositories;
+use PRC::Form::SkipConfirm;
 
 use List::Util qw/any/;
 
@@ -25,38 +26,6 @@ PRC::Controller::User - Catalyst Controller
 Catalyst Controller.
 
 =head1 METHODS
-
-=head2 add_no_repositories_selected_banner
-
-Adds banner if conditions are satisfied, otherwise clears warning in stash.
-
-=cut
-
-sub add_no_repositories_selected_banner :Private {
-  my ($self, $c) = @_;
-  my $user = $c->user;
-  my $add_banner = 0;
-
-  if ($user && $user->assignee_level == USER_ASSIGNEE_ACTIVE){
-    my $count = $c->model('PRCDB::Repo')->search({
-      user_id             => $user->id,
-      gone_missing        => REPO_NOT_GONE_MISSING,
-      accepting_assignees => REPO_ACCEPTING,
-    })->count;
-
-    if ($count == 0){
-      $add_banner = 1;
-    }
-  }
-
-  if ($add_banner){
-    $c->stash->{alert_warning} = 'You opted in to get assignees, but you haven\'t selected any repositories yet. Go to "My Repos" above to fix this.';
-  } else {
-    delete $c->stash->{alert_warning};
-  }
-
-  return 1;
-}
 
 =head2 check_user_status
 
@@ -115,35 +84,77 @@ sub settings :Path('/settings') :Args(0) {
 
   # must be logged in + activated
   $c->forward('check_user_status',[{ skip_legal_check => 1 }]);
-  $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
+  my $has_accepted_latest_terms = $user->has_accepted_latest_terms;
 
-  my $settings_form = PRC::Form::Settings->new;
-  $settings_form->process(
-    params   => $c->req->params,
-    defaults => {
-      assignment_level => $user->assignment_level,
-      assignee_level   => $user->assignee_level,
+  # Go ahead with assignment setting and repo/org sync logic if agreed to TOS
+  if($has_accepted_latest_terms){
+    my $last_repository_sync_time   = $user->last_repository_sync_time;
+    my $has_any_available_repos     = $user->has_any_available_repos;
+    my $last_organization_sync_time = $user->last_organization_sync_time;
+
+    if (!$last_repository_sync_time){
+      $c->stash({never_synced_repos => 1, hide_repos => 1});
+    } elsif (!$has_any_available_repos){
+      $c->stash({hide_repos => 1});
     }
-  );
-  if($c->req->params->{submit_settings} && $settings_form->validated){
-    # Note that values are validated by HTML::FormHandler
-    my $values = $settings_form->values;
-    $user->update({
-      assignment_level => $values->{assignment_level},
-      assignee_level   => $values->{assignee_level},
-    });
-    $c->forward('add_no_repositories_selected_banner');
-    $c->stash->{alert_success} = 'Your settings are saved!';
-  }
+    if (!$last_organization_sync_time){
+      $c->stash({never_synced_orgs => 1});
+    }
+
+    # Reload Repositories
+    my $reload_repositories_form = PRC::Form::ReloadRepositories->new;
+    $c->stash({ reload_repositories_form => $reload_repositories_form });
+    $reload_repositories_form->process(params => $c->req->params);
+    if($c->req->params->{submit_reload_repositories} && $reload_repositories_form->validated){
+      $user->fetch_repos;
+      $c->session({ alert_success => 'Your repositories are reloaded.' });
+      # Reload
+      $c->response->redirect('/settings',303);
+      $c->detach;
+    }
+
+    # Repositories
+    my $repositories_form = PRC::Form::Repositories->new(user => $user);
+    $c->stash({ repositories_form => $repositories_form });
+    $repositories_form->process(params => $c->req->params);
+    if($c->req->params->{submit_repositories} && $repositories_form->validated){
+      my $selected_repos = $repositories_form->values->{repo_select};
+      foreach my $repo ($user->available_repos){
+        my $github_id   = $repo->github_id;
+        my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
+        $repo->update({ accepting_assignees => $is_selected });
+      }
+      $c->stash->{alert_success} = 'Your selected repositories are updated.';
+    }
+
+    # Assignment Settings
+    my $assignment_form = PRC::Form::Assignment->new;
+    $c->stash({ assignment_form => $assignment_form });
+    $assignment_form->process(
+      params   => $c->req->params,
+      defaults => {
+        is_receiving_assignments => $user->is_receiving_assignments,
+      }
+    );
+    if($c->req->params->{submit_assignment} && $assignment_form->validated){
+      my $new_value = $assignment_form->values->{is_receiving_assignments};
+      $user->update({ is_receiving_assignments => $new_value });
+      if ($new_value){
+        $c->stash->{alert_success} = 'Yes! Welcome to the club!';
+      } else {
+        $c->stash->{alert_success} = 'You have opted out from getting assignments. We hope to see you again soon!';
+      }
+    }
+
+  } # end TOS check
 
   $c->stash({
     template   => 'static/html/settings.html',
     active_tab => 'settings',
-    settings_form       => $settings_form,
+    has_accepted_latest_terms => $has_accepted_latest_terms,
   });
 }
-
 
 =head2 my_assignment
 
@@ -154,68 +165,26 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
-  $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
 
   $c->stash({
     assignment => $user->open_assignment,
-    opted_in   => $user->has_assignment_level_active,
+    opted_in   => $user->is_receiving_assignments,
     template   => 'static/html/my-assignment.html',
     active_tab => 'my-assignment',
   });
 }
 
-
 =head2 my_repos
+
+Redirect to /settings, not used any more.
 
 =cut
 
 sub my_repos :Path('/my-repos') :Args(0) {
   my ($self, $c) = @_;
-
-  # must be logged in + activated + agreed to legal
-  $c->forward('check_user_status');
-  my $user = $c->user;
-
-  if($user->can_receive_assignees){
-
-    if($c->req->params->{reload_repos}){
-      $user->update({last_repos_sync => undef});
-      $c->stash->{alert_success} = 'Your repositories were reloaded!';
-    }
-    # Fetch repos
-    # TODO: throw away if errors
-    $user->fetch_repos;
-
-    my $form  = PRC::Form::Repos->new(user => $user);
-    $form->process(params => $c->req->params);
-
-    # Form is submitted and valid
-    if($form->params->{submit_repos} && $form->validated){
-      my $selected_repos = $form->values->{repo_select};
-
-      foreach my $repo ($user->available_repos){
-        my $github_id   = $repo->github_id;
-        my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
-        $repo->update({ accepting_assignees => $is_selected });
-      }
-      $c->stash->{alert_success} = 'Your repository settings are updated!';
-
-    }
-
-    $c->stash->{form} = $form;
-
-  }
-
-  # User not receiving assignees anyway
-  else {
-    $c->stash->{not_receiving_assignees} = 1;
-  }
-
-  $c->stash({
-    template   => 'static/html/my-repos.html',
-    active_tab => 'my-repos',
-  });
+  $c->response->redirect('/settings',303);
+  $c->detach;
 }
 
 =head2 history
@@ -227,7 +196,6 @@ sub history :Path('/history') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
-  $c->forward('add_no_repositories_selected_banner');
   my $user = $c->user;
 
   my @taken = $user->assignments_taken;

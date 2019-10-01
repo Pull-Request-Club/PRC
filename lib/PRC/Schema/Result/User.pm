@@ -45,6 +45,10 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable   => 0,
   },
+  "last_repository_sync_time",
+  { data_type => "datetime", default_value => \"null", is_nullable => 1 },
+  "last_organization_sync_time",
+  { data_type => "datetime", default_value => \"null", is_nullable => 1 },
   "tos_agree_time",
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
   "tos_agreed_version",
@@ -53,10 +57,8 @@ __PACKAGE__->add_columns(
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
   "is_deactivated",
   { data_type => "boolean", default_value => 0, is_nullable => 0 },
-  "assignment_level",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
-  "assignee_level",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "is_receiving_assignments",
+  { data_type => "boolean", default_value => 0, is_nullable => 0 },
   "github_id",
   { data_type => "integer", is_nullable => 0 },
   "github_login",
@@ -72,8 +74,6 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 256,
   },
-  "last_repos_sync",
-  { data_type => "datetime", default_value => \"null", is_nullable => 1 },
 );
 
 __PACKAGE__->set_primary_key("user_id");
@@ -174,20 +174,6 @@ sub accept_latest_terms {
   });
 }
 
-=head2 can_receive_assignees
-
-This reflects whether this user's repositories can be assigned.
-It does not reflect whether user has any repo, or is selected.
-
-=cut
-
-sub can_receive_assignees {
-  my ($user) = @_;
-  my $assignee_active = ($user->assignee_level == USER_ASSIGNEE_ACTIVE) ? 1 : 0;
-  my $accepted_terms  = $user->has_accepted_latest_terms;
-  return $assignee_active && $accepted_terms;
-}
-
 =head2 can_receive_assignments
 
 This reflects whether this user can receive an assignment next month.
@@ -199,7 +185,7 @@ It will also be false if user currently has an open assignment.
 sub can_receive_assignments {
   my ($user) = @_;
   return $user->has_accepted_latest_terms
-    && $user->has_assignment_level_active
+    && $user->is_receiving_assignments
     && !$user->has_open_assignment;
 }
 
@@ -225,28 +211,6 @@ Returns if user has an OPEN assignment assigned to them.
 sub has_open_assignment {
   my ($user) = @_;
   return $user->open_assignment ? 1 : 0;
-}
-
-=head2 has_assignment_level_active
-
-Returns true if assignment level is active.
-
-=cut
-
-sub has_assignment_level_active {
-  my ($user) = @_;
-  return ($user->assignment_level == USER_ASSIGNMENT_ACTIVE) ? 1 : 0;
-}
-
-=head2 has_assignment_level_quit
-
-Returns true if assignment level is quit.
-
-=cut
-
-sub has_assignment_level_quit {
-  my ($user) = @_;
-  return ($user->assignment_level == USER_ASSIGNMENT_QUIT) ? 1 : 0;
 }
 
 =head2 assignments_taken
@@ -300,9 +264,6 @@ Returns undef if something went wrong.
 sub fetch_repos {
   my ($user) = @_;
 
-  return 1 if $user->last_repos_sync
-    && $user->last_repos_sync > DateTime->now->add(days=>-1);
-
   my @existing_repos = $user->repos;
   my $fetched_repos  = PRC::GitHub->get_repos($user->github_token);
   return undef unless defined $fetched_repos;
@@ -327,7 +288,7 @@ sub fetch_repos {
     }
   }
 
-  $user->update({ last_repos_sync => DateTime->now->datetime });
+  $user->update({ last_repository_sync_time => DateTime->now->datetime });
 
   return 1;
 }
@@ -343,6 +304,19 @@ sub available_repos {
   return $user->repos->search({
     gone_missing => 0
   })->all;
+}
+
+=head2 has_any_available_repos
+
+Returns a boolean representing whether user has any available repos.
+
+=cut
+
+sub has_any_available_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    gone_missing => 0
+  })->count ? 1 : 0;
 }
 
 __PACKAGE__->meta->make_immutable;
