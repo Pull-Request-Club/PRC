@@ -46,7 +46,7 @@ sub options_repo_select {
 
 sub build_repo_option_label {
   my ($repo) = @_;
-  my $name  = $repo->github_name;
+  my $name  = $repo->github_full_name;
   my $lang  = $repo->github_language;
   my $count = $repo->github_open_issues_count;
 
