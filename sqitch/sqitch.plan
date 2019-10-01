@@ -3,3 +3,4 @@
 
 initial-ddl 2019-05-10T06:28:01Z Kivanc Yazan <kyzn@cpan.org> # Move existing DDL to Sqitch
 redo-user-table 2019-10-01T02:34:22Z Kivanc Yazan <kyzn@cpan.org> # Redo user table with additional last organization sync time and no assignee_level
+create-organization 2019-10-01T02:56:34Z Kivanc Yazan <kyzn@cpan.org> # Create tables for organization
