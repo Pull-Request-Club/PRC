@@ -37,9 +37,7 @@ sub options_repo_select {
     label    => build_repo_option_label($_),
     selected => $_->accepting_assignees,
   }} sort {
-    $b->github_open_issues_count <=> $a->github_open_issues_count
-      or
-    $b->github_stargazers_count <=> $a->github_stargazers_count
+    (lc $a->github_full_name) cmp (lc $b->github_full_name)
   } @repos;
   return \@options;
 }
