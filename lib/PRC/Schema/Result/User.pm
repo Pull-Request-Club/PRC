@@ -92,6 +92,13 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->has_many(
+  "orgs",
+  "PRC::Schema::Result::Org",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head1 METHODS
 
 =head2 is_active
@@ -284,7 +291,7 @@ sub fetch_repos {
     my $existing_repo_is_fetched =
       any {$_->{github_id} == $existing_repo->github_id} @$fetched_repos;
     if (!$existing_repo_is_fetched){
-      $existing_repo->update({ gone_missing => REPO_GONE_MISSING });
+      $existing_repo->update({ gone_missing => 1 });
     }
   }
 
@@ -315,6 +322,76 @@ Returns a boolean representing whether user has any available repos.
 sub has_any_available_repos {
   my ($user) = @_;
   return $user->repos->search({
+    gone_missing => 0
+  })->count ? 1 : 0;
+}
+
+=head2 fetch_orgs
+
+Fetch organizations from GitHub. Add/update org table.
+Returns undef if something went wrong.
+Assumes user has accepted read:org scope.
+
+=cut
+
+sub fetch_orgs {
+  my ($user) = @_;
+
+  my @existing_orgs = $user->orgs;
+  my $fetched_orgs  = PRC::GitHub->get_orgs($user->github_token);
+  return undef unless defined $fetched_orgs;
+
+  # Loop through each fetched organization
+  foreach my $fetched_org (@$fetched_orgs){
+    # If it's not there yet, add it and link it to this user
+    # If it's added by this user, update
+    # If it's added by someone else, don't make any changes
+    my $org = $user->result_source->schema->resultset('Org')->search({
+      github_id => $fetched_org->{github_id}
+    })->first;
+    if (!$org){
+      $user->create_related('orgs',$fetched_org);
+    } elsif($org->user_id == $user->user_id){
+      $org->update($fetched_org);
+    }
+  }
+
+  # Loop through this user's organizations to mark missing ones
+  foreach my $existing_org (@existing_orgs){
+    my $existing_org_is_fetched =
+      any {$_->{github_id} == $existing_org->github_id} @$fetched_orgs;
+    if (!$existing_org_is_fetched){
+      $existing_org->update({ gone_missing => 1 });
+    }
+  }
+
+  $user->update({ last_organization_sync_time => DateTime->now->datetime });
+
+  return 1;
+}
+
+=head2 available_orgs
+
+Returns an array of organizations that are not gone missing.
+
+=cut
+
+sub available_orgs {
+  my ($user) = @_;
+  return $user->orgs->search({
+    gone_missing => 0
+  })->all;
+}
+
+=head2 has_any_available_orgs
+
+Returns a boolean representing whether user has any available orgs.
+
+=cut
+
+sub has_any_available_orgs {
+  my ($user) = @_;
+  return $user->orgs->search({
     gone_missing => 0
   })->count ? 1 : 0;
 }

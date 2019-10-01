@@ -39,7 +39,7 @@ Returns URL for GitHub authentication. Puts client_id in.
 sub authenticate_url {
   my ($self) = @_;
   my $client_id = PRC::Secrets->client_id;
-  return "https://github.com/login/oauth/authorize?scope=user%3Aemail&client_id=$client_id";
+  return "https://github.com/login/oauth/authorize?scope=user%3Aemail%2Cread%3Aorg&client_id=$client_id";
 }
 
 =head2 access_token
@@ -151,7 +151,7 @@ sub get_email {
 
   my $repos = PRC::GitHub->get_repos($token);
 
-Makes a GET to /user/repos, return an arrayref.
+Makes a GET to /user/repos, returns an arrayref.
 Excludes forks, archived repos, private repos.
 Returns data such that it matches our column names.
 
@@ -182,7 +182,7 @@ sub get_repos {
     my $data = eval { decode_json($res->content) };
     return undef unless $data && ref $data eq 'ARRAY';
     if (scalar @$data){
-      # Return empty hashref if we got [{}]
+      # Return empty arrayref if we got [{}]
       return [] unless $data->[0]->{id};
     }
     else {
@@ -206,7 +206,7 @@ sub get_repos {
         github_issue_events_url  => $_->{issue_events_url},
         github_open_issues_count => $_->{open_issues_count},
         github_stargazers_count  => $_->{stargazers_count},
-        gone_missing             => REPO_NOT_GONE_MISSING,
+        gone_missing             => 0,
       }}
       grep {
         !$_->{archived} &&
@@ -217,6 +217,87 @@ sub get_repos {
   }
 
   return \@repos;
+}
+
+=head2 can_get_orgs
+
+  my $can_get_orgs = PRC::GitHub->can_get_orgs($token);
+
+Makes one GET to /user/orgs to see if it returns 403.
+If 403, this returns 0. Returns 1 otherwise.
+
+=cut
+
+sub can_get_orgs {
+  my ($self, $token) = @_;
+  return undef unless $token;
+
+  my $ua = LWP::UserAgent->new;
+  $ua->agent("PullRequestClub/0.1");
+
+  my $req = HTTP::Request->new(GET => "https://api.github.com/user/orgs?page=1");
+  $req->header(Authorization => "token $token");
+  $req->header(Accept => 'application/vnd.github.v3+json');
+  my $res = $ua->request($req);
+  return ($res->code == 403) ? 0 : 1;
+}
+
+=head2 get_orgs
+
+  my $repos = PRC::GitHub->get_orgs($token);
+
+Makes a GET to /user/orgs, returns an arrayref.
+Doesn't explicitly check for 403, any issue will return undef.
+Returns data such that it matches our column names.
+
+=cut
+
+sub get_orgs {
+  my ($self, $token) = @_;
+  return undef unless $token;
+
+  my $ua = LWP::UserAgent->new;
+  $ua->agent("PullRequestClub/0.1");
+
+  # Loop through pages
+  # TODO look at $res->header('link') that GitHub returns
+  my $done = 0;
+  my $page = 1;
+  my @orgs;
+
+  while (!$done){
+    my $req = HTTP::Request->new(GET => "https://api.github.com/user/orgs?page=$page");
+    $page++;
+    $req->header(Authorization => "token $token");
+    $req->header(Accept => 'application/vnd.github.v3+json');
+
+    my $res = $ua->request($req);
+    return undef unless $res->is_success;
+
+    my $data = eval { decode_json($res->content) };
+    return undef unless $data && ref $data eq 'ARRAY';
+    if (scalar @$data){
+      # Return empty arrayref if we got [{}]
+      return [] unless $data->[0]->{id};
+    }
+    else {
+      $done = 1;
+      next;
+    }
+
+    # "data" is an arrayref of hashes.
+    # Keep only a few items that are relevant to us
+    my @new_orgs =
+      map  {{
+        github_id      => $_->{id},
+        github_login   => $_->{login},
+        github_profile => 'https://github.com/'.$_->{login},
+        gone_missing   => 0,
+      }} @$data;
+    push @orgs, @new_orgs;
+  }
+
+  return \@orgs;
 }
 
 =head2 confirm_pr

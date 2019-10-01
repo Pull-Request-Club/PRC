@@ -82,7 +82,7 @@ sub users :Path('/admin/users') :Args(0) {
     assignments_total     => $_->assignments->count,
     assignments_done      => scalar(grep {$_->status == ASSIGNMENT_DONE} $_->assignments),
     repos_total           => scalar($_->repos),
-    repos_opted_in        => scalar(grep {$_->accepting_assignees == REPO_ACCEPTING} $_->repos),
+    repos_opted_in        => scalar(grep {$_->accepting_assignees == 1} $_->repos),
     %{_get_assignees_total_and_done($_,@assignments)},
   }} @users;
 

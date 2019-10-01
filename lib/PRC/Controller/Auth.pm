@@ -62,13 +62,23 @@ sub callback :Path('/callback') :Args(0) {
 
   # TODO: rate limit this endpoint.
 
+  my $code         = $c->req->params->{code}               or $c->forward('login_error');
+  my $access_token = PRC::GitHub->access_token($code)      or $c->forward('login_error');
+
+  # If a user is already logged in, it's safe to send them to somewhere else.
+  # If they are coming from setting page (because they needed more scope),
+  #    then we should make sure to update their stored token.
   if ($c->user_exists){
-    $c->response->redirect('/my-assignment',303);
+    my $redir = '/my-assignment';
+    if (delete $c->session->{fetch_org_reauth}){
+      $redir = '/settings';
+      $c->user->update({ github_token => $access_token });
+      $c->session->{alert_success} = 'Please try reloading organizations now.';
+    }
+    $c->response->redirect($redir,303);
     $c->detach;
   }
 
-  my $code         = $c->req->params->{code}               or $c->forward('login_error');
-  my $access_token = PRC::GitHub->access_token($code)      or $c->forward('login_error');
   my $user_data    = PRC::GitHub->user_data($access_token) or $c->forward('login_error');
   my $github_email = PRC::GitHub->get_email($access_token) or $c->forward('login_error',
     ['We had trouble getting your primary verified email from GitHub. Please try again.']);

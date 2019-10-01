@@ -12,6 +12,20 @@
   [% END -%]
 
   <br>
+  <h3>Organizations</h3>
+  [% IF has_accepted_latest_terms -%]
+    [% UNLESS hide_orgs -%]
+      [% organizations_form.render -%]
+    [% END -%]
+    [% IF never_synced_orgs -%]
+      <p class="lead">Looks like you have never synced your organizations. Click "Reload Organizations" below to get started.</p>
+    [% END -%]
+    [% reload_organizations_form.render -%]
+  [% ELSE -%]
+    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your organizations.</p>
+  [% END -%]
+
+  <br>
   <h3>Repositories</h3>
   [% IF has_accepted_latest_terms -%]
     [% UNLESS hide_repos -%]
