@@ -281,7 +281,7 @@ sub done_confirm :Path('/done-confirm') :Args(0) {
   $form->process(params => $c->req->params);
   if($form->validated){
     $user->open_assignment->mark_as_done;
-    $c->session->{alert_success} = 'You have completed your assignment!';
+    $c->session->{alert_success} = 'You have done a great job! Now is time to brag about it: Post a tweet or write a blog. Feel free to tag us along @PullRequestClub. See you next month!';
     $c->response->redirect('/history',303);
     $c->detach;
   }
