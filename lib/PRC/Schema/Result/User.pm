@@ -271,25 +271,70 @@ Returns undef if something went wrong.
 sub fetch_repos {
   my ($user) = @_;
 
+  # Collect available repo-fetching orgs
+  my @available_fetching_orgs = $user->available_fetching_orgs;
+  my $av_org_map;
+  foreach my $av_org (@available_fetching_orgs){
+    $av_org_map->{$av_org->github_id} = $av_org->org_id;
+  }
+
+  # Collect existing and fetched repos
   my @existing_repos = $user->repos;
   my $fetched_repos  = PRC::GitHub->get_repos($user->github_token);
   return undef unless defined $fetched_repos;
 
-  # Add or update each of fetched repositories
+  # Loop through all fetched repositories
   foreach my $fetched_repo (@$fetched_repos){
-    my $matching_existing_repo =
-      first {$_->github_id == $fetched_repo->{github_id}} @existing_repos;
-    if ($matching_existing_repo){
-      $matching_existing_repo->update($fetched_repo);
-    } else {
-      $user->create_related('repos',$fetched_repo);
+
+    # Process "type:organization" repos
+    if (my $fetched_org_github_id = delete $fetched_repo->{org_github_id}){
+      # If it belongs to a repo-fetching available organization, add our own org_id
+      if (my $org_id = $av_org_map->{$fetched_org_github_id}){
+        $fetched_repo->{org_id} = $org_id;
+      }
+      # Otherwise, add a flag that says ignore, and don't update db
+      else {
+        $fetched_repo->{ignore} = 1;
+        next;
+      }
+
+      # Now to update database.
+      # If it's not there yet, add it and link it to this user
+      # If it's added by this user, update
+      # If it's added by someone else, mark it as "ignore".
+      my $repo = $user->result_source->schema->resultset('Repo')->search({
+        github_id => $fetched_repo->{github_id}
+      })->first;
+
+      if (!$repo){
+        $user->create_related('repos',$fetched_repo);
+      } elsif($repo->user_id == $user->user_id){
+        $repo->update($fetched_repo);
+      } else {
+        $fetched_repo->{ignore} = 1;
+      }
     }
-  }
+
+    # Process "type:user" repos. Add or update.
+    else {
+      my $matching_existing_repo =
+        first {$_->github_id == $fetched_repo->{github_id}} @existing_repos;
+      if ($matching_existing_repo){
+        $matching_existing_repo->update($fetched_repo);
+      } else {
+        $user->create_related('repos',$fetched_repo);
+      }
+    }
+
+  } # end loop fetched repos
 
   # Mark repositories that didn't come back as "gone missing"
   foreach my $existing_repo (@existing_repos){
     my $existing_repo_is_fetched =
-      any {$_->{github_id} == $existing_repo->github_id} @$fetched_repos;
+      any {
+        $_->{github_id} == $existing_repo->github_id
+        && !$_->{ignore}
+      } @$fetched_repos;
     if (!$existing_repo_is_fetched){
       $existing_repo->update({ gone_missing => 1 });
     }
@@ -373,6 +418,7 @@ sub fetch_orgs {
 =head2 available_orgs
 
 Returns an array of organizations that are not gone missing.
+This includes either repo-fetching or non-repo-fetching orgs.
 
 =cut
 
@@ -382,6 +428,22 @@ sub available_orgs {
     gone_missing => 0
   })->all;
 }
+
+=head2 available_fetching_orgs
+
+Returns an array of organizations that are not gone missing.
+This includes only repo-fetching orgs.
+
+=cut
+
+sub available_fetching_orgs {
+  my ($user) = @_;
+  return $user->orgs->search({
+    gone_missing => 0,
+    is_fetching_repos => 1,
+  })->all;
+}
+
 
 =head2 has_any_available_orgs
 

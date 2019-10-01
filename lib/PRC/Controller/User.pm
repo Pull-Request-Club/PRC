@@ -164,7 +164,7 @@ sub settings :Path('/settings') :Args(0) {
         my $is_selected = (any {$_ eq $github_id} @$selected_orgs) ? 1 : 0;
         $org->update({ is_fetching_repos => $is_selected });
       }
-      $c->stash->{alert_success} = 'Your selected organizations are updated.';
+      $c->stash->{alert_success} = 'Your selected organizations are updated. Now you should reload your repositories.';
     }
 
     # Assignment Settings

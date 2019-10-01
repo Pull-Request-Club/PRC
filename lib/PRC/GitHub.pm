@@ -169,7 +169,7 @@ sub get_email {
 
 Makes a GET to /user/repos, returns an arrayref.
 Excludes forks, archived repos, private repos and templates.
-Returns data such that it matches our column names.
+Includes organizational repos (Requires "read:org" scope)
 
 =cut
 
@@ -187,7 +187,7 @@ sub get_repos {
   my @repos;
 
   while (!$done){
-    my $req = HTTP::Request->new(GET => "https://api.github.com/user/repos?visibility=public&affiliation=owner&page=$page");
+    my $req = HTTP::Request->new(GET => "https://api.github.com/user/repos?visibility=public&affiliation=owner,organization_member&page=$page");
     $page++;
     $req->header(Authorization => "token $token");
     $req->header(Accept => 'application/vnd.github.v3+json');
@@ -223,6 +223,7 @@ sub get_repos {
         github_open_issues_count => $_->{open_issues_count},
         github_stargazers_count  => $_->{stargazers_count},
         gone_missing             => 0,
+        (($_->{owner}{type} eq 'Organization') ? (org_github_id => $_->{owner}{id}) : ()),
       }}
       grep {
         !$_->{archived} &&
