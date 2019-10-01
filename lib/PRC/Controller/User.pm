@@ -143,7 +143,7 @@ sub settings :Path('/settings') :Args(0) {
       my $can_get_orgs = PRC::GitHub->can_get_orgs($user->github_token);
       if (!$can_get_orgs){
         $c->session->{fetch_org_reauth} = 1;
-        $c->response->redirect(PRC::GitHub->authenticate_url,303);
+        $c->response->redirect(PRC::GitHub->org_authenticate_url,303);
         $c->detach;
       }
       $user->fetch_orgs;

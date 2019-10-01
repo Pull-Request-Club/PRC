@@ -33,15 +33,31 @@ Good call GitHub. Good call.
   $c->detach;
 
 Returns URL for GitHub authentication. Puts client_id in.
+One scope is added (user:email).
 
 =cut
 
 sub authenticate_url {
   my ($self) = @_;
   my $client_id = PRC::Secrets->client_id;
-  return "https://github.com/login/oauth/authorize?scope=user%3Aemail%2Cread%3Aorg&client_id=$client_id";
+  return "https://github.com/login/oauth/authorize?scope=user%3Aemail&client_id=$client_id";
 }
 
+=head2 org_authenticate_url
+
+  $c->response->redirect(PRC::GitHub->org_authenticate_url);
+  $c->detach;
+
+Returns URL for GitHub authentication. Puts client_id in.
+This is same as authenticate_url with one more scope (read:org).
+
+=cut
+
+sub org_authenticate_url {
+  my ($self) = @_;
+  my $client_id = PRC::Secrets->client_id;
+  return "https://github.com/login/oauth/authorize?scope=user%3Aemail%2Cread%3Aorg&client_id=$client_id";
+}
 =head2 access_token
 
   my $token = PRC::GitHub->access_token('code');
