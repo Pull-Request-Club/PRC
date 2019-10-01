@@ -152,7 +152,7 @@ sub get_email {
   my $repos = PRC::GitHub->get_repos($token);
 
 Makes a GET to /user/repos, returns an arrayref.
-Excludes forks, archived repos, private repos.
+Excludes forks, archived repos, private repos and templates.
 Returns data such that it matches our column names.
 
 =cut
@@ -211,7 +211,8 @@ sub get_repos {
       grep {
         !$_->{archived} &&
         !$_->{fork}     &&
-        !$_->{private}
+        !$_->{private}  &&
+        !$_->{is_template}
       } @$data;
     push @repos, @new_repos;
   }
