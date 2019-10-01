@@ -20,8 +20,8 @@ has_field '_token' => (
 
 has_field 'repo_select' => (
   type     => 'Select',
-  label    => 'Please select repositories that you want to be
-               assigned to other participants.',
+  label    => 'Please select repositories that you want to
+               assign to other people.',
   widget   => 'CheckboxGroup',
   multiple => 1,
 );
