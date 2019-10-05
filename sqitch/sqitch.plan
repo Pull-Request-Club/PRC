@@ -7,3 +7,4 @@ create-organization 2019-10-01T02:56:34Z Kivanc Yazan <kyzn@cpan.org> # Create t
 reorganize-org 2019-10-01T07:34:53Z Kivanc Yazan <kyzn@cpan.org> # Make org into one table
 add-repo-org-id 2019-10-01T14:12:15Z Kivanc Yazan <kyzn@cpan.org> # Add nullable org_id to repo table
 rename-two-user-cols 2019-10-05T04:57:57Z Kivanc Yazan <kyzn@cpan.org> # Rename two user columns for sync time
+drop-org-fetching-bool 2019-10-05T05:09:29Z Kivanc Yazan <kyzn@cpan.org> # Drop org.is_fetching_repos column
