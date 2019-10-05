@@ -12,31 +12,31 @@
   [% END -%]
 
   <br>
-  <h3>Organizations</h3>
+  <h3>Personal Repositories</h3>
   [% IF has_accepted_latest_terms -%]
-    [% UNLESS hide_orgs -%]
-      [% organizations_form.render -%]
+    [% UNLESS hide_personal_repos -%]
+      [% personal_repos_form.render -%]
     [% END -%]
-    [% IF never_synced_orgs -%]
-      <p class="lead">Looks like you have never synced your organizations. Click "Reload Organizations" below to get started.</p>
+    [% IF never_synced_personal_repos -%]
+      <p class="lead">Looks like you have never synced your personal repositories. Click "Reload Personal Repositories" below to get started.</p>
     [% END -%]
-    [% reload_organizations_form.render -%]
+    [% reload_personal_repos_form.render -%]
   [% ELSE -%]
-    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your organizations.</p>
+    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your personal repositories.</p>
   [% END -%]
 
   <br>
-  <h3>Repositories</h3>
+  <h3>Organizational Repositories</h3>
   [% IF has_accepted_latest_terms -%]
-    [% UNLESS hide_repos -%]
-      [% repositories_form.render -%]
+    [% UNLESS hide_org_repos -%]
+      [% org_repos_form.render -%]
     [% END -%]
-    [% IF never_synced_repos -%]
-      <p class="lead">Looks like you have never synced your repositories. Click "Reload Repositories" below to get started.</p>
+    [% IF never_synced_org_repos -%]
+      <p class="lead">Looks like you have never synced your organizational repositories. Click "Reload Organizational Repositories" below to get started.</p>
     [% END -%]
-    [% reload_repositories_form.render -%]
+    [% reload_org_repos_form.render -%]
   [% ELSE -%]
-    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your repositories.</p>
+    <p class="lead">You need to accept our <a href='/legal'>latest terms of service</a> before updating your organizational repositories.</p>
   [% END -%]
 
   <br>

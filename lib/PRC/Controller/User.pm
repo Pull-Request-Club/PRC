@@ -9,10 +9,10 @@ use PRC::Form::Assignment;
 use PRC::Form::DeactivateConfirm;
 use PRC::Form::DeleteConfirm;
 use PRC::Form::DoneConfirm;
-use PRC::Form::Organizations;
-use PRC::Form::ReloadOrganizations;
-use PRC::Form::ReloadRepositories;
-use PRC::Form::Repositories;
+use PRC::Form::OrgRepos;
+use PRC::Form::PersonalRepos;
+use PRC::Form::ReloadOrgRepos;
+use PRC::Form::ReloadPersonalRepos;
 use PRC::Form::SkipConfirm;
 
 use List::Util qw/any/;
@@ -92,53 +92,62 @@ sub settings :Path('/settings') :Args(0) {
 
   # Go ahead with assignment setting and repo/org sync logic if agreed to TOS
   if($has_accepted_latest_terms){
-    my $last_repository_sync_time   = $user->last_repository_sync_time;
-    my $last_organization_sync_time = $user->last_organization_sync_time;
-    my $has_any_available_repos     = $user->has_any_available_repos;
-    my $has_any_available_orgs      = $user->has_any_available_orgs;
+    my $last_personal_repo_sync_time = $user->last_personal_repo_sync_time;
+    my $last_org_repo_sync_time      = $user->last_org_repo_sync_time;
+    my $has_any_av_personal_repos    = $user->has_any_available_personal_repos;
+    my $has_any_av_org_repos         = $user->has_any_available_org_repos;
 
-    if (!$last_repository_sync_time){
-      $c->stash({never_synced_repos => 1, hide_repos => 1});
-    } elsif (!$has_any_available_repos){
-      $c->stash({hide_repos => 1});
+    if (!$last_personal_repo_sync_time){
+      $c->stash({never_synced_personal_repos => 1, hide_personal_repos => 1});
+    } elsif (!$has_any_av_personal_repos){
+      $c->stash({hide_personal_repos => 1});
     }
-    if (!$last_organization_sync_time){
-      $c->stash({never_synced_orgs => 1, hide_orgs => 1});
-    } elsif (!$has_any_available_orgs){
-      $c->stash({hide_orgs =>1});
+    if (!$last_org_repo_sync_time){
+      $c->stash({never_synced_org_repos => 1, hide_org_repos => 1});
+    } elsif (!$has_any_av_org_repos){
+      $c->stash({hide_org_repos =>1});
     }
 
-    # Reload Repositories
-    my $reload_repositories_form = PRC::Form::ReloadRepositories->new;
-    $c->stash({ reload_repositories_form => $reload_repositories_form });
-    $reload_repositories_form->process(params => $c->req->params);
-    if($c->req->params->{submit_reload_repositories} && $reload_repositories_form->validated){
-      $user->fetch_repos;
-      $c->session({ alert_success => 'Your repositories are reloaded.' });
+    # If we are coming back from GitHub additional scope confirmation, reload org repos
+    if (delete $c->session->{fetch_org_reauth_done}){
+      $user->fetch_org_repos;
+      $c->session({ alert_success => 'Your organizational repositories are loaded.' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
     }
 
-    # Repositories
-    my $repositories_form = PRC::Form::Repositories->new(user => $user);
-    $c->stash({ repositories_form => $repositories_form });
-    $repositories_form->process(params => $c->req->params);
-    if($c->req->params->{submit_repositories} && $repositories_form->validated){
-      my $selected_repos = $repositories_form->values->{repo_select};
-      foreach my $repo ($user->available_repos){
+    # Reload Personal Repositories
+    my $reload_personal_repos_form = PRC::Form::ReloadPersonalRepos->new;
+    $c->stash({ reload_personal_repos_form => $reload_personal_repos_form });
+    $reload_personal_repos_form->process(params => $c->req->params);
+    if($c->req->params->{submit_reload_personal_repos} && $reload_personal_repos_form->validated){
+      $user->fetch_personal_repos;
+      $c->session({ alert_success => 'Your personal repositories are reloaded.' });
+      # Reload
+      $c->response->redirect('/settings',303);
+      $c->detach;
+    }
+
+    # Personal Repositories
+    my $personal_repos_form = PRC::Form::PersonalRepos->new(user => $user);
+    $c->stash({ personal_repos_form => $personal_repos_form });
+    $personal_repos_form->process(params => $c->req->params);
+    if($c->req->params->{submit_personal_repos} && $personal_repos_form->validated){
+      my $selected_repos = $personal_repos_form->values->{personal_repo_select};
+      foreach my $repo ($user->available_personal_repos){
         my $github_id   = $repo->github_id;
         my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
         $repo->update({ accepting_assignees => $is_selected });
       }
-      $c->stash->{alert_success} = 'Your selected repositories are updated.';
+      $c->stash->{alert_success} = 'Your selected personal repositories are updated.';
     }
 
-    # Reload Organizations
-    my $reload_organizations_form = PRC::Form::ReloadOrganizations->new;
-    $c->stash({ reload_organizations_form => $reload_organizations_form });
-    $reload_organizations_form->process(params => $c->req->params);
-    if($c->req->params->{submit_reload_organizations} && $reload_organizations_form->validated){
+    # Reload Organizational Repositories
+    my $reload_org_repos_form = PRC::Form::ReloadOrgRepos->new;
+    $c->stash({ reload_org_repos_form => $reload_org_repos_form });
+    $reload_org_repos_form->process(params => $c->req->params);
+    if($c->req->params->{submit_reload_org_repos} && $reload_org_repos_form->validated){
       # Check if we have "read:org" scope for this user. If not, ask for that.
       my $can_get_orgs = PRC::GitHub->can_get_orgs($user->github_token);
       if (!$can_get_orgs){
@@ -146,25 +155,26 @@ sub settings :Path('/settings') :Args(0) {
         $c->response->redirect(PRC::GitHub->org_authenticate_url,303);
         $c->detach;
       }
-      $user->fetch_orgs;
-      $c->session({ alert_success => 'Your organizations are reloaded.' });
+      # Continue if we have the scope
+      $user->fetch_org_repos;
+      $c->session({ alert_success => 'Your organizational repositories are reloaded.' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
     }
 
-    # Organizations
-    my $organizations_form = PRC::Form::Organizations->new(user => $user);
-    $c->stash({ organizations_form => $organizations_form });
-    $organizations_form->process(params => $c->req->params);
-    if($c->req->params->{submit_organizations} && $organizations_form->validated){
-      my $selected_orgs = $organizations_form->values->{org_select};
-      foreach my $org ($user->available_orgs){
-        my $github_id   = $org->github_id;
-        my $is_selected = (any {$_ eq $github_id} @$selected_orgs) ? 1 : 0;
-        $org->update({ is_fetching_repos => $is_selected });
+    # Organizational Repositories
+    my $org_repos_form = PRC::Form::OrgRepos->new(user => $user);
+    $c->stash({ org_repos_form => $org_repos_form });
+    $org_repos_form->process(params => $c->req->params);
+    if($c->req->params->{submit_org_repos} && $org_repos_form->validated){
+      my $selected_repos = $org_repos_form->values->{org_repo_select};
+      foreach my $repo ($user->available_org_repos){
+        my $github_id   = $repo->github_id;
+        my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
+        $repo->update({ accepting_assignees => $is_selected });
       }
-      $c->stash->{alert_success} = 'Your selected organizations are updated. Now you should reload your repositories.';
+      $c->stash->{alert_success} = 'Your selected organizational repositories are updated.';
     }
 
     # Assignment Settings

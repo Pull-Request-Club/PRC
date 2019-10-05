@@ -45,9 +45,9 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable   => 0,
   },
-  "last_repository_sync_time",
+  "last_personal_repo_sync_time",
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
-  "last_organization_sync_time",
+  "last_org_repo_sync_time",
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
   "tos_agree_time",
   { data_type => "datetime", default_value => \"null", is_nullable => 1 },
@@ -261,69 +261,105 @@ sub assignments_given {
   })->all;
 }
 
-=head2 fetch_repos
+=head2 fetch_personal_repos
 
-Fetch repositories from GitHub. Add/update repo table.
+Fetch PERSONAL repositories from GitHub. Add/update repo table.
 Returns undef if something went wrong.
 
 =cut
 
-sub fetch_repos {
+sub fetch_personal_repos {
   my ($user) = @_;
 
-  # Collect available repo-fetching orgs
-  my @available_fetching_orgs = $user->available_fetching_orgs;
-  my $av_org_map;
-  foreach my $av_org (@available_fetching_orgs){
-    $av_org_map->{$av_org->github_id} = $av_org->org_id;
-  }
-
   # Collect existing and fetched repos
-  my @existing_repos = $user->repos;
-  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token);
+  my @existing_repos = $user->personal_repos;
+  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token,0); # org = 0
   return undef unless defined $fetched_repos;
 
   # Loop through all fetched repositories
   foreach my $fetched_repo (@$fetched_repos){
 
-    # Process "type:organization" repos
-    if (my $fetched_org_github_id = delete $fetched_repo->{org_github_id}){
-      # If it belongs to a repo-fetching available organization, add our own org_id
-      if (my $org_id = $av_org_map->{$fetched_org_github_id}){
-        $fetched_repo->{org_id} = $org_id;
-      }
-      # Otherwise, add a flag that says ignore, and don't update db
-      else {
-        $fetched_repo->{ignore} = 1;
-        next;
-      }
-
-      # Now to update database.
-      # If it's not there yet, add it and link it to this user
-      # If it's added by this user, update
-      # If it's added by someone else, mark it as "ignore".
-      my $repo = $user->result_source->schema->resultset('Repo')->search({
-        github_id => $fetched_repo->{github_id}
-      })->first;
-
-      if (!$repo){
-        $user->create_related('repos',$fetched_repo);
-      } elsif($repo->user_id == $user->user_id){
-        $repo->update($fetched_repo);
-      } else {
-        $fetched_repo->{ignore} = 1;
-      }
+    my $matching_existing_repo =
+      first {$_->github_id == $fetched_repo->{github_id}} @existing_repos;
+    if ($matching_existing_repo){
+      $matching_existing_repo->update($fetched_repo);
+    } else {
+      $user->create_related('repos',$fetched_repo);
     }
 
-    # Process "type:user" repos. Add or update.
+  } # end loop fetched repos
+
+  # Mark repositories that didn't come back as "gone missing"
+  foreach my $existing_repo (@existing_repos){
+    my $existing_repo_is_fetched =
+      any {
+        $_->{github_id} == $existing_repo->github_id
+      } @$fetched_repos;
+    if (!$existing_repo_is_fetched){
+      $existing_repo->update({ gone_missing => 1 });
+    }
+  }
+
+  $user->update({ last_personal_repo_sync_time => DateTime->now->datetime });
+
+  return 1;
+}
+
+=head2 fetch_org_repos
+
+Fetch ORG repositories from GitHub. Add/update org/repo tables.
+Returns undef if something went wrong.
+
+=cut
+
+sub fetch_org_repos {
+  my ($user) = @_;
+
+  # Update orgs first
+  $user->fetch_orgs;
+
+  # Collect available orgs
+  my @available_orgs = $user->available_orgs;
+  my $av_org_map;
+  foreach my $av_org (@available_orgs){
+    $av_org_map->{$av_org->github_id} = $av_org->org_id;
+  }
+
+  # Collect existing and fetched repos
+  my @existing_repos = $user->org_repos;
+  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token,1); # org = 1
+  return undef unless defined $fetched_repos;
+
+  # Loop through all fetched repositories
+  foreach my $fetched_repo (@$fetched_repos){
+
+    my $fetched_org_github_id = delete $fetched_repo->{org_github_id};
+    next unless $fetched_org_github_id;
+
+    # If it belongs to an available organization, add our own org_id
+    if (my $org_id = $av_org_map->{$fetched_org_github_id}){
+      $fetched_repo->{org_id} = $org_id;
+    }
+    # Otherwise, add a flag that says ignore, and don't update db
     else {
-      my $matching_existing_repo =
-        first {$_->github_id == $fetched_repo->{github_id}} @existing_repos;
-      if ($matching_existing_repo){
-        $matching_existing_repo->update($fetched_repo);
-      } else {
-        $user->create_related('repos',$fetched_repo);
-      }
+      $fetched_repo->{ignore} = 1;
+      next;
+    }
+
+    # Now to update database.
+    # If it's not there yet, add it and link it to this user
+    # If it's added by this user, update
+    # If it's added by someone else, mark it as "ignore".
+    my $repo = $user->result_source->schema->resultset('Repo')->search({
+      github_id => $fetched_repo->{github_id}
+    })->first;
+
+    if (!$repo){
+      $user->create_related('repos',$fetched_repo);
+    } elsif($repo->user_id == $user->user_id){
+      $repo->update($fetched_repo);
+    } else {
+      $fetched_repo->{ignore} = 1;
     }
 
   } # end loop fetched repos
@@ -340,34 +376,90 @@ sub fetch_repos {
     }
   }
 
-  $user->update({ last_repository_sync_time => DateTime->now->datetime });
+  $user->update({ last_org_repo_sync_time => DateTime->now->datetime });
 
   return 1;
 }
 
-=head2 available_repos
+=head2 personal_repos
 
-Returns an array of repositories that are not gone missing.
+Returns an array of personal repositories.
 
 =cut
 
-sub available_repos {
+sub personal_repos {
   my ($user) = @_;
   return $user->repos->search({
-    gone_missing => 0
+    org_id => undef,
   })->all;
 }
 
-=head2 has_any_available_repos
+=head2 available_personal_repos
 
-Returns a boolean representing whether user has any available repos.
+Returns an array of personal repositories that are not gone missing.
 
 =cut
 
-sub has_any_available_repos {
+sub available_personal_repos {
   my ($user) = @_;
   return $user->repos->search({
-    gone_missing => 0
+    gone_missing => 0,
+    org_id => undef,
+  })->all;
+}
+
+=head2 has_any_available_personal_repos
+
+Returns a boolean representing whether user has any available personal repos.
+
+=cut
+
+sub has_any_available_personal_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    gone_missing => 0,
+    org_id => undef,
+  })->count ? 1 : 0;
+}
+
+=head2 org_repos
+
+Returns an array of org repositories.
+
+=cut
+
+sub org_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    org_id => { not => undef },
+  })->all;
+}
+
+=head2 available_org_repos
+
+Returns an array of org repositories that are not gone missing.
+
+=cut
+
+sub available_org_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    gone_missing => 0,
+    org_id => { not => undef },
+  })->all;
+}
+
+=head2 has_any_available_org_repos
+
+Returns a boolean representing whether user has any available org repos.
+
+=cut
+
+sub has_any_available_org_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    gone_missing => 0,
+    org_id => { not => undef },
   })->count ? 1 : 0;
 }
 
@@ -410,15 +502,12 @@ sub fetch_orgs {
     }
   }
 
-  $user->update({ last_organization_sync_time => DateTime->now->datetime });
-
   return 1;
 }
 
 =head2 available_orgs
 
 Returns an array of organizations that are not gone missing.
-This includes either repo-fetching or non-repo-fetching orgs.
 
 =cut
 
@@ -428,22 +517,6 @@ sub available_orgs {
     gone_missing => 0
   })->all;
 }
-
-=head2 available_fetching_orgs
-
-Returns an array of organizations that are not gone missing.
-This includes only repo-fetching orgs.
-
-=cut
-
-sub available_fetching_orgs {
-  my ($user) = @_;
-  return $user->orgs->search({
-    gone_missing => 0,
-    is_fetching_repos => 1,
-  })->all;
-}
-
 
 =head2 has_any_available_orgs
 

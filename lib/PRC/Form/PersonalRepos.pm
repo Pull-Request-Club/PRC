@@ -1,4 +1,4 @@
-package PRC::Form::Repositories;
+package PRC::Form::PersonalRepos;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
@@ -18,18 +18,18 @@ has_field '_token' => (
   type  => 'RequestToken',
 );
 
-has_field 'repo_select' => (
+has_field 'personal_repo_select' => (
   type     => 'Select',
-  label    => 'Please select repositories that you want to
-               assign to other people.',
+  label    => 'Please select personal repositories
+               that you want to assign to other people.',
   widget   => 'CheckboxGroup',
   multiple => 1,
 );
 
-sub options_repo_select {
+sub options_personal_repo_select {
   my ($self) = @_;
   my $user  = $self->user;
-  my @repos = $user->available_repos;
+  my @repos = $user->available_personal_repos;
   return [] unless scalar @repos;
 
   my @options = map {{
@@ -48,10 +48,6 @@ sub build_repo_option_label {
   my $lang  = $repo->github_language;
   my $count = $repo->github_open_issues_count;
 
-  # TODO Add call to action to create new issues
-  # TODO Make these clickable to GitHub
-  # TODO make it into a table
-
   my $label = $name . ' (';
   $label   .= "$lang, " if $lang;
   $label   .= ($count == 0) ? "No issues)"
@@ -60,9 +56,9 @@ sub build_repo_option_label {
   return $label;
 }
 
-has_field 'submit_repositories' => (
+has_field 'submit_personal_repos' => (
   type  => 'Submit',
-  value => 'Save my repositories',
+  value => 'Save Personal Repositories',
   element_attr => { class => 'btn btn-success' },
 );
 

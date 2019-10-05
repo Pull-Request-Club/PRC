@@ -74,6 +74,7 @@ sub callback :Path('/callback') :Args(0) {
       $redir = '/settings';
       $c->user->update({ github_token => $access_token });
       $c->session->{alert_success} = 'Please try reloading organizations now.';
+      $c->session->{fetch_org_reauth_done} = 1;
     }
     $c->response->redirect($redir,303);
     $c->detach;

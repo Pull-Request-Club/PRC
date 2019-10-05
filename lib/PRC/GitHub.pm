@@ -165,16 +165,18 @@ sub get_email {
 
 =head2 get_repos
 
-  my $repos = PRC::GitHub->get_repos($token);
+  my $repos = PRC::GitHub->get_repos($token,$org);
 
 Makes a GET to /user/repos, returns an arrayref.
 Excludes forks, archived repos, private repos and templates.
-Includes organizational repos (Requires "read:org" scope)
+
+If "org" flag is set, asks only for organizational repos (Requires
+"read:org" scope) Otherwise gets just personal (owner) repos.
 
 =cut
 
 sub get_repos {
-  my ($self, $token) = @_;
+  my ($self, $token, $org) = @_;
   return undef unless $token;
 
   my $ua = LWP::UserAgent->new;
@@ -186,8 +188,12 @@ sub get_repos {
   my $page = 1;
   my @repos;
 
+  my $url = 'https://api.github.com/user/repos?visibility=public&affiliation='
+          . ($org ? 'organization_member' : 'owner')
+          . '&page=';
+
   while (!$done){
-    my $req = HTTP::Request->new(GET => "https://api.github.com/user/repos?visibility=public&affiliation=owner,organization_member&page=$page");
+    my $req = HTTP::Request->new(GET => "$url$page");
     $page++;
     $req->header(Authorization => "token $token");
     $req->header(Accept => 'application/vnd.github.v3+json');

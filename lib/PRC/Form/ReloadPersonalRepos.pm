@@ -1,4 +1,4 @@
-package PRC::Form::ReloadOrganizations;
+package PRC::Form::ReloadPersonalRepos;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
@@ -13,9 +13,9 @@ has_field '_token' => (
   type  => 'RequestToken',
 );
 
-has_field 'submit_reload_organizations' => (
+has_field 'submit_reload_personal_repos' => (
   type  => 'Submit',
-  value => 'Reload Organizations',
+  value => 'Reload Personal Repositories',
   element_attr => { class => 'btn btn-primary' },
 );
 

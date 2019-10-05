@@ -36,8 +36,6 @@ __PACKAGE__->add_columns(
   },
   "gone_missing",
   { data_type => "boolean", default_value => 0, is_nullable => 0 },
-  "is_fetching_repos",
-  { data_type => "boolean", default_value => 0, is_nullable => 0 },
   "github_id",
   { data_type => "integer", is_nullable => 0 },
   "github_login",
