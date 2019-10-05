@@ -1,6 +1,9 @@
 use utf8;
 package PRC::Schema::Result::User;
 
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
 =head1 NAME
 
 PRC::Schema::Result::User
@@ -15,13 +18,126 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-use DateTime;
-use PRC::Constants;
-use PRC::GitHub;
-use List::Util qw/any first/;
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::TimeStamp>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
+
+=head1 TABLE: C<user>
+
+=cut
+
 __PACKAGE__->table("user");
+
+=head1 ACCESSORS
+
+=head2 user_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 create_time
+
+  data_type: 'datetime'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 update_time
+
+  data_type: 'datetime'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 last_login_time
+
+  data_type: 'datetime'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 last_personal_repo_sync_time
+
+  data_type: 'datetime'
+  default_value: null
+  is_nullable: 1
+
+=head2 last_org_repo_sync_time
+
+  data_type: 'datetime'
+  default_value: null
+  is_nullable: 1
+
+=head2 tos_agree_time
+
+  data_type: 'datetime'
+  default_value: null
+  is_nullable: 1
+
+=head2 tos_agreed_version
+
+  data_type: 'datetime'
+  default_value: null
+  is_nullable: 1
+
+=head2 scheduled_delete_time
+
+  data_type: 'datetime'
+  default_value: null
+  is_nullable: 1
+
+=head2 is_deactivated
+
+  data_type: 'boolean'
+  default_value: 0
+  is_nullable: 0
+
+=head2 is_receiving_assignments
+
+  data_type: 'boolean'
+  default_value: 0
+  is_nullable: 0
+
+=head2 github_id
+
+  data_type: 'integer'
+  is_nullable: 0
+
+=head2 github_login
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 128
+
+=head2 github_email
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 256
+
+=head2 github_profile
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 256
+
+=head2 github_token
+
+  data_type: 'varchar'
+  default_value: null
+  is_nullable: 1
+  size: 256
+
+=cut
+
 __PACKAGE__->add_columns(
   "user_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
@@ -30,14 +146,12 @@ __PACKAGE__->add_columns(
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    set_on_create => 1,
   },
   "update_time",
   {
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    set_on_update => 1,
   },
   "last_login_time",
   {
@@ -76,14 +190,27 @@ __PACKAGE__->add_columns(
   },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</user_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("user_id");
 
-__PACKAGE__->has_many(
-  "repos",
-  "PRC::Schema::Result::Repo",
-  { "foreign.user_id" => "self.user_id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
+=head1 RELATIONS
+
+=head2 assignments
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::Assignment>
+
+=cut
 
 __PACKAGE__->has_many(
   "assignments",
@@ -92,12 +219,59 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 orgs
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::Org>
+
+=cut
+
 __PACKAGE__->has_many(
   "orgs",
   "PRC::Schema::Result::Org",
   { "foreign.user_id" => "self.user_id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+
+=head2 repos
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::Repo>
+
+=cut
+
+__PACKAGE__->has_many(
+  "repos",
+  "PRC::Schema::Result::Repo",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 user_langs
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::UserLang>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_langs",
+  "PRC::Schema::Result::UserLang",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-10-05 09:05:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z2Kj6y4U1SNFhL3oMl9UNA
+
+use DateTime;
+use PRC::Constants;
+use PRC::GitHub;
+use List::Util qw/any first/;
 
 =head1 METHODS
 

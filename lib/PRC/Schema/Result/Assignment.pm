@@ -1,6 +1,9 @@
 use utf8;
 package PRC::Schema::Result::Assignment;
 
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
 =head1 NAME
 
 PRC::Schema::Result::Assignment
@@ -15,10 +18,72 @@ use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
 
-use PRC::Constants;
+=head1 COMPONENTS LOADED
+
+=over 4
+
+=item * L<DBIx::Class::InflateColumn::DateTime>
+
+=item * L<DBIx::Class::TimeStamp>
+
+=back
+
+=cut
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
+
+=head1 TABLE: C<assignment>
+
+=cut
+
 __PACKAGE__->table("assignment");
+
+=head1 ACCESSORS
+
+=head2 assignment_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 repo_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 user_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 create_time
+
+  data_type: 'datetime'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 update_time
+
+  data_type: 'datetime'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 month
+
+  data_type: 'datetime'
+  default_value: current_timestamp
+  is_nullable: 0
+
+=head2 status
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
+=cut
+
 __PACKAGE__->add_columns(
   "assignment_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
@@ -31,14 +96,12 @@ __PACKAGE__->add_columns(
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    set_on_create => 1,
   },
   "update_time",
   {
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
-    set_on_update => 1,
   },
   "month",
   {
@@ -50,7 +113,27 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</assignment_id>
+
+=back
+
+=cut
+
 __PACKAGE__->set_primary_key("assignment_id");
+
+=head1 RELATIONS
+
+=head2 repo
+
+Type: belongs_to
+
+Related object: L<PRC::Schema::Result::Repo>
+
+=cut
 
 __PACKAGE__->belongs_to(
   "repo",
@@ -59,12 +142,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 user
+
+Type: belongs_to
+
+Related object: L<PRC::Schema::Result::User>
+
+=cut
+
 __PACKAGE__->belongs_to(
   "user",
   "PRC::Schema::Result::User",
   { user_id => "user_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-10-05 08:47:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6RqXXNesb61OPxCYPo+qFA
+
+use PRC::Constants;
 
 =head1 METHODS
 
