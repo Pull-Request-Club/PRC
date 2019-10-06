@@ -555,6 +555,20 @@ sub fetch_org_repos {
   return 1;
 }
 
+=head2 available_repos
+
+Returns an array of repositories that are not gone missing.
+Includes both personal and org repos.
+
+=cut
+
+sub available_repos {
+  my ($user) = @_;
+  return $user->repos->search({
+    gone_missing => 0,
+  })->all;
+}
+
 =head2 personal_repos
 
 Returns an array of personal repositories.

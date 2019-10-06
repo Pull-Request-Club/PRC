@@ -223,20 +223,15 @@ sub month_pretty {
 
 =head2 month_sortable
 
-Returns string for month row as "2019-08".
+Returns string for month row as "1908" (YYMM).
 
 =cut
 
 sub month_sortable {
   my ($assignment) = @_;
-  my $dt    = $assignment->month;
-  my $year  = $dt->year;
-  my $month = $dt->month;
-  if ($month < 10){
-    $month = '0' . $month;
-  }
-  my $sortable = $year . '-' . $month;
-  return $sortable;
+  my $datetime     = $assignment->month;
+  return '' unless $datetime;
+  return $datetime =~ s/^\d{2}(\d{2})-(\d{2}).*/$1$2/r;
 }
 
 =head2 mark_as_skipped
