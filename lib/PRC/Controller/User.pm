@@ -9,6 +9,7 @@ use PRC::Form::Assignment;
 use PRC::Form::DeactivateConfirm;
 use PRC::Form::DeleteConfirm;
 use PRC::Form::DoneConfirm;
+use PRC::Form::Languages;
 use PRC::Form::OrgRepos;
 use PRC::Form::PersonalRepos;
 use PRC::Form::ReloadOrgRepos;
@@ -194,6 +195,16 @@ sub settings :Path('/settings') :Args(0) {
       } else {
         $c->stash->{alert_success} = 'You have opted out from getting assignments. We hope to see you again soon!';
       }
+    }
+
+    # Preferred Languages
+    my $languages_form = PRC::Form::Languages->new(user => $user);
+    $c->stash({ languages_form => $languages_form });
+    $languages_form->process(params => $c->req->params);
+    if($c->req->params->{submit_languages} && $languages_form->validated){
+      my $selected_langs = $languages_form->values->{lang_select};
+      $user->update_langs($selected_langs);
+      $c->stash->{alert_success} = 'Your preferred languages are updated.';
     }
 
   } # end TOS check

@@ -705,5 +705,70 @@ sub has_any_available_orgs {
   })->count ? 1 : 0;
 }
 
+=head2 active_user_langs
+
+Same as $user->user_langs, except this doesn't
+return rows if a lang.gone_missing = 1.
+
+=cut
+
+sub active_user_langs {
+  my ($user) = @_;
+  return $user->user_langs->search({
+    'lang.gone_missing' => 0,
+  },{
+    join => 'lang',
+  })->all;
+};
+
+=head2 selected_lang_ids
+
+Returns hash of ids => 1 of selected languages.
+Excludes languages where lang.gone_missing = 1.
+
+=cut
+
+sub selected_lang_ids {
+  my ($user) = @_;
+  my @selected_langs = $user->user_langs->search({
+    'lang.gone_missing' => 0,
+  },{
+    select => 'lang_id',
+    join   => 'lang',
+  })->all;
+  my %lang_ids = map {$_->lang_id => 1} @selected_langs;
+  return %lang_ids;
+}
+
+=head2 update_langs($langs)
+
+Update preferred languages of user.
+
+=cut
+
+sub update_langs {
+  my ($user,$new) = @_;
+  my @old = $user->active_user_langs;
+  my %old = map {$_->lang_id => 1} @old;
+  my %new = map {$_ => 1} @$new;
+
+  # The ones in old but not in new will be deleted
+  foreach my $old_row (@old){
+    if(!$new{$old_row->lang_id}){
+      $old_row->delete;
+    }
+  }
+
+  # The ones in new but not in old will be inserted
+  foreach my $new_id (@$new){
+    if(!$old{$new_id}){
+      $user->create_related('user_langs',{lang_id => $new_id});
+    }
+  }
+
+  return 1;
+
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
