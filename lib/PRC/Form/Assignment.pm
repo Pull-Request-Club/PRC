@@ -21,7 +21,7 @@ has_field 'is_receiving_assignments' => (
 
 has_field 'submit_assignment' => (
   type  => 'Submit',
-  value => 'Save my assignment setting',
+  value => 'Save Assignment Settings',
   element_attr => { class => 'btn btn-success' },
 );
 
