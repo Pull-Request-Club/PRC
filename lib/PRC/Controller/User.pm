@@ -77,6 +77,27 @@ sub check_user_status :Private {
 
 }
 
+=head2 add_announcement
+
+A private action that adds announcement.
+TODO: Make a table for site-wide announcements and read from DB.
+
+=cut
+
+sub add_announcement :Private {
+  my ($self, $c) = @_;
+  my $user = $c->user;
+  return 1 unless $user;
+
+  # Now you can select preferred languages (until mid November)
+  if (!$user->has_any_active_user_langs
+    && DateTime->now < DateTime->new({year=>2019,month=>11,day=>15})
+  ){
+    $c->stash->{alert_info} = "Now you can select your preferred languages! Click \"Settings\" above to get started.";
+  }
+
+}
+
 
 =head2 settings
 
@@ -225,6 +246,7 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
+  $c->forward('add_announcement');
   my $user = $c->user;
 
   $c->stash({
@@ -256,6 +278,7 @@ sub history :Path('/history') :Args(0) {
 
   # must be logged in + activated + agreed to legal
   $c->forward('check_user_status');
+  $c->forward('add_announcement');
   my $user = $c->user;
 
   my @taken = $user->assignments_taken;

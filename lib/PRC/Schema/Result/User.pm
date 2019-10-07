@@ -735,10 +735,26 @@ sub active_user_langs {
   })->all;
 };
 
+=head2 has_any_active_user_langs
+
+Returns a boolean representing whether user has any selected langs.
+
+=cut
+
+sub has_any_active_user_langs {
+  my ($user) = @_;
+  return $user->user_langs->search({
+    'lang.gone_missing' => 0,
+  },{
+    join => 'lang',
+  })->count ? 1 : 0;
+};
+
 =head2 selected_lang_ids
 
-Returns hash of ids => 1 of selected languages.
-Excludes languages where lang.gone_missing = 1.
+Same as $user->active_user_langs, except this
+returns a hash of ids as keys and 1 as value.
+Example: { 9 => 1, 10 => 1}
 
 =cut
 
