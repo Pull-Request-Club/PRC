@@ -10,3 +10,4 @@ rename-two-user-cols 2019-10-05T04:57:57Z Kivanc Yazan <kyzn@cpan.org> # Rename 
 drop-org-fetching-bool 2019-10-05T05:09:29Z Kivanc Yazan <kyzn@cpan.org> # Drop org.is_fetching_repos column
 add-lang-tables 2019-10-05T15:42:01Z Kivanc Yazan <kyzn@cpan.org> # Add tables for selecting languages
 add-langs 2019-10-06T01:33:25Z Kivanc Yazan <kyzn@cpan.org> # Add some languages to lang table
+rename-perl6-raku 2019-10-13T21:37:51Z Kivanc Yazan <kyzn@cpan.org> # Rename Perl 6 as Raku
