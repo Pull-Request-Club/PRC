@@ -89,13 +89,6 @@ sub add_announcement :Private {
   my $user = $c->user;
   return 1 unless $user;
 
-  # Now you can select preferred languages (until mid November)
-  if (!$user->has_any_active_user_langs
-    && DateTime->now < DateTime->new({year=>2019,month=>11,day=>15})
-  ){
-    $c->stash->{alert_info} = "Now you can select your preferred languages! Click \"Settings\" above to get started.";
-  }
-
 }
 
 
