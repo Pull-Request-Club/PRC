@@ -208,6 +208,20 @@ sub status_color {
   }
 }
 
+=head2 year
+
+Returns year as "2020" (YYYY).
+
+=cut
+
+sub year {
+  my ($assignment) = @_;
+  my $datetime     = $assignment->month;
+  return '' unless $datetime;
+  return $datetime->year;
+}
+
+
 =head2 month_pretty
 
 Returns pretty string for month row like "January 2019".

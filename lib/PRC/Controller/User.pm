@@ -276,10 +276,28 @@ sub history :Path('/history') :Args(0) {
 
   my @taken = $user->assignments_taken;
   my @given = $user->assignments_given;
+  my (%taken_year,%given_year);
+
+  for my $t (@taken){
+    my $y = $t->year;
+    $taken_year{$y} //= [];
+    push(@{$taken_year{$y}},$t);
+  }
+  for my $g (@given){
+    my $y = $g->year;
+    $given_year{$y} //= [];
+    push(@{$given_year{$y}},$g);
+  }
+  my @taken_years_sorted = sort(keys(%taken_year));
+  my @given_years_sorted = sort(keys(%given_year));
 
   $c->stash({
-    taken       => \@taken,
-    given       => \@given,
+    taken       => \%taken_year,
+    given       => \%given_year,
+    taken_years_sorted => \@taken_years_sorted,
+    given_years_sorted => \@given_years_sorted,
+    taken_year_count   => scalar(keys(%taken_year)),
+    given_year_count   => scalar(keys(%given_year)),
     template    => 'static/html/history.html',
     active_tab  => 'history',
   });

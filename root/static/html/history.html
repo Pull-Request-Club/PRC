@@ -6,27 +6,59 @@
 
   <h3>Assignment History</h3>
 
-  [% IF taken.size -%]
-  <table class="table table-hover">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">Date</th>
-        <th scope="col">Maintainer</th>
-        <th scope="col">Repository</th>
-        <th scope="col">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-    [% FOREACH assignment IN taken -%]
-      <tr class="table-[% assignment.status_color -%]">
-        <th scope="row">[% assignment.month_pretty -%]</th>
-        <td>[% assignment.repo.user.github_login -%]</td>
-        <td><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_full_name | html -%]</a></td>
-        <td>[% assignment.status_string -%]</td>
-      </tr>
+  [% IF taken_year_count > 0 -%]
+  taken_year_count > 0 <br>
+      [% FOREACH year in taken_years_sorted-%]
+        [% year -%]<br>
+      [% END -%]
+
+    <div id="accordion">
+
+    [% FOREACH year in taken_years_sorted -%]
+      year = [% year -%]<br>
+
+      <div class="card">
+
+        <div class="card-header" id="heading[% year -%]">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse[% year -%]" aria-expanded="true" aria-controls="collapse[% year -%]">
+              [% year -%]
+            </button>
+          </h5>
+        </div>
+
+        <div id="[% year -%]" class="collapse show" aria-labelledby="heading[% year -%]" data-parent="#accordion">
+          <div class="card-body">
+            <table class="table table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Maintainer</th>
+                  <th scope="col">Repository</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              [% FOREACH assignment IN taken_year.year -%]
+                <tr class="table-[% assignment.status_color -%]">
+                  <th scope="row">[% assignment.month_pretty -%]</th>
+                  <td>[% assignment.repo.user.github_login -%]</td>
+                  <td><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_full_name | html -%]</a></td>
+                  <td>[% assignment.status_string -%]</td>
+                </tr>
+              [% END -%]
+
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
     [% END -%]
-    </tbody>
-  </table>
+
+  </div>
 
   [% ELSE -%]
 
