@@ -163,6 +163,9 @@ sub settings :Path('/settings') :Args(0) {
         $repo->update({ accepting_assignees => $is_selected });
       }
       $c->stash->{alert_success} = 'Your selected personal repositories are updated.';
+      # Reload
+      $c->response->redirect('/settings',303);
+      $c->detach;
     }
 
     # Reload Organizational Repositories
@@ -226,6 +229,9 @@ sub settings :Path('/settings') :Args(0) {
       my $selected_langs = $languages_form->values->{lang_select};
       $user->update_langs($selected_langs);
       $c->stash->{alert_success} = 'Your preferred languages are updated.';
+      # Reload
+      $c->response->redirect('/settings',303);
+      $c->detach;
     }
 
   } # end TOS check
