@@ -27,4 +27,5 @@ requires 'Task::Catalyst::Tutorial';
 requires 'Test2::V0';
 requires 'WWW::Mechanize';
 requires 'YAML';
+requires 'DBD::SQLite';
 test_requires 'Test::More' => '0.88';
