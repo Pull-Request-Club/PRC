@@ -162,7 +162,7 @@ sub settings :Path('/settings') :Args(0) {
         my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
         $repo->update({ accepting_assignees => $is_selected });
       }
-      $c->stash->{alert_success} = 'Your selected personal repositories are updated.';
+      $c->session({ alert_success => 'Your selected personal repositories are updated.'});
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
@@ -199,7 +199,9 @@ sub settings :Path('/settings') :Args(0) {
         my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
         $repo->update({ accepting_assignees => $is_selected });
       }
-      $c->stash->{alert_success} = 'Your selected organizational repositories are updated.';
+      $c->session({ alert_success => 'Your selected organizational repositories are updated.'});
+      $c->response->redirect('/settings',303);
+      $c->detach;
     }
 
     # Assignment Settings
@@ -215,10 +217,12 @@ sub settings :Path('/settings') :Args(0) {
       my $new_value = $assignment_form->values->{is_receiving_assignments};
       $user->update({ is_receiving_assignments => $new_value });
       if ($new_value){
-        $c->stash->{alert_success} = 'Yes! Welcome to the club!';
+        $c->session->{alert_success} = 'Yes! Welcome to the club!';
       } else {
-        $c->stash->{alert_success} = 'You have opted out from getting assignments. We hope to see you again soon!';
+        $c->session->{alert_success} = 'You have opted out from getting assignments. We hope to see you again soon!';
       }
+      $c->response->redirect('/settings',303);
+      $c->detach;
     }
 
     # Preferred Languages
@@ -228,7 +232,7 @@ sub settings :Path('/settings') :Args(0) {
     if($c->req->params->{submit_languages} && $languages_form->validated){
       my $selected_langs = $languages_form->values->{lang_select};
       $user->update_langs($selected_langs);
-      $c->stash->{alert_success} = 'Your preferred languages are updated.';
+      $c->session({alert_success => 'Your preferred languages are updated.'});
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
