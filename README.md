@@ -29,4 +29,4 @@ Kivanc Yazan
 - Andrew Grangaard
 - E. Choroba
 - Karen Etheridge
-- thibaultduponchelle
+- Thibault Duponchelle
