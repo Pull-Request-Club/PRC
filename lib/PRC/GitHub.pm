@@ -342,10 +342,18 @@ sub confirm_pr {
 
   my $req   = HTTP::Request->new(GET => $repo->github_events_url);
   my $token = $repo->user->github_token;
-  $req->header(Authorization => "token $token");
+  if ($token){
+    $req->header(Authorization => "token $token");
+  }
   $req->header(Accept => 'application/vnd.github.v3+json');
 
   my $res = $ua->request($req);
+  # Unauthorized. Try again without token.
+  if (!$res->is_success && $res->code == 401){
+    $req->header(Authorization => undef);
+    $res = $ua->request($req);
+  }
+
   return undef unless $res->is_success;
 
   my $data = eval { decode_json($res->content) };
