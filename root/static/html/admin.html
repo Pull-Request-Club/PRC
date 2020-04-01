@@ -1,32 +1,77 @@
 <div class="container">
 
   <br>
-  <h3>Users</h3>
-  [% user_count            -%] total users<br>
-  [% tos_user_count        -%] agreed to tos<br>
-  [% deactivated_user      -%] deactivated<br>
-  [% to_be_deleted_user    -%] to be deleted<br>
   <br>
-  [% assignment_user_count -%] receiving assignments<br>
-  [% synced_personal_repos -%] synced personal repos<br>
-  [% synced_org_repos      -%] synced org repos<br>
+  <br>
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">USERS</th>
+        <th scope="col">TOS Agreed</th>
+        <th scope="col">Deactivated</th>
+        <th scope="col">Delete Scheduled</th>
 
-  <br>
-  <h3>Repos</h3>
-  [% all_repo_count -%] total repos<br>
-  [% all_repo_opted -%] accepting assignees<br>
-  [% per_repo_count -%] personal repos <br>
-  [% per_repo_opted -%] accepting assignees<br>
-  [% org_count      -%] orgs<br>
-  [% org_repo_count -%] org repos <br>
-  [% org_repo_opted -%] accepting assignees<br>
+        <th scope="col">Getting Assignments</th>
+        <th scope="col">Synced Personal Repos</th>
+        <th scope="col">Synced Org Repos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/admin/users/">[% user_count -%]</a></td>
+        <td>[% tos_user_count        -%]</td>
+        <td>[% deactivated_user      -%]</td>
+        <td>[% to_be_deleted_user    -%]</td>
+        <td>[% assignment_user_count -%]</td>
+        <td>[% synced_personal_repos -%]</td>
+        <td>[% synced_org_repos      -%]</td>
+      </tr>
+    </tbody>
+  </table>
 
-  <br>
-  <h3>Assignments</h3>
-  [% assignment_total -%] total assignments<br>
-  [% assignment_open  -%] open assignments<br>
-  [% assignment_skip  -%] skipped assignments<br>
-  [% assignment_done  -%] done assignments<br>
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">REPOS</th>
+        <th scope="col">Accepting Assignees</th>
+        <th scope="col">Personal Repos</th>
+        <th scope="col">Accepting Assignees</th>
+        <th scope="col">Orgs</th>
+        <th scope="col">Org Repos</th>
+        <th scope="col">Accepting Assignees</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[% all_repo_count -%]</td>
+        <td>[% all_repo_opted -%]</td>
+        <td>[% per_repo_count -%]</td>
+        <td>[% per_repo_opted -%]</td>
+        <td>[% org_count      -%]</td>
+        <td>[% org_repo_count -%]</td>
+        <td>[% org_repo_opted -%]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">ASSIGNMENTS</th>
+        <th scope="col">Done</th>
+        <th scope="col">Open</th>
+        <th scope="col">Skip</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[% assignment_total -%]</td>
+        <td>[% assignment_done  -%]</td>
+        <td>[% assignment_open  -%]</td>
+        <td>[% assignment_skip  -%]</td>
+      </tr>
+    </tbody>
+  </table>
 
 </div>
 </div>
