@@ -47,7 +47,7 @@ __PACKAGE__->config(
   # Disable deprecated behavior needed by old applications
   disable_component_resolution_regex_fallback => 1,
   enable_catalyst_header => 1, # Send X-Catalyst header
-  'Plugin::Session' => { expires => 604800 }, # 1 week
+  'Plugin::Session' => { expires => 7776000 }, # 90 days
   authentication => {
     default_realm => 'user',
     realms        => {
