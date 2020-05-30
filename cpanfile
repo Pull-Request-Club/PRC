@@ -15,6 +15,7 @@ requires 'FCGI';
 requires 'FCGI::ProcManager';
 requires 'HTTP::Server::Simple';
 requires 'HTML::FormHandler';
+requires 'Net::SSLeay' => '1.88';
 requires 'IO::Socket::SSL';
 requires 'JSON::XS';
 requires 'LWP::UserAgent';
