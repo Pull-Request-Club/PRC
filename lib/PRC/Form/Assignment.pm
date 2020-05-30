@@ -22,7 +22,7 @@ has_field 'is_receiving_assignments' => (
 has_field 'submit_assignment' => (
   type  => 'Submit',
   value => 'Save Assignment Settings',
-  element_attr => { class => 'btn btn-success' },
+  element_attr => { class => 'btn btn-success btn-block' },
 );
 
 __PACKAGE__->meta->make_immutable;
