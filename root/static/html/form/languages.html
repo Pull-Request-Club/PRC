@@ -3,8 +3,10 @@ options = languages_form.field('lang_select').options;
 per_row = 3;
 %]
 
-<form method="post">
+<form id="form-languages" method="post">
 [% languages_form.field('_token').render -%]
+
+<label>[% languages_form.field('lang_select').label -%]</label>
 
 [% FOR language IN options -%]
 

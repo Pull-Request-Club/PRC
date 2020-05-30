@@ -48,7 +48,7 @@ sub options_lang_select {
 has_field 'submit_languages' => (
   type  => 'Submit',
   value => 'Save Preferred Languages',
-  element_attr => { class => 'btn btn-success' },
+  element_attr => { class => 'btn btn-success btn-block' },
 );
 
 __PACKAGE__->meta->make_immutable;
