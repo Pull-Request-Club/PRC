@@ -443,7 +443,6 @@ DISTRIBUTIONS
     requirements:
       Carp::Clan 0
       Catalyst::Component::InstancePerContext 0
-      Catalyst::Devel 1.0
       Catalyst::Runtime 5.80005
       CatalystX::Component::Traits 0.14
       DBD::SQLite 0
@@ -454,7 +453,6 @@ DISTRIBUTIONS
       Module::Runtime 0.012
       Moose 1.12
       MooseX::MarkAsMethods 0.13
-      MooseX::NonMoose 0.16
       MooseX::Types 0
       MooseX::Types::LoadableClass 0.009
       Storable 0
@@ -973,7 +971,6 @@ DISTRIBUTIONS
       Config::Any::XML undef
       Config::Any::YAML undef
     requirements:
-      Config::General 2.47
       Module::Pluggable::Object 3.6
   Config-General-2.63
     pathname: T/TL/TLINDEN/Config-General-2.63.tar.gz
@@ -2160,17 +2157,6 @@ DISTRIBUTIONS
     requirements:
       Devel::StackTrace 0
       ExtUtils::MakeMaker 0
-  Digest-HMAC-1.03
-    pathname: G/GA/GAAS/Digest-HMAC-1.03.tar.gz
-    provides:
-      Digest::HMAC 1.03
-      Digest::HMAC_MD5 1.01
-      Digest::HMAC_SHA1 1.03
-    requirements:
-      Digest::MD5 2
-      Digest::SHA 1
-      ExtUtils::MakeMaker 0
-      perl 5.004
   Dist-CheckConflicts-0.11
     pathname: D/DO/DOY/Dist-CheckConflicts-0.11.tar.gz
     provides:
@@ -2190,7 +2176,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Mail::Address 0
-      Net::DNS 0
       Scalar::Util 0
       Test::More 0
       perl 5.006
@@ -4454,122 +4439,6 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test 0
-      perl 5.006
-  Net-DNS-1.18
-    pathname: N/NL/NLNETLABS/Net-DNS-1.18.tar.gz
-    provides:
-      Net::DNS 1.18
-      Net::DNS::Domain 1698
-      Net::DNS::DomainName 1605
-      Net::DNS::DomainName1035 1605
-      Net::DNS::DomainName2535 1605
-      Net::DNS::Header 1709
-      Net::DNS::Mailbox 1605
-      Net::DNS::Mailbox1035 1605
-      Net::DNS::Mailbox2535 1605
-      Net::DNS::Nameserver 1692
-      Net::DNS::Packet 1714
-      Net::DNS::Parameters 1714
-      Net::DNS::Question 1714
-      Net::DNS::RR 1714
-      Net::DNS::RR::A 1597
-      Net::DNS::RR::AAAA 1597
-      Net::DNS::RR::AFSDB 1597
-      Net::DNS::RR::APL 1597
-      Net::DNS::RR::APL::Item 1597
-      Net::DNS::RR::CAA 1597
-      Net::DNS::RR::CDNSKEY 1586
-      Net::DNS::RR::CDS 1586
-      Net::DNS::RR::CERT 1597
-      Net::DNS::RR::CNAME 1597
-      Net::DNS::RR::CSYNC 1597
-      Net::DNS::RR::DHCID 1597
-      Net::DNS::RR::DLV 1528
-      Net::DNS::RR::DNAME 1597
-      Net::DNS::RR::DNSKEY 1597
-      Net::DNS::RR::DS 1597
-      Net::DNS::RR::EUI48 1597
-      Net::DNS::RR::EUI64 1597
-      Net::DNS::RR::GPOS 1528
-      Net::DNS::RR::HINFO 1597
-      Net::DNS::RR::HIP 1597
-      Net::DNS::RR::IPSECKEY 1597
-      Net::DNS::RR::ISDN 1597
-      Net::DNS::RR::KEY 1528
-      Net::DNS::RR::KX 1597
-      Net::DNS::RR::L32 1597
-      Net::DNS::RR::L64 1597
-      Net::DNS::RR::LOC 1597
-      Net::DNS::RR::LP 1597
-      Net::DNS::RR::MB 1528
-      Net::DNS::RR::MG 1528
-      Net::DNS::RR::MINFO 1597
-      Net::DNS::RR::MR 1528
-      Net::DNS::RR::MX 1597
-      Net::DNS::RR::NAPTR 1597
-      Net::DNS::RR::NID 1597
-      Net::DNS::RR::NS 1597
-      Net::DNS::RR::NSEC 1696
-      Net::DNS::RR::NSEC3 1694
-      Net::DNS::RR::NSEC3PARAM 1597
-      Net::DNS::RR::NULL 1528
-      Net::DNS::RR::OPENPGPKEY 1597
-      Net::DNS::RR::OPT 1605
-      Net::DNS::RR::OPT::CHAIN 1605
-      Net::DNS::RR::OPT::CLIENT_SUBNET 1605
-      Net::DNS::RR::OPT::COOKIE 1605
-      Net::DNS::RR::OPT::DAU 1605
-      Net::DNS::RR::OPT::DHU 1605
-      Net::DNS::RR::OPT::EXPIRE 1605
-      Net::DNS::RR::OPT::KEY_TAG 1605
-      Net::DNS::RR::OPT::N3U 1605
-      Net::DNS::RR::OPT::PADDING 1605
-      Net::DNS::RR::OPT::TCP_KEEPALIVE 1605
-      Net::DNS::RR::PTR 1597
-      Net::DNS::RR::PX 1597
-      Net::DNS::RR::RP 1597
-      Net::DNS::RR::RRSIG 1709
-      Net::DNS::RR::RT 1597
-      Net::DNS::RR::SIG 1709
-      Net::DNS::RR::SMIMEA 1597
-      Net::DNS::RR::SOA 1597
-      Net::DNS::RR::SPF 1593
-      Net::DNS::RR::SRV 1597
-      Net::DNS::RR::SSHFP 1597
-      Net::DNS::RR::TKEY 1528
-      Net::DNS::RR::TLSA 1597
-      Net::DNS::RR::TSIG 1597
-      Net::DNS::RR::TXT 1597
-      Net::DNS::RR::URI 1597
-      Net::DNS::RR::X25 1597
-      Net::DNS::Resolver 1714
-      Net::DNS::Resolver::Base 1709
-      Net::DNS::Resolver::MSWin32 1568
-      Net::DNS::Resolver::Recurse 1709
-      Net::DNS::Resolver::UNIX 1573
-      Net::DNS::Resolver::android 1568
-      Net::DNS::Resolver::cygwin 1568
-      Net::DNS::Resolver::os2 1568
-      Net::DNS::Resolver::os390 1579
-      Net::DNS::Text 1698
-      Net::DNS::Update 1714
-      Net::DNS::ZoneFile 1709
-      Net::DNS::ZoneFile::Generator 1709
-      Net::DNS::ZoneFile::Text 1709
-    requirements:
-      Digest::HMAC 1.03
-      Digest::MD5 2.13
-      Digest::SHA 5.23
-      ExtUtils::MakeMaker 0
-      File::Spec 0.86
-      IO::File 1.08
-      IO::Select 1.14
-      IO::Socket::IP 0.38
-      MIME::Base64 2.11
-      PerlIO 1.05
-      Scalar::Util 1.25
-      Test::More 0.52
-      Time::Local 1.19
       perl 5.006
   Net-HTTP-6.18
     pathname: O/OA/OALDERS/Net-HTTP-6.18.tar.gz
