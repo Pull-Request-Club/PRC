@@ -1,1 +1,35 @@
-[% languages_form.render -%]
+[%
+options = languages_form.field('lang_select').options;
+per_row = 3;
+%]
+
+<form method="post">
+[% languages_form.field('_token').render -%]
+
+[% FOR language IN options -%]
+
+  [% IF loop.count % per_row == 1 -%]
+  <div class="row">
+  [% END -%]
+
+  <div class="col">
+    <div class="checkbox">
+      <input type="checkbox" value="[% language.value -%]" name="lang_select" id="lang_select.[% language.value -%]"[% IF language.selected -%] checked="checked"[% END -%] />
+      <label class="checkbox" for="lang_select.[% language.value -%]">
+      [% language.label -%]
+      </label>
+    </div>
+  </div>
+
+  [% IF loop.count % per_row == 0 -%]
+  </div>
+  [% END -%]
+
+[% END -%]
+
+[% IF options.size % per_row != 0 -%]
+</div>
+[% END -%]
+
+[% languages_form.field('submit_languages').render -%]
+</form>
