@@ -182,14 +182,11 @@ sub settings :Path('/settings') :Args(0) {
     $c->stash({ reload_org_repos_form => $reload_org_repos_form });
     $reload_org_repos_form->process(params => $c->req->params);
     if($c->req->params->{submit_reload_org_repos} && $reload_org_repos_form->validated){
-      # Check if we have "read:org" scope for this user. If not, ask for that.
-      my $can_get_orgs = PRC::GitHub->can_get_orgs($user->github_token);
-      if (!$can_get_orgs){
-        $c->session->{fetch_org_reauth} = 1;
-        $c->response->redirect(PRC::GitHub->org_authenticate_url,303);
-        $c->detach;
-      }
-      # Continue if we have the scope
+      # Get read:org scope first. Orgs may change.
+      $c->session->{fetch_org_reauth} = 1;
+      $c->response->redirect(PRC::GitHub->org_authenticate_url,303);
+      $c->detach;
+      # Continue with the scope
       $user->fetch_org_repos;
       $c->session({ alert_success => 'Your organizational repositories are reloaded.' });
       $c->session({ setting_tab   => 'organizational' });

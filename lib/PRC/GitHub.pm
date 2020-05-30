@@ -243,29 +243,6 @@ sub get_repos {
   return \@repos;
 }
 
-=head2 can_get_orgs
-
-  my $can_get_orgs = PRC::GitHub->can_get_orgs($token);
-
-Makes one GET to /user/orgs to see if it returns 403.
-If 403, this returns 0. Returns 1 otherwise.
-
-=cut
-
-sub can_get_orgs {
-  my ($self, $token) = @_;
-  return undef unless $token;
-
-  my $ua = LWP::UserAgent->new;
-  $ua->agent("PullRequestClub/0.1");
-
-  my $req = HTTP::Request->new(GET => "https://api.github.com/user/orgs?page=1");
-  $req->header(Authorization => "token $token");
-  $req->header(Accept => 'application/vnd.github.v3+json');
-  my $res = $ua->request($req);
-  return ($res->code == 403) ? 0 : 1;
-}
-
 =head2 get_orgs
 
   my $repos = PRC::GitHub->get_orgs($token);
