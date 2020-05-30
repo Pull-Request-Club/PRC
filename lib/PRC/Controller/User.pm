@@ -112,8 +112,14 @@ sub settings :Path('/settings') :Args(0) {
 
   my $has_accepted_latest_terms = $user->has_accepted_latest_terms;
 
+  # If we are being redirected from a form submit, show that setting tab.
+  my $setting_tab = delete $c->session->{setting_tab};
+
   # Go ahead with assignment setting and repo/org sync logic if agreed to TOS
   if($has_accepted_latest_terms){
+    # If we haven't set a setting tab yet (not being redirected from a form submit)
+    # then fall back to default "assignment" tab here.
+    $setting_tab //= 'assignment';
     my $last_personal_repo_sync_time = $user->last_personal_repo_sync_time;
     my $last_org_repo_sync_time      = $user->last_org_repo_sync_time;
     my $has_any_av_personal_repos    = $user->has_any_available_personal_repos;
@@ -122,18 +128,19 @@ sub settings :Path('/settings') :Args(0) {
     if (!$last_personal_repo_sync_time){
       $c->stash({never_synced_personal_repos => 1, hide_personal_repos => 1});
     } elsif (!$has_any_av_personal_repos){
-      $c->stash({hide_personal_repos => 1});
+      $c->stash({has_no_av_personal_repos => 1, hide_personal_repos => 1});
     }
     if (!$last_org_repo_sync_time){
       $c->stash({never_synced_org_repos => 1, hide_org_repos => 1});
     } elsif (!$has_any_av_org_repos){
-      $c->stash({hide_org_repos =>1});
+      $c->stash({has_no_av_org_repos => 1, hide_org_repos =>1});
     }
 
     # If we are coming back from GitHub additional scope confirmation, reload org repos
     if (delete $c->session->{fetch_org_reauth_done}){
       $user->fetch_org_repos;
       $c->session({ alert_success => 'Your organizational repositories are loaded.' });
+      $c->session({ setting_tab   => 'organizational' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
@@ -146,6 +153,7 @@ sub settings :Path('/settings') :Args(0) {
     if($c->req->params->{submit_reload_personal_repos} && $reload_personal_repos_form->validated){
       $user->fetch_personal_repos;
       $c->session({ alert_success => 'Your personal repositories are reloaded.' });
+      $c->session({ setting_tab   => 'personal' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
@@ -163,6 +171,7 @@ sub settings :Path('/settings') :Args(0) {
         $repo->update({ accepting_assignees => $is_selected });
       }
       $c->session({ alert_success => 'Your selected personal repositories are updated.'});
+      $c->session({ setting_tab   => 'personal' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
@@ -183,6 +192,7 @@ sub settings :Path('/settings') :Args(0) {
       # Continue if we have the scope
       $user->fetch_org_repos;
       $c->session({ alert_success => 'Your organizational repositories are reloaded.' });
+      $c->session({ setting_tab   => 'organizational' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
@@ -200,6 +210,8 @@ sub settings :Path('/settings') :Args(0) {
         $repo->update({ accepting_assignees => $is_selected });
       }
       $c->session({ alert_success => 'Your selected organizational repositories are updated.'});
+      $c->session({ setting_tab   => 'organizational' });
+      # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
     }
@@ -217,10 +229,12 @@ sub settings :Path('/settings') :Args(0) {
       my $new_value = $assignment_form->values->{is_receiving_assignments};
       $user->update({ is_receiving_assignments => $new_value });
       if ($new_value){
-        $c->session->{alert_success} = 'Yes! Welcome to the club!';
+        $c->session->{alert_success} = 'Welcome to the club!';
       } else {
-        $c->session->{alert_success} = 'You have opted out from getting assignments. We hope to see you again soon!';
+        $c->session->{alert_success} = 'You have opted out from getting assignments.';
       }
+      $c->session({ setting_tab   => 'assignment' });
+      # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
     }
@@ -233,6 +247,7 @@ sub settings :Path('/settings') :Args(0) {
       my $selected_langs = $languages_form->values->{lang_select};
       $user->update_langs($selected_langs);
       $c->session({alert_success => 'Your preferred languages are updated.'});
+      $c->session({ setting_tab   => 'languages' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
@@ -243,7 +258,8 @@ sub settings :Path('/settings') :Args(0) {
   $c->stash({
     template   => 'static/html/settings.html',
     active_tab => 'settings',
-    has_accepted_latest_terms => $has_accepted_latest_terms,
+    $has_accepted_latest_terms ? () : (danger_only => 1),
+    setting_tab => $setting_tab,
   });
 }
 
