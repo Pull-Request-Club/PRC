@@ -1,0 +1,11 @@
+[% UNLESS hide_org_repos -%]
+  [% org_repos_form.render -%]
+[% END -%]
+[% IF never_synced_org_repos -%]
+  <br>
+  <p>Looks like you have never synced your organizational repositories. Click "Reload Organizational Repositories" below to get started.</p>
+[% ELSIF has_no_av_org_repos -%]
+  <br>
+  <p>Looks like you don't have any organizational repositories that you can use.</p>
+[% END -%]
+[% reload_org_repos_form.render -%]

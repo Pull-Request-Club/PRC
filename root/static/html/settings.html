@@ -22,46 +22,24 @@
 
   [% IF !danger_only -%]
   <div class="tab-pane fade[% IF setting_tab == 'assignment' -%] show active[% END -%]" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
-    [% assignment_form.render -%]
+    [% INCLUDE 'static/html/form/assignment.html' -%]
   </div>
 
   <div class="tab-pane fade[% IF setting_tab == 'languages' -%] show active[% END -%]" id="languages" role="tabpanel" aria-labelledby="languages-tab">
-    [% languages_form.render -%]
+    [% INCLUDE 'static/html/form/languages.html' -%]
   </div>
 
   <div class="tab-pane fade[% IF setting_tab == 'personal' -%] show active[% END -%]" id="personal" role="tabpanel" aria-labelledby="personal-tab">
-    [% UNLESS hide_personal_repos -%]
-      [% personal_repos_form.render -%]
-    [% END -%]
-    [% IF never_synced_personal_repos -%]
-      <br>
-      <p>Looks like you have never synced your personal repositories. Click "Reload Personal Repositories" below to get started.</p>
-    [% ELSIF has_no_av_personal_repos -%]
-      <br>
-      <p>Looks like you don't have any personal repositories that you can use.</p>
-    [% END -%]
-    [% reload_personal_repos_form.render -%]
+    [% INCLUDE 'static/html/form/personal.html' -%]
   </div>
 
   <div class="tab-pane fade[% IF setting_tab == 'organizational' -%] show active[% END -%]" id="organizational" role="tabpanel" aria-labelledby="organizational-tab">
-    [% UNLESS hide_org_repos -%]
-      [% org_repos_form.render -%]
-    [% END -%]
-    [% IF never_synced_org_repos -%]
-      <br>
-      <p>Looks like you have never synced your organizational repositories. Click "Reload Organizational Repositories" below to get started.</p>
-    [% ELSIF has_no_av_org_repos -%]
-      <br>
-      <p>Looks like you don't have any organizational repositories that you can use.</p>
-    [% END -%]
-    [% reload_org_repos_form.render -%]
+    [% INCLUDE 'static/html/form/organizational.html' -%]
   </div>
   [% END -%]
 
   <div class="tab-pane fade[% IF danger_only -%] show active[% END -%]" id="danger" role="tabpanel" aria-labelledby="danger-tab">
-    <br>
-    <a href="/deactivate-confirm" class="btn btn-danger">Deactivate My Account</a><br><br>
-    <a href="/delete-confirm" class="btn btn-danger">Delete My Account</a>
+    [% INCLUDE 'static/html/form/danger.html' -%]
   </div>
 
 </div>
