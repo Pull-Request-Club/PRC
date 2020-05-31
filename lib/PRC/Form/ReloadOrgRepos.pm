@@ -16,7 +16,7 @@ has_field '_token' => (
 has_field 'submit_reload_org_repos' => (
   type  => 'Submit',
   value => 'Reload Organizational Repositories',
-  element_attr => { class => 'btn btn-primary' },
+  element_attr => { class => 'btn btn-primary btn-block' },
 );
 
 __PACKAGE__->meta->make_immutable;

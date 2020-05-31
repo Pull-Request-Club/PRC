@@ -1,6 +1,38 @@
 [% UNLESS hide_org_repos -%]
-  [% org_repos_form.render -%]
+
+<form id="form-organizational" method="post">
+  [% org_repos_form.field('_token').render -%]
+  <label>[% org_repos_form.field('org_repo_select').label -%]</label>
+
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Check</th>
+        <th scope="col">Org</th>
+        <th scope="col">Repository</th>
+        <th scope="col">Language</th>
+        <th scope="col">Stars</th>
+        <th scope="col">Issues</th>
+      </tr>
+    </thead>
+    <tbody>
+      [% FOR repo IN org_repos_form.field('org_repo_select').options -%]
+      <tr>
+        <td><input type="checkbox" value="[% repo.value -%]" name="org_repo_select" id="org_repo_select.[% repo.value -%]"[% IF repo.selected -%] checked="checked"[% END -%] /></td>
+        <td>[% repo.org -%]</td>
+        <td><a href="[% repo.url -%]" target="_blank">[% repo.name -%]</a></td>
+        <td>[% repo.lang -%]</td>
+        <td>[% repo.stars -%]</td>
+        <td><a href="[% repo.url -%]/issues" target="_blank">[% repo.issues -%]</a></td>
+      </tr>
+      [% END -%]
+    </tbody>
+  </table>
+  [% org_repos_form.field('submit_org_repos').render -%]
+</form>
+
 [% END -%]
+
 [% IF never_synced_org_repos -%]
   <br>
   <p>Looks like you have never synced your organizational repositories. Click "Reload Organizational Repositories" below to get started.</p>
@@ -8,4 +40,5 @@
   <br>
   <p>Looks like you don't have any organizational repositories that you can use.</p>
 [% END -%]
+
 [% reload_org_repos_form.render -%]

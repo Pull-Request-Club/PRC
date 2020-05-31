@@ -20,8 +20,12 @@ has_field '_token' => (
 
 has_field 'org_repo_select' => (
   type     => 'Select',
-  label    => 'Please select organizational repositories
-               that you want to assign to other people.',
+  label    => 'Please check repositories that you want assigned
+               to contributors.<br>
+               Then click "Save Organizational Repositories" button
+               at the bottom of the page.<br>
+               If you want to refresh the list, click "Reload
+               Organizational Repositories" button.',
   widget   => 'CheckboxGroup',
   multiple => 1,
 );
@@ -34,32 +38,23 @@ sub options_org_repo_select {
 
   my @options = map {{
     value    => $_->github_id,
-    label    => build_repo_option_label($_),
     selected => $_->accepting_assignees,
+    name     => $_->github_full_name,
+    org      => $_->org->github_login,
+    url      => $_->github_html_url,
+    lang     => $_->github_language,
+    issues   => $_->github_open_issues_count,
+    stars    => $_->github_stargazers_count,
   }} sort {
     (lc $a->github_full_name) cmp (lc $b->github_full_name)
   } @repos;
   return \@options;
 }
 
-sub build_repo_option_label {
-  my ($repo) = @_;
-  my $name  = $repo->github_full_name;
-  my $lang  = $repo->github_language;
-  my $count = $repo->github_open_issues_count;
-
-  my $label = $name . ' (';
-  $label   .= "$lang, " if $lang;
-  $label   .= ($count == 0) ? "No issues)"
-            : ($count == 1) ? "1 issue)"
-                            : "$count issues)";
-  return $label;
-}
-
 has_field 'submit_org_repos' => (
   type  => 'Submit',
   value => 'Save Organizational Repositories',
-  element_attr => { class => 'btn btn-success' },
+  element_attr => { class => 'btn btn-success btn-block' },
 );
 
 __PACKAGE__->meta->make_immutable;
