@@ -45,11 +45,23 @@ sub auto :Private {
 
 =head2 /admin
 
-Basic stats (home)
+Redirect to /admin/numbers
 
 =cut
 
 sub admin :Path('/admin') :Args(0) {
+  my ($self, $c) = @_;
+  $c->response->redirect('/admin/numbers',303);
+  $c->detach;
+}
+
+=head2 /admin/numbers
+
+Basic numbers
+
+=cut
+
+sub numbers :Path('/admin/numbers') :Args(0) {
   my ($self, $c) = @_;
 
   my @users = $c->model('PRCDB::User')->all;
@@ -81,8 +93,8 @@ sub admin :Path('/admin') :Args(0) {
   };
 
   $c->stash({
-    template   => 'static/html/admin.html',
-    active_tab => 'home',
+    template   => 'static/html/admin/numbers.html',
+    active_tab => 'numbers',
     %$stats,
   });
 
@@ -90,7 +102,7 @@ sub admin :Path('/admin') :Args(0) {
 
 =head2 /admin/users
 
-List all users.
+List users.
 
 =cut
 
@@ -127,8 +139,8 @@ sub users :Path('/admin/users') :Args(0) {
 
   $c->stash({
     users      => \@users,
-    template   => 'static/html/admin-users.html',
-    active_tab => 'all-users',
+    template   => 'static/html/admin/users.html',
+    active_tab => 'users',
   });
 
 }
