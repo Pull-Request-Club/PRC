@@ -1,3 +1,5 @@
+<script src="/static/js/table-sort.js" type="text/javascript"></script>
+
 <div class="container">
   <br><br>
 
@@ -22,24 +24,24 @@
 
   [% IF !danger_only -%]
   <div class="tab-pane fade[% IF setting_tab == 'assignment' -%] show active[% END -%]" id="assignment" role="tabpanel" aria-labelledby="assignment-tab">
-    [% INCLUDE 'static/html/form/assignment.html' -%]
+    [% INCLUDE 'static/html/settings/assignment.html' -%]
   </div>
 
   <div class="tab-pane fade[% IF setting_tab == 'languages' -%] show active[% END -%]" id="languages" role="tabpanel" aria-labelledby="languages-tab">
-    [% INCLUDE 'static/html/form/languages.html' -%]
+    [% INCLUDE 'static/html/settings/languages.html' -%]
   </div>
 
   <div class="tab-pane fade[% IF setting_tab == 'personal' -%] show active[% END -%]" id="personal" role="tabpanel" aria-labelledby="personal-tab">
-    [% INCLUDE 'static/html/form/personal.html' -%]
+    [% INCLUDE 'static/html/settings/personal.html' -%]
   </div>
 
   <div class="tab-pane fade[% IF setting_tab == 'organizational' -%] show active[% END -%]" id="organizational" role="tabpanel" aria-labelledby="organizational-tab">
-    [% INCLUDE 'static/html/form/organizational.html' -%]
+    [% INCLUDE 'static/html/settings/organizational.html' -%]
   </div>
   [% END -%]
 
   <div class="tab-pane fade[% IF danger_only -%] show active[% END -%]" id="danger" role="tabpanel" aria-labelledby="danger-tab">
-    [% INCLUDE 'static/html/form/danger.html' -%]
+    [% INCLUDE 'static/html/settings/danger.html' -%]
   </div>
 
 </div>

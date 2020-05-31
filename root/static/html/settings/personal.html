@@ -1,7 +1,5 @@
 [% UNLESS hide_personal_repos -%]
 
-<script src="/static/js/table-sort.js" type="text/javascript"></script>
-
 <form id="form-personal" method="post">
   [% personal_repos_form.field('_token').render -%]
   <label>[% personal_repos_form.field('personal_repo_select').label -%]</label>
@@ -23,7 +21,7 @@
         <td><a href="[% repo.url -%]" target="_blank">[% repo.name -%]</a></td>
         <td>[% repo.lang -%]</td>
         <td>[% repo.stars -%]</td>
-        <td>[% repo.issues -%]</td>
+        <td><a href="[% repo.url -%]/issues" target="_blank">[% repo.issues -%]</a></td>
       </tr>
       [% END -%]
     </tbody>
