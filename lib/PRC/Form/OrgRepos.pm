@@ -40,7 +40,6 @@ sub options_org_repo_select {
     value    => $_->github_id,
     selected => $_->accepting_assignees,
     name     => $_->github_full_name,
-    org      => $_->org->github_login,
     url      => $_->github_html_url,
     lang     => $_->github_language,
     issues   => $_->github_open_issues_count,
