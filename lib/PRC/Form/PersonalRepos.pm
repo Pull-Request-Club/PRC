@@ -20,10 +20,12 @@ has_field '_token' => (
 
 has_field 'personal_repo_select' => (
   type     => 'Select',
-  label    => 'Please select personal repositories
-               that you want to assign to other people.
+  label    => 'Please check repositories that you want assigned
+               to contributors.<br>
                Then click "Save Personal Repositories" button
-               at the bottom of the page.',
+               at the bottom of the page.<br>
+               If you want to refresh the list, click "Reload
+               Personal Repositories" button.',
   widget   => 'CheckboxGroup',
   multiple => 1,
 );
