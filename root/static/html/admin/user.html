@@ -1,12 +1,9 @@
+<script src="/static/js/table-sort.js" type="text/javascript"></script>
 <div class="container">
   <br><br>
 
-  <h1>History</h1>
-  <br>
-
   <h3>Assignment History</h3>
 
-  [% IF taken.size -%]
   <table class="table table-hover">
     <thead class="thead-dark">
       <tr>
@@ -28,18 +25,9 @@
     </tbody>
   </table>
 
-  [% ELSE -%]
-
-    You do not have any assignment history.
-    <br>
-
-  [% END -%]
-
   <br>
 
   <h3>Assignee History</h3>
-
-  [% IF given.size -%]
 
   <table class="table table-hover">
     <thead class="thead-dark">
@@ -61,12 +49,6 @@
     [% END -%]
     </tbody>
   </table>
-
-  [% ELSE -%]
-
-    You do not have any assignee history.
-
-  [% END -%]
 
   <br>
 

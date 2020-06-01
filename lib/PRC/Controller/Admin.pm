@@ -110,7 +110,7 @@ sub users :Path('/admin/users') :Args(0) {
   my ($self, $c) = @_;
 
   my @users = $c->model('PRCDB::User')->search({},{
-    prefetch => ['repos','assignments'],
+    prefetch => ['repos','assignments','orgs'],
   })->all;
   my @assignments = $c->model('PRCDB::Assignment')->all;
 
@@ -141,6 +141,100 @@ sub users :Path('/admin/users') :Args(0) {
     users      => \@users,
     template   => 'static/html/admin/users.html',
     active_tab => 'users',
+  });
+
+}
+
+=head2 user
+
+=cut
+
+sub user :Path('/admin/user') :Args(1) {
+  my ($self, $c, $id) = @_;
+  my $user = $c->model('PRCDB::User')->find($id);
+  my @taken = $user->assignments_taken;
+  my @given = $user->assignments_given;
+
+  $c->stash({
+    taken       => \@taken,
+    given       => \@given,
+    template    => 'static/html/admin/user.html',
+  });
+}
+
+=head2 /admin/assignment-central
+
+List users that are waiting for assignments.
+List repos that are waiting for users.
+
+=cut
+
+sub assignment_central :Path('/admin/assignment-central') :Args(0) {
+  my ($self, $c) = @_;
+
+  my $user_subquery = $c->model('PRCDB::Assignment')->search({
+    'me.user_id' => { '=' => \'sub.user_id' },
+    '-or' => [
+      { 'sub.status' => ASSIGNMENT_OPEN },
+      { 'sub.month'  => { '>=' => \'strftime("%Y-%m","now")' }},
+    ],
+  },{
+    from => { sub => 'assignment'},
+  })->get_column('sub.assignment_id')->as_query;
+
+  my @users = $c->model('PRCDB::User')->search({
+    tos_agree_time => {'>=', LATEST_LEGAL_DATE->ymd},
+    is_receiving_assignments => 1,
+    is_deactivated => 0,
+    'NOT EXISTS' => $user_subquery,
+  },{
+    prefetch => ['assignments', {'user_langs' => 'lang'}],
+  })->all;
+
+  @users = map {{
+    user_id             => $_->user_id,
+    github_login        => $_->github_login,
+    github_email        => $_->github_email,
+    langs               => $_->active_user_langs_string,
+    %{$_->received_assignment_count},
+  }} @users;
+
+  my $repo_subquery = $c->model('PRCDB::Assignment')->search({
+    'me.repo_id' => { '=' => \'sub.repo_id' },
+    'julianday("now")' => { '<=' => \'julianday(month) + 45' },
+  },{
+    from => { sub => 'assignment'},
+  })->get_column('sub.assignment_id')->as_query;
+
+  my @repos = $c->model('PRCDB::Repo')->search({
+    'me.accepting_assignees' => 1,
+    'me.gone_missing'        => 0,
+    'user.tos_agree_time'    => {'>=', LATEST_LEGAL_DATE->ymd},
+    'user.is_deactivated'    => 0,
+    'NOT EXISTS'             => $repo_subquery,
+  },{
+    join     => 'user',
+    prefetch => ['assignments','org','user'],
+  })->all;
+
+  @repos = map {{
+    repo_id   => $_->repo_id,
+    user_id   => $_->user_id,
+    user_name => $_->user->github_login,
+    org_id    => $_->org_id // '-',
+    org_name  => ( ($_->org) ? ($_->org->github_login) : ''),
+    name      => $_->github_full_name,
+    lang      => $_->github_language,
+    issues    => $_->github_open_issues_count,
+    stars     => $_->github_stargazers_count,
+    assignment_count => scalar($_->assignments),
+  }} @repos;
+
+  $c->stash({
+    users      => \@users,
+    repos      => \@repos,
+    template   => 'static/html/admin/assignment-central.html',
+    active_tab => 'assignment-central',
   });
 
 }
@@ -191,7 +285,7 @@ sub _get_assignee_counts {
 
 sub _get_repo_counts {
   my ($user) = @_;
-  my @repos = $user->available_repos;
+  my @repos = grep {!$_->gone_missing} $user->repos->all;
 
   my $per_repos_tot = grep {!$_->org_id} @repos;
   my $per_repos_opt = grep {!$_->org_id && $_->accepting_assignees} @repos;

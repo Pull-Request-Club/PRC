@@ -1,0 +1,66 @@
+<script src="/static/js/table-sort.js" type="text/javascript"></script>
+
+<div class="container">
+  <br>
+
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+    <thead class="thead-dark text-nowrap">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">GitHub</th>
+        <th scope="col">Score</th>
+        <th scope="col">Total</th>
+        <th scope="col">Done</th>
+        <th scope="col">Langs</th>
+        <th scope="col">Skipped</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH user IN users -%]
+      <tr>
+        <td><a href="/admin/user/[% user.user_id -%]">[% user.user_id -%]</a></td>
+        <td><a href="https://github.com/[% user.github_login -%]">[% user.github_login -%]</a></td>
+        <td>[% user.score -%]</td>
+        <td>[% user.total -%]</td>
+        <td>[% user.done -%]</td>
+        <td>[% user.langs -%]</td>
+        <td>[% user.skipped -%]</td>
+        <td>[% user.github_email -%]</a></td>
+      </tr>
+    [% END -%]
+    </tbody>
+  </table>
+
+  <br>
+
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark text-nowrap">
+      <tr>
+        <th scope="col">Repo</th>
+        <th scope="col">Given</th>
+        <th scope="col">User</th>
+        <th scope="col">Org</th>
+        <th scope="col">Name</th>
+        <th scope="col">Lang</th>
+        <th scope="col">Issues</th>
+        <th scope="col">Stars</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH repo IN repos -%]
+      <tr>
+        <td>[% repo.repo_id -%]</td>
+        <td>[% repo.assignment_count -%]</td>
+        <td>[% repo.user_name -%]</td>
+        <td>[% repo.org_name -%]</td>
+        <td><a href="https://github.com/[% repo.name -%]" target="_blank">[% repo.name -%]</a></td>
+        <td>[% repo.lang -%]</td>
+        <td>[% repo.issues -%]</a></td>
+        <td>[% repo.stars -%]</a></td>
+      </tr>
+    [% END -%]
+    </tbody>
+  </table>
+</div>

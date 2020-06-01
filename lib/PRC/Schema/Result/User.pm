@@ -435,6 +435,28 @@ sub assignments_given {
   })->all;
 }
 
+=head2 received_assignment_count
+
+Count of total assignments received. Returned as a hashref.
+
+=cut
+
+sub received_assignment_count {
+  my ($user) = @_;
+  my @assignments = $user->assignments->all;
+
+  my $counts = {
+    total     => int(@assignments)                                                 || 0,
+    done      => (scalar(grep {$_->status == ASSIGNMENT_DONE}    @assignments))    || 0,
+    skipped   => (scalar(grep {$_->status == ASSIGNMENT_SKIPPED} @assignments))    || 0,
+    open      => (scalar(grep {$_->status == ASSIGNMENT_OPEN}    @assignments))    || 0,
+  };
+
+  my $score = 5 * $counts->{total} + 20 * $counts->{done} - 1 * $counts->{skipped};
+  $counts->{score} = $score;
+  return $counts;
+}
+
 =head2 fetch_personal_repos
 
 Fetch PERSONAL repositories from GitHub. Add/update repo table.
@@ -553,20 +575,6 @@ sub fetch_org_repos {
   $user->update({ last_org_repo_sync_time => DateTime->now->datetime });
 
   return 1;
-}
-
-=head2 available_repos
-
-Returns an array of repositories that are not gone missing.
-Includes both personal and org repos.
-
-=cut
-
-sub available_repos {
-  my ($user) = @_;
-  return $user->repos->search({
-    gone_missing => 0,
-  })->all;
 }
 
 =head2 personal_repos
@@ -734,6 +742,23 @@ sub active_user_langs {
     join => 'lang',
   })->all;
 };
+
+=head2 active_user_langs_string
+
+Same as $user->active_user_langs, except this
+returns a string joined by , for printing.
+
+=cut
+
+sub active_user_langs_string {
+  my ($user) = @_;
+  my @langs = $user->user_langs->all;
+  my @lang_strings = ();
+  foreach my $lang (@langs){
+    push @lang_strings, $lang->lang->lang_name;
+  }
+  return join(', ',@lang_strings);
+}
 
 =head2 has_any_active_user_langs
 
