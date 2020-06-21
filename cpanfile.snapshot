@@ -2169,6 +2169,14 @@ DISTRIBUTIONS
       base 0
       strict 0
       warnings 0
+  Email-SendGrid-V3-v0.900.1
+    pathname: G/GS/GSG/Email-SendGrid-V3-v0.900.1.tar.gz
+    provides:
+      Email::SendGrid::V3 v0.900.1
+    requirements:
+      ExtUtils::MakeMaker 7.1101
+      JSON 0
+      namespace::clean 0
   Email-Valid-1.202
     pathname: R/RJ/RJBS/Email-Valid-1.202.tar.gz
     provides:
@@ -4459,16 +4467,15 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
-  Net-SSLeay-1.85
-    pathname: M/MI/MIKEM/Net-SSLeay-1.85.tar.gz
+  Net-SSLeay-1.88
+    pathname: C/CH/CHRISN/Net-SSLeay-1.88.tar.gz
     provides:
-      Net::SSLeay 1.85
-      Net::SSLeay::Handle 0.61
+      Net::SSLeay 1.88
+      Net::SSLeay::Handle 1.88
     requirements:
-      ExtUtils::MakeMaker 6.36
+      ExtUtils::MakeMaker 0
       MIME::Base64 0
-      Test::More 0.60_01
-      perl 5.005
+      perl 5.008001
   Net-Server-2.009
     pathname: R/RH/RHANDOM/Net-Server-2.009.tar.gz
     provides:
