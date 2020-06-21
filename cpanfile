@@ -11,6 +11,7 @@ requires 'Config::General';
 requires 'Catalyst::Plugin::Unicode';
 requires 'DBIx::Class::Schema::Loader';
 requires 'DBIx::Class::TimeStamp';
+requires 'Email::SendGrid::V3';
 requires 'FCGI';
 requires 'FCGI::ProcManager';
 requires 'HTTP::Server::Simple';
