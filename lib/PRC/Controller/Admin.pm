@@ -162,14 +162,14 @@ sub user :Path('/admin/user') :Args(1) {
   });
 }
 
-=head2 /admin/assignment-central
+=head2 /admin/assign
 
 List users that are waiting for assignments.
 List repos that are waiting for users.
 
 =cut
 
-sub assignment_central :Path('/admin/assignment-central') :Args(0) {
+sub assign :Path('/admin/assign') :Args(0) {
   my ($self, $c) = @_;
 
   my $user_subquery = $c->model('PRCDB::Assignment')->search({
@@ -233,8 +233,54 @@ sub assignment_central :Path('/admin/assignment-central') :Args(0) {
   $c->stash({
     users      => \@users,
     repos      => \@repos,
-    template   => 'static/html/admin/assignment-central.html',
-    active_tab => 'assignment-central',
+    template   => 'static/html/admin/assign.html',
+    active_tab => 'assign',
+  });
+
+}
+
+=head2 /admin/assignments
+
+List all assignments.
+
+=cut
+
+sub assignments :Path('/admin/assignments') :Args(0) {
+  my ($self, $c) = @_;
+
+  my @assignments = $c->model('PRCDB::Assignment')->search({
+  },{
+    prefetch => ['user', {'repo' => 'user'}],
+  })->all;
+
+  @assignments = map {{
+    id        => $_->assignment_id,
+    month     => $_->month_sortable,
+
+    cont_id   => $_->user_id,
+    cont      => $_->user->github_login,
+
+    maint_id  => $_->repo->user_id,
+    maint     => $_->repo->user->github_login,
+
+    repo_name => substr($_->repo->github_full_name,0,40),
+    repo_url  => $_->repo->github_html_url,
+
+    status_color  => $_->status_color,
+    status_string => $_->status_string,
+  }} @assignments;
+
+  # Group per month
+  my $assignments_per_month;
+  foreach my $assignment (@assignments){
+    $assignments_per_month->{$assignment->{month}} //= [];
+    push @{$assignments_per_month->{$assignment->{month}}}, $assignment;
+  }
+
+  $c->stash({
+    assignments_per_month => $assignments_per_month,
+    template   => 'static/html/admin/assignments.html',
+    active_tab => 'assignments',
   });
 
 }
