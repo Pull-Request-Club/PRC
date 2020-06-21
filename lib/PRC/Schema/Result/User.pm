@@ -249,6 +249,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 user_email_opt_ins
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::UserEmailOptIn>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_email_opt_ins",
+  "PRC::Schema::Result::UserEmailOptIn",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_langs
 
 Type: has_many
@@ -265,8 +280,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-10-05 09:05:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z2Kj6y4U1SNFhL3oMl9UNA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-22 00:08:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wtome4HBjVyAtu8zcfFkgw
 
 use DateTime;
 use PRC::Constants;
