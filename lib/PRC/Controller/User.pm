@@ -9,6 +9,7 @@ use PRC::Form::Assignment;
 use PRC::Form::DeactivateConfirm;
 use PRC::Form::DeleteConfirm;
 use PRC::Form::DoneConfirm;
+use PRC::Form::Emails;
 use PRC::Form::Languages;
 use PRC::Form::OrgRepos;
 use PRC::Form::PersonalRepos;
@@ -245,6 +246,20 @@ sub settings :Path('/settings') :Args(0) {
       $user->update_langs($selected_langs);
       $c->session({alert_success => 'Your preferred languages are updated.'});
       $c->session({ setting_tab   => 'languages' });
+      # Reload
+      $c->response->redirect('/settings',303);
+      $c->detach;
+    }
+
+    # Email Opt Ins
+    my $emails_form = PRC::Form::Emails->new(user => $user);
+    $c->stash({ emails_form => $emails_form });
+    $emails_form->process(params => $c->req->params);
+    if($c->req->params->{submit_emails} && $emails_form->validated){
+      my $selected_emails = $emails_form->values->{email_select};
+      $user->update_emails($selected_emails);
+      $c->session({alert_success => 'Your email preferences are updated.'});
+      $c->session({ setting_tab   => 'emails' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;

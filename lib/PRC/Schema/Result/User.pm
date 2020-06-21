@@ -840,5 +840,53 @@ sub update_langs {
 
 }
 
+=head2 selected_email_ids
+
+Returns a hash of user's opted in emails.
+Example: { 9 => 1, 10 => 1}
+
+=cut
+
+sub selected_email_ids {
+  my ($user) = @_;
+  my @selected_emails = $user->user_email_opt_ins->search({
+  },{
+    select => 'email_id',
+    join   => 'email',
+  })->all;
+  my %email_ids = map {$_->email_id => 1} @selected_emails;
+
+  return %email_ids;
+}
+
+=head2 update_emails($emails)
+
+Update opted in emails of user.
+
+=cut
+
+sub update_emails {
+  my ($user,$new) = @_;
+  my @old = $user->user_email_opt_ins;
+  my %old = map {$_->email_id => 1} @old;
+  my %new = map {$_ => 1} @$new;
+
+  # The ones in old but not in new will be deleted
+  foreach my $old_row (@old){
+    if(!$new{$old_row->email_id}){
+      $old_row->delete;
+    }
+  }
+
+  # The ones in new but not in old will be inserted
+  foreach my $new_id (@$new){
+    if(!$old{$new_id}){
+      $user->create_related('user_email_opt_ins',{email_id => $new_id});
+    }
+  }
+
+  return 1;
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
