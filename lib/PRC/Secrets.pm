@@ -1,49 +1,36 @@
 package PRC::Secrets;
 use namespace::autoclean;
 
-use YAML qw/LoadFile/;
+use YAML::LoadFileCached;
 
 =encoding utf8
 
 =head1 NAME
 
-PRC::Secrets - A Quick Library for GitHub calls
+PRC::Secrets - A Quick Library for reading secrets
 
 =head1 DESCRIPTION
 
 This is a library to abstract reading secrets. Look at ENV variables first,
 look at secrets.yml later if first one is not there. Die if nothing is found.
-There is a lot of room for improvement here. (Read file once and cache it etc)
 
 =head1 METHODS
 
-=head2 client_id
+=head2 read
 
-A quick subroutine to get client_id.
+Subroutine that reads the secret.
+Tries ENV variable first, then goes for secrets.yml.
+Available secrets:
 
-=cut
-
-sub client_id {
-  return shift->_read('CLIENT_ID');
-}
-
-=head2 client_secret
-
-A quick subroutine to get client_secret.
+CLIENT_ID
+CLIENT_SECRET
+SG_API_KEY
+ENC_KEY
+HMAC_KEY
 
 =cut
 
-sub client_secret {
-  return shift->_read('CLIENT_SECRET');
-}
-
-=head2 _read
-
-Subroutine that does the actual reading.
-
-=cut
-
-sub _read {
+sub read {
   my ($self, $key) = @_;
 
   my $value;
@@ -51,7 +38,8 @@ sub _read {
     $value = $ENV{$key};
   }
   elsif (-e 'secrets.yml'){
-    my $file_contents = YAML::LoadFile('secrets.yml');
+    my $file_contents = LoadFileCached('secrets.yml');
+
     if (ref $file_contents eq 'HASH' && $file_contents->{$key}){
       $value = $file_contents->{$key};
     }

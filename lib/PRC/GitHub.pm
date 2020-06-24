@@ -5,7 +5,6 @@ use PRC::Constants;
 use PRC::Secrets;
 use LWP::UserAgent;
 use JSON::XS;
-use YAML qw/LoadFile/;
 
 =encoding utf8
 
@@ -39,7 +38,7 @@ One scope is added (user:email).
 
 sub authenticate_url {
   my ($self) = @_;
-  my $client_id = PRC::Secrets->client_id;
+  my $client_id = PRC::Secrets->read('CLIENT_ID');
   return "https://github.com/login/oauth/authorize?scope=user%3Aemail&client_id=$client_id";
 }
 
@@ -55,7 +54,7 @@ This is same as authenticate_url with one more scope (read:org).
 
 sub org_authenticate_url {
   my ($self) = @_;
-  my $client_id = PRC::Secrets->client_id;
+  my $client_id = PRC::Secrets->read('CLIENT_ID');
   return "https://github.com/login/oauth/authorize?scope=user%3Aemail%2Cread%3Aorg&client_id=$client_id";
 }
 =head2 access_token
@@ -73,8 +72,8 @@ sub access_token {
 
   my $data_post = {
     code          => $code,
-    client_id     => PRC::Secrets->client_id,
-    client_secret => PRC::Secrets->client_secret,
+    client_id     => PRC::Secrets->read('CLIENT_ID'),
+    client_secret => PRC::Secrets->read('CLIENT_SECRET'),
   };
 
   my $ua = LWP::UserAgent->new;

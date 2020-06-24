@@ -6348,6 +6348,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.008001
+  YAML-LoadFileCached-0.21
+    pathname: F/FL/FLORIAN/YAML-LoadFileCached-0.21.tar.gz
+    provides:
+      YAML::LoadFileCached 0.21
+    requirements:
+      ExtUtils::MakeMaker 0
+      YAML 0.3
   YAML-Tiny-1.73
     pathname: E/ET/ETHER/YAML-Tiny-1.73.tar.gz
     provides:

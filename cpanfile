@@ -28,5 +28,6 @@ requires 'App::Sqitch';
 requires 'Task::Catalyst::Tutorial';
 requires 'Test2::V0';
 requires 'WWW::Mechanize';
-requires 'YAML';
+requires 'YAML::LoadFileCached';
 test_requires 'Test::More' => '0.88';
+test_requires 'Sub::Override';
