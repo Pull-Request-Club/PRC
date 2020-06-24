@@ -1044,6 +1044,121 @@ DISTRIBUTIONS
       Crypt::DES 2.07
     requirements:
       ExtUtils::MakeMaker 0
+  CryptX-0.068
+    pathname: M/MI/MIK/CryptX-0.068.tar.gz
+    provides:
+      Crypt::AuthEnc 0.068
+      Crypt::AuthEnc::CCM 0.068
+      Crypt::AuthEnc::ChaCha20Poly1305 0.068
+      Crypt::AuthEnc::EAX 0.068
+      Crypt::AuthEnc::GCM 0.068
+      Crypt::AuthEnc::OCB 0.068
+      Crypt::Checksum 0.068
+      Crypt::Checksum::Adler32 0.068
+      Crypt::Checksum::CRC32 0.068
+      Crypt::Cipher 0.068
+      Crypt::Cipher::AES 0.068
+      Crypt::Cipher::Anubis 0.068
+      Crypt::Cipher::Blowfish 0.068
+      Crypt::Cipher::CAST5 0.068
+      Crypt::Cipher::Camellia 0.068
+      Crypt::Cipher::DES 0.068
+      Crypt::Cipher::DES_EDE 0.068
+      Crypt::Cipher::IDEA 0.068
+      Crypt::Cipher::KASUMI 0.068
+      Crypt::Cipher::Khazad 0.068
+      Crypt::Cipher::MULTI2 0.068
+      Crypt::Cipher::Noekeon 0.068
+      Crypt::Cipher::RC2 0.068
+      Crypt::Cipher::RC5 0.068
+      Crypt::Cipher::RC6 0.068
+      Crypt::Cipher::SAFERP 0.068
+      Crypt::Cipher::SAFER_K128 0.068
+      Crypt::Cipher::SAFER_K64 0.068
+      Crypt::Cipher::SAFER_SK128 0.068
+      Crypt::Cipher::SAFER_SK64 0.068
+      Crypt::Cipher::SEED 0.068
+      Crypt::Cipher::Serpent 0.068
+      Crypt::Cipher::Skipjack 0.068
+      Crypt::Cipher::Twofish 0.068
+      Crypt::Cipher::XTEA 0.068
+      Crypt::Digest 0.068
+      Crypt::Digest::BLAKE2b_160 0.068
+      Crypt::Digest::BLAKE2b_256 0.068
+      Crypt::Digest::BLAKE2b_384 0.068
+      Crypt::Digest::BLAKE2b_512 0.068
+      Crypt::Digest::BLAKE2s_128 0.068
+      Crypt::Digest::BLAKE2s_160 0.068
+      Crypt::Digest::BLAKE2s_224 0.068
+      Crypt::Digest::BLAKE2s_256 0.068
+      Crypt::Digest::CHAES 0.068
+      Crypt::Digest::Keccak224 0.068
+      Crypt::Digest::Keccak256 0.068
+      Crypt::Digest::Keccak384 0.068
+      Crypt::Digest::Keccak512 0.068
+      Crypt::Digest::MD2 0.068
+      Crypt::Digest::MD4 0.068
+      Crypt::Digest::MD5 0.068
+      Crypt::Digest::RIPEMD128 0.068
+      Crypt::Digest::RIPEMD160 0.068
+      Crypt::Digest::RIPEMD256 0.068
+      Crypt::Digest::RIPEMD320 0.068
+      Crypt::Digest::SHA1 0.068
+      Crypt::Digest::SHA224 0.068
+      Crypt::Digest::SHA256 0.068
+      Crypt::Digest::SHA384 0.068
+      Crypt::Digest::SHA3_224 0.068
+      Crypt::Digest::SHA3_256 0.068
+      Crypt::Digest::SHA3_384 0.068
+      Crypt::Digest::SHA3_512 0.068
+      Crypt::Digest::SHA512 0.068
+      Crypt::Digest::SHA512_224 0.068
+      Crypt::Digest::SHA512_256 0.068
+      Crypt::Digest::SHAKE 0.068
+      Crypt::Digest::Tiger192 0.068
+      Crypt::Digest::Whirlpool 0.068
+      Crypt::KeyDerivation 0.068
+      Crypt::Mac 0.068
+      Crypt::Mac::BLAKE2b 0.068
+      Crypt::Mac::BLAKE2s 0.068
+      Crypt::Mac::F9 0.068
+      Crypt::Mac::HMAC 0.068
+      Crypt::Mac::OMAC 0.068
+      Crypt::Mac::PMAC 0.068
+      Crypt::Mac::Pelican 0.068
+      Crypt::Mac::Poly1305 0.068
+      Crypt::Mac::XCBC 0.068
+      Crypt::Misc 0.068
+      Crypt::Mode 0.068
+      Crypt::Mode::CBC 0.068
+      Crypt::Mode::CFB 0.068
+      Crypt::Mode::CTR 0.068
+      Crypt::Mode::ECB 0.068
+      Crypt::Mode::OFB 0.068
+      Crypt::PK 0.068
+      Crypt::PK::DH 0.068
+      Crypt::PK::DSA 0.068
+      Crypt::PK::ECC 0.068
+      Crypt::PK::Ed25519 0.068
+      Crypt::PK::RSA 0.068
+      Crypt::PK::X25519 0.068
+      Crypt::PRNG 0.068
+      Crypt::PRNG::ChaCha20 0.068
+      Crypt::PRNG::Fortuna 0.068
+      Crypt::PRNG::RC4 0.068
+      Crypt::PRNG::Sober128 0.068
+      Crypt::PRNG::Yarrow 0.068
+      Crypt::Stream::ChaCha 0.068
+      Crypt::Stream::RC4 0.068
+      Crypt::Stream::Rabbit 0.068
+      Crypt::Stream::Salsa20 0.068
+      Crypt::Stream::Sober128 0.068
+      Crypt::Stream::Sosemanuk 0.068
+      CryptX 0.068
+      Math::BigInt::LTM 0.068
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.006
   DBD-SQLite-1.58
     pathname: I/IS/ISHIGAKI/DBD-SQLite-1.58.tar.gz
     provides:
@@ -3454,6 +3569,13 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       Test::More 0
+  MIME-Base64-URLSafe-0.01
+    pathname: K/KA/KAZUHO/MIME-Base64-URLSafe-0.01.tar.gz
+    provides:
+      MIME::Base64::URLSafe 0.01
+    requirements:
+      ExtUtils::MakeMaker 0
+      MIME::Base64 0
   MIME-Types-2.17
     pathname: M/MA/MARKOV/MIME-Types-2.17.tar.gz
     provides:
@@ -5215,6 +5337,18 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 6.30
       Params::Util 0
       Sub::Exporter 0
+      strict 0
+      warnings 0
+  String-Random-0.30
+    pathname: S/SH/SHLOMIF/String-Random-0.30.tar.gz
+    provides:
+      String::Random 0.30
+    requirements:
+      Carp 0
+      Exporter 0
+      Module::Build 0.28
+      parent 0
+      perl 5.006_001
       strict 0
       warnings 0
   String-RewritePrefix-0.007
