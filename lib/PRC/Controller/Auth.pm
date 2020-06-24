@@ -101,6 +101,10 @@ sub callback :Path('/callback') :Args(0) {
     $user = $rs->create($db_args);
     # If that didn't work, kick out
     $c->forward('login_error') unless $user;
+    # Sign up to assignments
+    $user->update({ is_receiving_assignments => 1 });
+    # Subscribe to all emails
+    $user->subscribe_to_all_emails;
   }
 
   # LOGIN HAPPENS!

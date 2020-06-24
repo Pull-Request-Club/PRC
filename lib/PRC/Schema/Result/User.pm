@@ -888,5 +888,18 @@ sub update_emails {
   return 1;
 }
 
+=head2 subscribe_to_all_emails
+
+Subscribe to all emails
+
+=cut
+
+sub subscribe_to_all_emails {
+  my ($user) = @_;
+
+  my @all_emails = $user->result_source->schema->resultset('Email')->get_column('email_id')->all;
+  $user->update_emails(\@all_emails);
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
