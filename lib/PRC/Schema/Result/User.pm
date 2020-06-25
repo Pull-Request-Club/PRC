@@ -901,5 +901,27 @@ sub subscribe_to_all_emails {
   $user->update_emails(\@all_emails);
 }
 
+=head2 add_welcome_to_prc_assignment
+
+Add first "welcome to prc" assignment
+TODO: Send a special new-assignment email with "welcome" copy.
+
+=cut
+
+sub add_welcome_to_prc_assignment {
+  my ($user) = @_;
+
+  my $welcome_to_prc_repo = $user->result_source->schema->resultset('Repo')
+    ->search({ github_id => 268291406 })->first;
+  return undef unless $welcome_to_prc_repo;
+
+  my $assignment = $user->create_related('assignments',{
+    repo_id => $welcome_to_prc_repo->repo_id,
+    month   => DateTime->now->ymd,
+  });
+
+  return $assignment;
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
