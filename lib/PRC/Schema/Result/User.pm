@@ -146,12 +146,14 @@ __PACKAGE__->add_columns(
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
+    set_on_create => 1,
   },
   "update_time",
   {
     data_type     => "datetime",
     default_value => \"current_timestamp",
     is_nullable   => 0,
+    set_on_update => 1,
   },
   "last_login_time",
   {
