@@ -221,6 +221,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 email_logs
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::EmailLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "email_logs",
+  "PRC::Schema::Result::EmailLog",
+  { "foreign.user_id" => "self.user_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 orgs
 
 Type: has_many
@@ -282,8 +297,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-22 00:08:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wtome4HBjVyAtu8zcfFkgw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-30 23:23:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:i3ymAq9604hsRyTRTeAfZw
 
 use DateTime;
 use PRC::Constants;

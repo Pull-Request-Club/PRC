@@ -109,6 +109,21 @@ __PACKAGE__->set_primary_key("email_id");
 
 =head1 RELATIONS
 
+=head2 email_logs
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::EmailLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "email_logs",
+  "PRC::Schema::Result::EmailLog",
+  { "foreign.email_id" => "self.email_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_email_opt_ins
 
 Type: has_many
@@ -125,8 +140,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-22 00:08:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7fbpcX7woZ0Qt11Ye1CCrg
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-30 23:23:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3tqdQcGDLx0FuUySECFiKg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -129,6 +129,21 @@ __PACKAGE__->set_primary_key("assignment_id");
 
 =head1 RELATIONS
 
+=head2 email_logs
+
+Type: has_many
+
+Related object: L<PRC::Schema::Result::EmailLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "email_logs",
+  "PRC::Schema::Result::EmailLog",
+  { "foreign.assignment_id" => "self.assignment_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 repo
 
 Type: belongs_to
@@ -160,8 +175,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-10-05 08:47:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6RqXXNesb61OPxCYPo+qFA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-30 23:23:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F1OarE7Is58XJBIUr3l/ng
 
 use PRC::Constants;
 
