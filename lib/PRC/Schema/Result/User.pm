@@ -905,6 +905,21 @@ sub update_emails {
   return 1;
 }
 
+=head2 is_subscribed_to
+
+Check if user is subscribed to given email id
+
+=cut
+
+sub is_subscribed_to {
+  my ($user, $email_id) = @_;
+  my $count = $user->result_source->schema->resultset('UserEmailOptIn')->search({
+    user_id  => $user->user_id,
+    email_id => $email_id,
+  })->count;
+  return $count ? 1 : 0;
+}
+
 =head2 subscribe_to_all_emails
 
 Subscribe to all emails

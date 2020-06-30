@@ -24,7 +24,7 @@
 
       [% FOREACH assignment IN month.value -%]
         <tr class="table-[% assignment.status_color -%]">
-          <td>[% assignment.id -%]</td>
+          <td><a href="/admin/assignment/[% assignment.id -%]">[% assignment.id -%]</a></td>
           <td>[% assignment.month -%]</td>
 
           <td><a href="/admin/user/[% assignment.cont_id -%]">[% assignment.cont_id -%]</a></td>

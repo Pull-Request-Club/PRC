@@ -1,0 +1,19 @@
+<div class="container">
+  <br><br>
+
+    <div class="card text-center" style="max-width: 100%;">
+      <div class="card-header">
+        [% assignment.user.user_id -%] - [% assignment.user.github_login -%] - [% assignment.month_pretty -%] - [% assignment.status_string -%] - Last Login: [% assignment.user.last_login_time -%]<br>
+        TOS: [% assignment.user.has_accepted_latest_terms -%] - New Assignment: [% assignment.user.is_subscribed_to(1) -%] - Open Reminder: [% assignment.user.is_subscribed_to(3) -%]
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">[% assignment.repo.github_name | html -%]</h5>
+        <p class="card-text"><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_html_url -%]</a></p>
+      </div>
+      <div class="card-footer">
+        [% new_assignment_email_form.render -%]
+        [% open_reminder_email_form.render -%]
+      </div>
+    </div>
+  <br><br>
+</div>

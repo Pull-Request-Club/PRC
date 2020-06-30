@@ -5,6 +5,9 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Constants;
+use PRC::Email;
+use PRC::Form::Admin::NewAssignmentEmail;
+use PRC::Form::Admin::OpenReminderEmail;
 use List::Util qw/any first/;
 
 =encoding utf8
@@ -283,6 +286,45 @@ sub assignments :Path('/admin/assignments') :Args(0) {
     active_tab => 'assignments',
   });
 
+}
+
+=head2 /admin/assignment/<id>
+
+List one assignment and send emails for it.
+
+=cut
+
+sub assignment :Path('/admin/assignment') :Args(1) {
+  my ($self, $c, $id) = @_;
+
+  my $assignment = $c->model('PRCDB::Assignment')->find($id);
+
+  my $new_assignment_email_form = PRC::Form::NewAssignmentEmail->new;
+  $c->stash({ new_assignment_email_form => $new_assignment_email_form });
+  $new_assignment_email_form->process(params => $c->req->params);
+
+  my $open_reminder_email_form = PRC::Form::OpenReminderEmail->new;
+  $c->stash({ open_reminder_email_form => $open_reminder_email_form });
+  $open_reminder_email_form->process(params => $c->req->params);
+
+  if($c->req->params->{submit_new_assignment_email} && $new_assignment_email_form->validated){
+    PRC::Email->send_new_assignment_email($assignment);
+    $c->session({ alert_success => 'New Assignment email sent.' });
+    $c->response->redirect('/admin/assignment/'.$id,303);
+    $c->detach;
+  }
+
+  if($c->req->params->{submit_open_reminder_email} && $open_reminder_email_form->validated){
+    PRC::Email->send_open_reminder_email($assignment);
+    $c->session({ alert_success => 'Open Reminder email sent.' });
+    $c->response->redirect('/admin/assignment/'.$id,303);
+    $c->detach;
+  }
+
+  $c->stash({
+    assignment => $assignment,
+    template   => 'static/html/admin/assignment.html',
+  });
 }
 
 sub _yymmdd {
