@@ -1,0 +1,24 @@
+<div class="container">
+
+  <br><br>
+
+  <h1>Unsubscribe</h1>
+  <br>
+
+  [% IF msg -%]
+  <center>
+    <p class="lead">
+      [% msg -%]
+    </p>
+    <a class="btn btn-link" href="/" role="button">Home</a>
+  </center>
+  [% ELSE -%]
+  <center>
+    <p class="lead">
+      Are you sure you want to unsubscribe from [% email_print_name -%] emails?
+    [% unsub_confirm_form.render -%]
+    <a class="btn btn-link" href="/" role="button">Nope</a>
+  </center>
+  [% END -%]
+
+</div>

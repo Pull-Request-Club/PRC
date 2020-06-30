@@ -28,6 +28,30 @@ same time.
 
 =head1 METHODS
 
+=head2 create_unsubscribe_link
+
+Takes in user_id and email_id.
+Returns a "pullrequest.club" URL to unsubcribe.
+Link will be valid for 30 days.
+
+=cut
+
+sub create_unsubscribe_link {
+  my ($self,$user_id,$email_id) = @_;
+  return undef unless $user_id && $email_id;
+  my $create_time = time();
+  my $expire_time = $create_time + 30 * 24 * 60 * 60; # 30 days
+  my $data = {
+    user_id     => $user_id,
+    email_id    => $email_id,
+    create_time => $create_time,
+    expire_time => $expire_time,
+  };
+  my $enc = $self->_encrypt_data($data);
+  my $url = 'https://pullrequest.club/unsub/' . $enc->{ciphertext} . '/' . $enc->{hmac};
+  return $url;
+}
+
 =head2 _encrypt_data
 
 Method that takes a hashref of data, and returns
