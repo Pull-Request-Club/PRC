@@ -179,7 +179,7 @@ sub assign :Path('/admin/assign') :Args(0) {
     'me.user_id' => { '=' => \'sub.user_id' },
     '-or' => [
       { 'sub.status' => ASSIGNMENT_OPEN },
-      { 'sub.month'  => { '>=' => \'strftime("%Y-%m","now")' }},
+      { 'sub.month'  => { '>=' => \'strftime("%Y-%m",date("now","+3 days"))' }},
     ],
   },{
     from => { sub => 'assignment'},
