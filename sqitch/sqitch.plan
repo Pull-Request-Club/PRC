@@ -13,3 +13,4 @@ add-langs 2019-10-06T01:33:25Z Kivanc Yazan <kyzn@cpan.org> # Add some languages
 rename-perl6-raku 2019-10-13T21:37:51Z Kivanc Yazan <kyzn@cpan.org> # Rename Perl 6 as Raku
 add-email-tables 2020-06-21T12:15:23Z kivanc,,, <kivanc@peppy> # Add email and email-user tables
 add-emails-1 2020-06-23T07:11:12Z kivanc,,, <kivanc@peppy> # Add first four email types
+add-email-log 2020-06-30T20:02:33Z Kivanc Yazan <kyzn@cpan.org> # Add email-log table
