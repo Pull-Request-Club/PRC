@@ -1,19 +1,100 @@
 <div class="container">
   <br><br>
 
-    <div class="card text-center" style="max-width: 100%;">
-      <div class="card-header">
-        [% assignment.user.user_id -%] - [% assignment.user.github_login -%] - [% assignment.month_pretty -%] - [% assignment.status_string -%] - Last Login: [% assignment.user.last_login_time -%]<br>
-        TOS: [% assignment.user.has_accepted_latest_terms -%] - New Assignment: [% assignment.user.is_subscribed_to(1) -%] - Open Reminder: [% assignment.user.is_subscribed_to(3) -%]
-      </div>
-      <div class="card-body">
-        <h5 class="card-title">[% assignment.repo.github_name | html -%]</h5>
-        <p class="card-text"><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_html_url -%]</a></p>
-      </div>
-      <div class="card-footer">
-        [% new_assignment_email_form.render -%]
-        [% open_reminder_email_form.render -%]
+  <div class="row">
+
+    <div class="col-sm-6">
+      <div class="card">
+        <h5 class="card-header">Assignment [% assignment.assignment_id -%]</h5>
+        <div class="card-body">
+          <p class="card-text">
+
+          <strong>Create:</strong> [% assignment.create_time -%]
+          <strong>Update:</strong> [% assignment.update_time -%]<br>
+          <strong>Month:</strong> [% assignment.month_pretty -%]<br>
+          <strong>Status:</strong> [% assignment.status_string -%]<br>
+
+          </p>
+          [% new_assignment_email_form.render -%]
+          [% open_reminder_email_form.render -%]
+        </div>
       </div>
     </div>
+
+    <div class="col-sm-6">
+      <div class="card">
+        <h5 class="card-header">Repo [% assignment.repo_id -%]</h5>
+        <div class="card-body">
+          <p class="card-text">
+
+          <strong>Create:</strong> [% assignment.repo.create_time -%]
+          <strong>Update:</strong> [% assignment.repo.update_time -%]<br>
+          <strong>Name:</strong> [% assignment.repo.github_full_name -%]<br>
+          <strong>Language:</strong> [% assignment.repo.github_language -%]<br>
+          <strong>Org:</strong> [% assignment.repo.org.github_login -%]<br>
+          <strong>Assigning?</strong> [% assignment.repo.accepting_assignees -%]
+          <strong>Gone Missing?</strong> [% assignment.repo.gone_missing -%]<br>
+          <strong>Issues:</strong> [% assignment.repo.github_open_issues_count -%]
+          <strong>Stars:</strong> [% assignment.repo.github_stargazers_count -%]<br>
+
+          </p>
+          <a href="/admin/repo/[% assignment.repo_id -%]" class="btn btn-primary">Repo details</a>
+          <a href="[% assignment.repo.github_html_url -%]" target="_blank" class="btn btn-primary">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+  </div><br>
+
+  <div class="row">
+
+    <div class="col-sm-6">
+      <div class="card">
+        <h5 class="card-header">Assignment User [% assignment.user_id -%] ([% assignment.user.github_login -%])</h5>
+        <div class="card-body">
+          <p class="card-text">
+
+          <strong>Create:</strong> [% assignment.user.create_time -%]
+          <strong>Update:</strong> [% assignment.user.update_time -%]<br>
+          <strong>TOS:</strong> [% assignment.user.tos_agree_time -%]
+          <strong>Login:</strong> [% assignment.user.last_login_time -%]<br>
+          <strong>Personal:</strong> [% assignment.user.last_personal_repo_sync_time -%]
+          <strong>Org:</strong> [% assignment.user.last_org_repo_sync_time -%]<br>
+          <strong>Langs:</strong> [% FOR user_lang IN assignment.user.user_langs; user_lang.lang.lang_name; ' '; END -%]<br>
+          <strong>Emails:</strong> [% FOR email_opt_in IN assignment.user.user_email_opt_ins; email_opt_in.email.email_name; ' '; END -%]<br>
+
+          </p>
+          <a href="/admin/user/[% assignment.user_id -%]" class="btn btn-primary">User details</a>
+          <a href="https://github.com/[% assignment.user.github_login -%]" target="_blank" class="btn btn-primary">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="card">
+        <h5 class="card-header">Repo User [% assignment.repo.user_id -%] ([% assignment.repo.user.github_login -%])</h5>
+        <div class="card-body">
+          <p class="card-text">
+
+          <strong>Create:</strong> [% assignment.repo.user.create_time -%]
+          <strong>Update:</strong> [% assignment.repo.user.update_time -%]<br>
+          <strong>TOS:</strong> [% assignment.repo.user.tos_agree_time -%]
+          <strong>Login:</strong> [% assignment.repo.user.last_login_time -%]<br>
+          <strong>Personal:</strong> [% assignment.repo.user.last_personal_repo_sync_time -%]
+          <strong>Org:</strong> [% assignment.repo.user.last_org_repo_sync_time -%]<br>
+          <strong>Langs:</strong> [% FOR user_lang IN assignment.repo.user.user_langs; user_lang.lang.lang_name; ' '; END -%]<br>
+          <strong>Emails:</strong> [% FOR email_opt_in IN assignment.repo.user.user_email_opt_ins; email_opt_in.email.email_name; ' '; END -%]<br>
+
+          </p>
+          <a href="/admin/user/[% assignment.repo.user_id -%]" class="btn btn-primary">User details</a>
+          <a href="https://github.com/[% assignment.repo.user.github_login -%]" target="_blank" class="btn btn-primary">GitHub</a>
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <br><br>
 </div>

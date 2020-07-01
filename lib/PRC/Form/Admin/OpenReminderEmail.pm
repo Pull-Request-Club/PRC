@@ -14,7 +14,7 @@ has_field '_token' => (
 
 has_field 'submit_open_reminder_email' => (
   type  => 'Submit',
-  value => 'Send open-reminder email',
+  value => 'Email open-reminder',
   element_attr => { class => 'btn btn-success' },
 );
 

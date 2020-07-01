@@ -14,7 +14,7 @@ has_field '_token' => (
 
 has_field 'submit_new_assignment_email' => (
   type  => 'Submit',
-  value => 'Send new-assignment email',
+  value => 'Email new-assignment',
   element_attr => { class => 'btn btn-success' },
 );
 
