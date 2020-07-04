@@ -23,14 +23,14 @@ Does no checks for TOS and opt-in (yet).
 =cut
 
 sub send_new_assignment_email {
-  my ($self, $assignment) = @_;
+  my ($self, $assignment, $new_user) = @_;
   my $user = $assignment->user;
   my $email_id = 1;
 
   my $to = $user->github_email;
   my $subject = 'Your ' . $assignment->month_pretty . ' Assignment';
   my $unsub_link = PRC::Crypt->create_unsubscribe_link($user->user_id, $email_id);
-  my $body= 'Hi!<br><br>
+  my $body=  'Hi!' . ($new_user ? ' Welcome to Pull Request Club!' : '') .'<br><br>
              You have a new assignment at Pull Request Club.<br><br>
              Please login at <a href="https://pullrequest.club">pullrequest.club</a> to see its details.<br><br>
              Kivanc @ Pull Request Club<br>

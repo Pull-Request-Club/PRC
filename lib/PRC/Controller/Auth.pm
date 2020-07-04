@@ -5,8 +5,9 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use DateTime;
-use PRC::GitHub;
+use PRC::Email;
 use PRC::Form::Reactivate;
+use PRC::GitHub;
 
 =encoding utf8
 
@@ -104,9 +105,11 @@ sub callback :Path('/callback') :Args(0) {
     # Sign up to assignments
     $user->update({ is_receiving_assignments => 1 });
     # Add "welcome" assignment
-    $user->add_welcome_to_prc_assignment;
+    my $assignment = $user->add_welcome_to_prc_assignment;
     # Subscribe to all emails
     $user->subscribe_to_all_emails;
+    # And send "new-assignment" email
+    PRC::Email->send_new_assignment_email($assignment,1);
   }
 
   # LOGIN HAPPENS!
