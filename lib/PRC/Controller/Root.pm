@@ -110,6 +110,7 @@ sub legal :Local :Args(0) {
   my ($self, $c) = @_;
 
   my $user = $c->user;
+  my $never_accepted_any_terms_before = $user->has_never_accepted_any_terms;
 
   if ($user && !$user->has_accepted_latest_terms){
     my $form = PRC::Form::AcceptLegal->new;
@@ -118,6 +119,14 @@ sub legal :Local :Args(0) {
 
     if($form->validated){
       $user->accept_latest_terms;
+
+      if($never_accepted_any_terms_before){                    # First time accepting TOS
+        $user->update({ is_receiving_assignments => 1 });      # Get assignments
+        $user->subscribe_to_all_emails;                        # Get emails
+        my $assignment = $user->add_welcome_to_prc_assignment; # Welcome assignment
+        PRC::Email->send_new_assignment_email($assignment,1);  # Welcome email
+      }
+
       $c->response->redirect('/my-assignment',303);
       $c->detach;
     }

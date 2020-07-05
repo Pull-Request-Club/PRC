@@ -102,14 +102,6 @@ sub callback :Path('/callback') :Args(0) {
     $user = $rs->create($db_args);
     # If that didn't work, kick out
     $c->forward('login_error') unless $user;
-    # Sign up to assignments
-    $user->update({ is_receiving_assignments => 1 });
-    # Add "welcome" assignment
-    my $assignment = $user->add_welcome_to_prc_assignment;
-    # Subscribe to all emails
-    $user->subscribe_to_all_emails;
-    # And send "new-assignment" email
-    PRC::Email->send_new_assignment_email($assignment,1);
   }
 
   # LOGIN HAPPENS!

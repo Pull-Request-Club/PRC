@@ -373,6 +373,21 @@ sub has_accepted_latest_terms {
   return ( $user->tos_agree_time > LATEST_LEGAL_DATE ) ? 1 : 0;
 }
 
+=head2 has_never_accepted_any_terms
+
+Returns 1 if tos_agreed_version is NULL.
+
+=cut
+
+sub has_never_accepted_any_terms {
+  my ($user) = @_;
+  if ($user->tos_agreed_version){
+   return 0;
+  } else {
+   return 1;
+  }
+}
+
 =head2 accept_latest_terms
 
 Accepts latest terms.
