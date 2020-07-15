@@ -15,3 +15,4 @@ add-email-tables 2020-06-21T12:15:23Z kivanc,,, <kivanc@peppy> # Add email and e
 add-emails-1 2020-06-23T07:11:12Z kivanc,,, <kivanc@peppy> # Add first four email types
 add-email-log 2020-06-30T20:02:33Z Kivanc Yazan <kyzn@cpan.org> # Add email-log table
 add-user-sync-forked 2020-07-15T09:26:33Z Kivanc Yazan <kyzn@cpan.org> # Add user.is_syncing_forked_repos
+repo-add-drop-cols 2020-07-15T11:25:13Z Kivanc Yazan <kyzn@cpan.org> # Add repo fork cols, drop unused URL cols
