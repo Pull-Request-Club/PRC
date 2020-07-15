@@ -1,4 +1,4 @@
-package PRC::Form::Assignment;
+package PRC::Form::Settings::General;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
@@ -19,9 +19,9 @@ has_field 'is_receiving_assignments' => (
   input_without_param => 0,
 );
 
-has_field 'submit_assignment' => (
+has_field 'submit_general' => (
   type  => 'Submit',
-  value => 'Save Assignment Settings',
+  value => 'Save Settings',
   element_attr => { class => 'btn btn-success' },
 );
 

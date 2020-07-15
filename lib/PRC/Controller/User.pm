@@ -5,7 +5,6 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Constants;
-use PRC::Form::Assignment;
 use PRC::Form::DeactivateConfirm;
 use PRC::Form::DeleteConfirm;
 use PRC::Form::DoneConfirm;
@@ -15,6 +14,7 @@ use PRC::Form::OrgRepos;
 use PRC::Form::PersonalRepos;
 use PRC::Form::ReloadOrgRepos;
 use PRC::Form::ReloadPersonalRepos;
+use PRC::Form::Settings::General;
 use PRC::Form::SkipConfirm;
 
 use List::Util qw/any/;
@@ -116,11 +116,11 @@ sub settings :Path('/settings') :Args(0) {
   # If we are being redirected from a form submit, show that setting tab.
   my $setting_tab = delete $c->session->{setting_tab};
 
-  # Go ahead with assignment setting and repo/org sync logic if agreed to TOS
+  # Go ahead with general settings and repo/org sync logic if agreed to TOS
   if($has_accepted_latest_terms){
     # If we haven't set a setting tab yet (not being redirected from a form submit)
-    # then fall back to default "assignment" tab here.
-    $setting_tab //= 'assignment';
+    # then fall back to default "general" tab here.
+    $setting_tab //= 'general';
     my $last_personal_repo_sync_time = $user->last_personal_repo_sync_time;
     my $last_org_repo_sync_time      = $user->last_org_repo_sync_time;
     my $has_any_av_personal_repos    = $user->has_any_available_personal_repos;
@@ -214,24 +214,24 @@ sub settings :Path('/settings') :Args(0) {
       $c->detach;
     }
 
-    # Assignment Settings
-    my $assignment_form = PRC::Form::Assignment->new;
-    $c->stash({ assignment_form => $assignment_form });
-    $assignment_form->process(
+    # General Settings
+    my $general_form = PRC::Form::Settings::General->new;
+    $c->stash({ general_form => $general_form });
+    $general_form->process(
       params   => $c->req->params,
       defaults => {
         is_receiving_assignments => $user->is_receiving_assignments,
       }
     );
-    if($c->req->params->{submit_assignment} && $assignment_form->validated){
-      my $new_value = $assignment_form->values->{is_receiving_assignments};
+    if($c->req->params->{submit_general} && $general_form->validated){
+      my $new_value = $general_form->values->{is_receiving_assignments};
       $user->update({ is_receiving_assignments => $new_value });
       if ($new_value){
         $c->session->{alert_success} = 'Welcome to the club!';
       } else {
         $c->session->{alert_success} = 'You have opted out from getting assignments.';
       }
-      $c->session({ setting_tab   => 'assignment' });
+      $c->session({ setting_tab   => 'general' });
       # Reload
       $c->response->redirect('/settings',303);
       $c->detach;
