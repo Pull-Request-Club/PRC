@@ -14,3 +14,4 @@ rename-perl6-raku 2019-10-13T21:37:51Z Kivanc Yazan <kyzn@cpan.org> # Rename Per
 add-email-tables 2020-06-21T12:15:23Z kivanc,,, <kivanc@peppy> # Add email and email-user tables
 add-emails-1 2020-06-23T07:11:12Z kivanc,,, <kivanc@peppy> # Add first four email types
 add-email-log 2020-06-30T20:02:33Z Kivanc Yazan <kyzn@cpan.org> # Add email-log table
+add-user-sync-forked 2020-07-15T09:26:33Z Kivanc Yazan <kyzn@cpan.org> # Add user.is_syncing_forked_repos
