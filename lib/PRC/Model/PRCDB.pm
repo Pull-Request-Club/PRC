@@ -7,7 +7,7 @@ __PACKAGE__->config(
     schema_class => 'PRC::Schema',
     
     connect_info => {
-        dsn => 'dbi:SQLite:prc.db',
+        dsn => 'dbi:SQLite:sqitch/prc.db',
         user => '',
         password => '',
         on_connect_do => q{PRAGMA foreign_keys = ON},
