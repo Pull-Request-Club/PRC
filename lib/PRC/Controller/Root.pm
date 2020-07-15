@@ -124,7 +124,9 @@ sub legal :Local :Args(0) {
         $user->update({ is_receiving_assignments => 1 });      # Get assignments
         $user->subscribe_to_all_emails;                        # Get emails
         my $assignment = $user->add_welcome_to_prc_assignment; # Welcome assignment
-        PRC::Email->send_new_assignment_email($assignment,1);  # Welcome email
+        if ($assignment){
+          PRC::Email->send_new_assignment_email($assignment,1);  # Welcome email
+        }
       }
 
       $c->response->redirect('/my-assignment',303);

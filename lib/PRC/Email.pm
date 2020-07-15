@@ -24,6 +24,7 @@ Does no checks for TOS and opt-in (yet).
 
 sub send_new_assignment_email {
   my ($self, $assignment, $new_user) = @_;
+  return undef unless $assignment;
   my $user = $assignment->user;
   my $email_id = 1;
 
