@@ -19,6 +19,13 @@ has_field 'is_receiving_assignments' => (
   input_without_param => 0,
 );
 
+has_field 'is_syncing_forked_repos' => (
+  type  => 'Checkbox',
+  label => 'Sync forked repos?',
+  checkbox_value      => 1,
+  input_without_param => 0,
+);
+
 has_field 'submit_general' => (
   type  => 'Submit',
   value => 'Save Settings',

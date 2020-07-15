@@ -224,16 +224,16 @@ sub settings :Path('/settings') :Args(0) {
       params   => $c->req->params,
       defaults => {
         is_receiving_assignments => $user->is_receiving_assignments,
+        is_syncing_forked_repos  => $user->is_syncing_forked_repos,
       }
     );
     if($c->req->params->{submit_general} && $general_form->validated){
-      my $new_value = $general_form->values->{is_receiving_assignments};
-      $user->update({ is_receiving_assignments => $new_value });
-      if ($new_value){
-        $c->session->{alert_success} = 'Welcome to the club!';
-      } else {
-        $c->session->{alert_success} = 'You have opted out from getting assignments.';
-      }
+      my $new_values = $general_form->values;
+      $user->update({
+        is_receiving_assignments => $new_values->{is_receiving_assignments},
+        is_syncing_forked_repos  => $new_values->{is_syncing_forked_repos},
+      });
+      $c->session->{alert_success} = 'Your settings are updated.';
       $c->session({ setting_tab   => 'general' });
       # Reload
       $c->response->redirect('/settings',303);
