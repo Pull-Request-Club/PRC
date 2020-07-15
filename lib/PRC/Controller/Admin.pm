@@ -125,9 +125,6 @@ sub users :Path('/admin/users') :Args(0) {
                            ($_->is_deactivated ? "Y" : ""),
 
     last_login_time              => _yymmdd($_->last_login_time),
-    last_personal_repo_sync_time => _yymmdd($_->last_personal_repo_sync_time),
-    last_org_repo_sync_time      => _yymmdd($_->last_org_repo_sync_time),
-    org_count                    => int(scalar($_->orgs)) || '',
 
     assignment_status     => $_->is_receiving_assignments ? "Y" : "",
     open_assignment_month => _get_open_assignment_month_sortable($_->assignments),

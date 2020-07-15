@@ -13,27 +13,20 @@
         <th scope="col">Deact</th>
 
         <th scope="col">Login</th>
-        <th scope="col">PRepo</th>
-        <th scope="col">ORepo</th>
-        <th scope="col">O</th>
 
-        <th scope="col">A</th>
+        <th scope="col">?</th>
         <th scope="col">Open</th>
-        <th scope="col">T</th>
-        <th scope="col">D</th>
-        <th scope="col">S</th>
+        <th scope="col">Skip</th>
+        <th scope="col">Done</th>
+        <th scope="col">Total</th>
 
-        <th scope="col">PR</th>
-        <th scope="col">O</th>
-        <th scope="col">OR</th>
-        <th scope="col">O</th>
-        <th scope="col">AR</th>
-        <th scope="col">O</th>
+        <th scope="col">Repo</th>
+        <th scope="col">Opted</th>
 
-        <th scope="col">T</th>
-        <th scope="col">O</th>
-        <th scope="col">S</th>
-        <th scope="col">D</th>
+        <th scope="col">Open</th>
+        <th scope="col">Skip</th>
+        <th scope="col">Done</th>
+        <th scope="col">Total</th>
       </tr>
     </thead>
     <tbody>
@@ -46,27 +39,20 @@
         <td>[% user.deactivation_status -%]</td>
 
         <td>[% user.last_login_time -%]</td>
-        <td>[% user.last_personal_repo_sync_time -%]</td>
-        <td>[% user.last_org_repo_sync_time -%]</td>
-        <td>[% user.org_count -%]</td>
 
         <td>[% user.assignment_status -%]</td>
         <td>[% user.open_assignment_month -%]</td>
-        <td>[% user.assignments_total -%]</td>
-        <td>[% user.assignments_done -%]</td>
         <td>[% user.assignments_skipped -%]</td>
+        <td>[% user.assignments_done -%]</td>
+        <td>[% user.assignments_total -%]</td>
 
-        <td>[% user.personal_repos_total -%]</td>
-        <td>[% user.personal_repos_opted_in -%]</td>
-        <td>[% user.org_repos_total -%]</td>
-        <td>[% user.org_repos_opted_in -%]</td>
         <td>[% user.all_repos_total -%]</td>
         <td>[% user.all_repos_opted_in -%]</td>
 
-        <td>[% user.assignees_total -%]</td>
         <td>[% user.assignees_open -%]</td>
         <td>[% user.assignees_skip -%]</td>
         <td>[% user.assignees_done -%]</td>
+        <td>[% user.assignees_total -%]</td>
       </tr>
     [% END -%]
     </tbody>
