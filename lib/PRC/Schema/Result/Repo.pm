@@ -107,31 +107,19 @@ __PACKAGE__->table("repo");
   is_nullable: 1
   size: 256
 
+=head2 github_is_fork
+
+  data_type: 'boolean'
+  default_value: 0
+  is_nullable: 0
+
 =head2 github_html_url
 
   data_type: 'varchar'
   is_nullable: 0
   size: 512
 
-=head2 github_pulls_url
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 512
-
 =head2 github_events_url
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 512
-
-=head2 github_issues_url
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 512
-
-=head2 github_issue_events_url
 
   data_type: 'varchar'
   is_nullable: 0
@@ -144,6 +132,12 @@ __PACKAGE__->table("repo");
   is_nullable: 0
 
 =head2 github_stargazers_count
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
+=head2 github_forks_count
 
   data_type: 'integer'
   default_value: 0
@@ -194,19 +188,17 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 256,
   },
+  "github_is_fork",
+  { data_type => "boolean", default_value => 0, is_nullable => 0 },
   "github_html_url",
   { data_type => "varchar", is_nullable => 0, size => 512 },
-  "github_pulls_url",
-  { data_type => "varchar", is_nullable => 0, size => 512 },
   "github_events_url",
-  { data_type => "varchar", is_nullable => 0, size => 512 },
-  "github_issues_url",
-  { data_type => "varchar", is_nullable => 0, size => 512 },
-  "github_issue_events_url",
   { data_type => "varchar", is_nullable => 0, size => 512 },
   "github_open_issues_count",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "github_stargazers_count",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "github_forks_count",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
@@ -275,8 +267,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-10-05 08:47:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LMkwD+DB/0hFZVMDNbmYaw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-15 17:29:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H4PbkdcrlAnkgrLVTX58EQ
 
 
 __PACKAGE__->meta->make_immutable;
