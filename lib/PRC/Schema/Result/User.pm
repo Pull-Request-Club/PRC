@@ -522,9 +522,12 @@ Returns undef if something went wrong.
 sub fetch_personal_repos {
   my ($user) = @_;
 
+  # See if user is syncing forks
+  my $include_forks = $user->is_syncing_forked_repos;
+
   # Collect existing and fetched repos
   my @existing_repos = $user->personal_repos;
-  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token,0); # org = 0
+  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token,0,$include_forks); # org = 0
   return undef unless defined $fetched_repos;
 
   # Loop through all fetched repositories
@@ -569,6 +572,9 @@ sub fetch_org_repos {
   # Update orgs first
   $user->fetch_orgs;
 
+  # See if user is syncing forks
+  my $include_forks = $user->is_syncing_forked_repos;
+
   # Collect available orgs
   my @available_orgs = $user->available_orgs;
   my $av_org_map;
@@ -578,7 +584,7 @@ sub fetch_org_repos {
 
   # Collect existing and fetched repos
   my @existing_repos = $user->org_repos;
-  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token,1); # org = 1
+  my $fetched_repos  = PRC::GitHub->get_repos($user->github_token,1,$include_forks); # org = 1
   return undef unless defined $fetched_repos;
 
   # Loop through all fetched repositories

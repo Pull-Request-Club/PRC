@@ -9,9 +9,11 @@
       <tr>
         <th scope="col"></th>
         <th scope="col">Repo</th>
+        <th scope="col">Is Fork?</th>
         <th scope="col">Lang</th>
-        <th scope="col">Star</th>
         <th scope="col">Issue</th>
+        <th scope="col">Star</th>
+        <th scope="col">Forked</th>
       </tr>
     </thead>
     <tbody>
@@ -19,9 +21,11 @@
       <tr>
         <td><input type="checkbox" value="[% repo.value -%]" name="org_repo_select" id="org_repo_select.[% repo.value -%]"[% IF repo.selected -%] checked="checked"[% END -%] /></td>
         <td><a href="[% repo.url -%]" target="_blank">[% repo.name -%]</a></td>
+        <td>[% repo.is_fork -%]</td>
         <td>[% repo.lang -%]</td>
-        <td>[% repo.stars -%]</td>
         <td><a href="[% repo.url -%]/issues" target="_blank">[% repo.issues -%]</a></td>
+        <td>[% repo.stars -%]</td>
+        <td>[% repo.forks -%]</td>
       </tr>
       [% END -%]
     </tbody>

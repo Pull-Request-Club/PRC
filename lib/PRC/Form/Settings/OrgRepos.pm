@@ -42,8 +42,10 @@ sub options_org_repo_select {
     name     => $_->github_full_name,
     url      => $_->github_html_url,
     lang     => $_->github_language,
+    is_fork  => $_->github_is_fork ? "Fork" : "",
     issues   => $_->github_open_issues_count,
     stars    => $_->github_stargazers_count,
+    forks    => $_->github_forks_count,
   }} sort {
     (lc $a->github_full_name) cmp (lc $b->github_full_name)
   } @repos;

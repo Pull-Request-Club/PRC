@@ -164,18 +164,20 @@ sub get_email {
 
 =head2 get_repos
 
-  my $repos = PRC::GitHub->get_repos($token,$org);
+  my $repos = PRC::GitHub->get_repos($token,$org,$include_forks);
 
 Makes a GET to /user/repos, returns an arrayref.
-Excludes forks, archived repos, private repos and templates.
+Excludes forks (unless requested), archived repos, private repos and templates.
 
 If "org" flag is set, asks only for organizational repos (Requires
 "read:org" scope) Otherwise gets just personal (owner) repos.
 
+If "include_forks" is set, it won't filter out "forked" repos.
+
 =cut
 
 sub get_repos {
-  my ($self, $token, $org) = @_;
+  my ($self, $token, $org, $include_forks) = @_;
   return undef unless $token;
 
   my $ua = LWP::UserAgent->new;
@@ -212,7 +214,7 @@ sub get_repos {
     }
 
     # "data" is an arrayref of hashes.
-    # Filter repos that are archived, forked, or private
+    # Filter repos that are archived, forked (unless requested), or private
     # Keep only a few items that are relevant to us
     my @new_repos =
       map  {{
@@ -220,19 +222,18 @@ sub get_repos {
         github_name              => $_->{name},
         github_full_name         => $_->{full_name},
         github_language          => $_->{language},
+        github_is_fork           => $_->{fork},
         github_html_url          => $_->{html_url},
-        github_pulls_url         => $_->{pulls_url},
         github_events_url        => $_->{events_url},
-        github_issues_url        => $_->{issues_url},
-        github_issue_events_url  => $_->{issue_events_url},
         github_open_issues_count => $_->{open_issues_count},
         github_stargazers_count  => $_->{stargazers_count},
+        github_forks_count       => $_->{forks_count},
         gone_missing             => 0,
         (($_->{owner}{type} eq 'Organization') ? (org_github_id => $_->{owner}{id}) : ()),
       }}
       grep {
         !$_->{archived} &&
-        !$_->{fork}     &&
+        ($include_forks ? 1 : !$_->{fork}) &&
         !$_->{private}  &&
         !$_->{is_template}
       } @$data;
