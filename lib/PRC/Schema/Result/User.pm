@@ -106,6 +106,12 @@ __PACKAGE__->table("user");
   default_value: 0
   is_nullable: 0
 
+=head2 is_syncing_forked_repos
+
+  data_type: 'boolean'
+  default_value: 0
+  is_nullable: 0
+
 =head2 github_id
 
   data_type: 'integer'
@@ -174,6 +180,8 @@ __PACKAGE__->add_columns(
   "is_deactivated",
   { data_type => "boolean", default_value => 0, is_nullable => 0 },
   "is_receiving_assignments",
+  { data_type => "boolean", default_value => 0, is_nullable => 0 },
+  "is_syncing_forked_repos",
   { data_type => "boolean", default_value => 0, is_nullable => 0 },
   "github_id",
   { data_type => "integer", is_nullable => 0 },
@@ -297,8 +305,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-06-30 23:23:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:i3ymAq9604hsRyTRTeAfZw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-07-15 12:52:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+lBaep/2fGrdSzbWlEND1g
 
 use DateTime;
 use PRC::Constants;
