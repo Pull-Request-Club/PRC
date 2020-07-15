@@ -1,4 +1,4 @@
-package PRC::Form::ReloadOrgRepos;
+package PRC::Form::Settings::ReloadOrgRepos;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';

@@ -5,17 +5,20 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Constants;
+
+use PRC::Form::DoneConfirm;
+use PRC::Form::SkipConfirm;
+
 use PRC::Form::DeactivateConfirm;
 use PRC::Form::DeleteConfirm;
-use PRC::Form::DoneConfirm;
-use PRC::Form::Emails;
-use PRC::Form::Languages;
-use PRC::Form::OrgRepos;
-use PRC::Form::PersonalRepos;
-use PRC::Form::ReloadOrgRepos;
-use PRC::Form::ReloadPersonalRepos;
+
+use PRC::Form::Settings::Emails;
+use PRC::Form::Settings::Languages;
+use PRC::Form::Settings::OrgRepos;
+use PRC::Form::Settings::PersonalRepos;
+use PRC::Form::Settings::ReloadOrgRepos;
+use PRC::Form::Settings::ReloadPersonalRepos;
 use PRC::Form::Settings::General;
-use PRC::Form::SkipConfirm;
 
 use List::Util qw/any/;
 
@@ -148,7 +151,7 @@ sub settings :Path('/settings') :Args(0) {
     }
 
     # Reload Personal Repositories
-    my $reload_personal_repos_form = PRC::Form::ReloadPersonalRepos->new;
+    my $reload_personal_repos_form = PRC::Form::Settings::ReloadPersonalRepos->new;
     $c->stash({ reload_personal_repos_form => $reload_personal_repos_form });
     $reload_personal_repos_form->process(params => $c->req->params);
     if($c->req->params->{submit_reload_personal_repos} && $reload_personal_repos_form->validated){
@@ -161,7 +164,7 @@ sub settings :Path('/settings') :Args(0) {
     }
 
     # Personal Repositories
-    my $personal_repos_form = PRC::Form::PersonalRepos->new(user => $user);
+    my $personal_repos_form = PRC::Form::Settings::PersonalRepos->new(user => $user);
     $c->stash({ personal_repos_form => $personal_repos_form });
     $personal_repos_form->process(params => $c->req->params);
     if($c->req->params->{submit_personal_repos} && $personal_repos_form->validated){
@@ -179,7 +182,7 @@ sub settings :Path('/settings') :Args(0) {
     }
 
     # Reload Organizational Repositories
-    my $reload_org_repos_form = PRC::Form::ReloadOrgRepos->new;
+    my $reload_org_repos_form = PRC::Form::Settings::ReloadOrgRepos->new;
     $c->stash({ reload_org_repos_form => $reload_org_repos_form });
     $reload_org_repos_form->process(params => $c->req->params);
     if($c->req->params->{submit_reload_org_repos} && $reload_org_repos_form->validated){
@@ -197,7 +200,7 @@ sub settings :Path('/settings') :Args(0) {
     }
 
     # Organizational Repositories
-    my $org_repos_form = PRC::Form::OrgRepos->new(user => $user);
+    my $org_repos_form = PRC::Form::Settings::OrgRepos->new(user => $user);
     $c->stash({ org_repos_form => $org_repos_form });
     $org_repos_form->process(params => $c->req->params);
     if($c->req->params->{submit_org_repos} && $org_repos_form->validated){
@@ -238,7 +241,7 @@ sub settings :Path('/settings') :Args(0) {
     }
 
     # Preferred Languages
-    my $languages_form = PRC::Form::Languages->new(user => $user);
+    my $languages_form = PRC::Form::Settings::Languages->new(user => $user);
     $c->stash({ languages_form => $languages_form });
     $languages_form->process(params => $c->req->params);
     if($c->req->params->{submit_languages} && $languages_form->validated){
@@ -252,7 +255,7 @@ sub settings :Path('/settings') :Args(0) {
     }
 
     # Email Opt Ins
-    my $emails_form = PRC::Form::Emails->new(user => $user);
+    my $emails_form = PRC::Form::Settings::Emails->new(user => $user);
     $c->stash({ emails_form => $emails_form });
     $emails_form->process(params => $c->req->params);
     if($c->req->params->{submit_emails} && $emails_form->validated){

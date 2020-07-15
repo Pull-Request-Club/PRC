@@ -1,4 +1,4 @@
-package PRC::Form::Languages;
+package PRC::Form::Settings::Languages;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';

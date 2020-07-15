@@ -1,4 +1,4 @@
-package PRC::Form::Emails;
+package PRC::Form::Settings::Emails;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';

@@ -1,4 +1,4 @@
-package PRC::Form::OrgRepos;
+package PRC::Form::Settings::OrgRepos;
 use HTML::FormHandler::Moose;
 extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
