@@ -58,7 +58,11 @@
 [% END -%]
 [% IF alert_success -%]
 <div class="alert alert-success alert-dismissable fade show" role="alert">
-  [% alert_success | html -%]
+  [% IF alert_success_no_html_filter_i_swear_there_is_no_user_input -%]
+    [% alert_success -%]
+  [% ELSE -%]
+    [% alert_success | html -%]
+  [% END -%]
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>

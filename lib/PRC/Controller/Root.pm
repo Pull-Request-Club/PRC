@@ -37,6 +37,8 @@ sub auto :Private {
     alert_warning => delete $c->session->{alert_warning},
     alert_danger  => delete $c->session->{alert_danger},
     $user ? ( logged_in => 1, github_login => $user->github_login ) : (),
+    alert_success_no_html_filter_i_swear_there_is_no_user_input =>
+      delete $c->session->{alert_success_no_html_filter_i_swear_there_is_no_user_input},
   });
 
 }

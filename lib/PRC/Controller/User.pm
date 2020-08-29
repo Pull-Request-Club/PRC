@@ -21,6 +21,7 @@ use PRC::Form::Settings::ReloadPersonalRepos;
 use PRC::Form::Settings::General;
 
 use List::Util qw/any/;
+use utf8;
 
 =encoding utf8
 
@@ -373,7 +374,8 @@ sub done_confirm :Path('/done-confirm') :Args(0) {
   $form->process(params => $c->req->params);
   if($form->validated){
     $user->open_assignment->mark_as_done;
-    $c->session->{alert_success} = 'You have done a great job! Now is time to brag about it: Post a tweet or write a blog. Feel free to tag us along @PullRequestClub. See you next month!';
+    $c->session->{alert_success_no_html_filter_i_swear_there_is_no_user_input} = 1;
+    $c->session->{alert_success} = 'Great job 🎉 Now is time to brag: <a href="https://twitter.com/intent/tweet?via=pullrequestclub&text=I%20just%20submitted%20a%20Pull%20Request%20%F0%9F%8E%89&hashtags=opensource,freesoftware" target="_blank">Click here to tweet about it!</a>';
     $c->response->redirect('/history',303);
     $c->detach;
   }
