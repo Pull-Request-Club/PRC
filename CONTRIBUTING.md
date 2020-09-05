@@ -10,7 +10,7 @@ You may also create new issues to discuss with maintainers.
 
 - Try to follow the same style in the codebase. It would help us a lot to make
 the code readable and easier to maintain.
-- We are using 2 spaces.
+- We use 2 spaces to indent code.
 
 ## Git
 
