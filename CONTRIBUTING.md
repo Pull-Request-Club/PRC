@@ -17,5 +17,5 @@ the code readable and easier to maintain.
 - Rebase before merge (for linear history)
 - Don't make unrelated changes in a commit. This includes whitespace changes too.
 If you want to make a whitespace change, please create another commit just for that.
-- Please do not put "fixes" or "solves" to your commit message or PR text. This
+- Please do not put "fixes" or "solves" in your commit message or PR text. This
 will cause the referenced issue to close automatically.
