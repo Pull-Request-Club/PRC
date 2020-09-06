@@ -22,7 +22,7 @@ See the [wiki](https://github.com/kyzn/PRC/wiki) for further development instruc
 
 # License
 
-MIT. See the License file in the repository.
+MIT. See the [License](LICENSE) file in the repository.
 
 # Author
 
