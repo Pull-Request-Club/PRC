@@ -34,4 +34,5 @@ Kivanc Yazan
 - Andrew Grangaard
 - E. Choroba
 - Karen Etheridge
+- Paul Cochrane
 - Thibault Duponchelle
