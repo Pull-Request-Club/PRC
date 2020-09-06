@@ -2,8 +2,9 @@
 
 ![](root/static/images/home-2019-12-28.png)
 
-Pull Request Club is a web application written in Perl using the Catalyst
-Framework. Users can sign up with their GitHub accounts, and do two things:
+Pull Request Club is a web application written in Perl using the [Catalyst
+Framework](http://www.catalystframework.org/).
+Users can sign up with their GitHub accounts, and do two things:
 - Receive monthly assignments, and
 - Let the system assign their repositories to other participants.
 
