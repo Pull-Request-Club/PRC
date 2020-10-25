@@ -89,10 +89,11 @@ sub numbers :Path('/admin/numbers') :Args(0) {
     org_repo_count => scalar(grep {$_->org_id} @repos),
     org_repo_opted => scalar(grep {!$_->gone_missing && $_->accepting_assignees && $_->org_id} @repos),
 
-    assignment_total => scalar(@assignments),
-    assignment_open  => scalar(grep {$_->status == ASSIGNMENT_OPEN} @assignments),
-    assignment_skip  => scalar(grep {$_->status == ASSIGNMENT_SKIPPED} @assignments),
-    assignment_done  => scalar(grep {$_->status == ASSIGNMENT_DONE} @assignments),
+    assignment_total   => scalar(@assignments),
+    assignment_open    => scalar(grep {$_->status == ASSIGNMENT_OPEN} @assignments),
+    assignment_skip    => scalar(grep {$_->status == ASSIGNMENT_SKIPPED} @assignments),
+    assignment_deleted => scalar(grep {$_->status == ASSIGNMENT_DELETED} @assignments),
+    assignment_done    => scalar(grep {$_->status == ASSIGNMENT_DONE} @assignments),
   };
 
   $c->stash({
@@ -342,29 +343,33 @@ sub _get_assignee_counts {
   my @repos = $user->repos->all;
   my @repo_ids = map {$_->repo_id} @repos;
 
-  my $assignees_total = 0;
-  my $assignees_open  = 0;
-  my $assignees_skip  = 0;
-  my $assignees_done  = 0;
+  my $assignees_total   = 0;
+  my $assignees_open    = 0;
+  my $assignees_skip    = 0;
+  my $assignees_deleted = 0;
+  my $assignees_done    = 0;
 
   foreach my $assignment (@assignments){
     if ( any {$assignment->repo_id eq $_} @repo_ids ){
       $assignees_total++;
-      if ($assignment->status eq ASSIGNMENT_DONE){
-        $assignees_done++;
+      if ($assignment->status eq ASSIGNMENT_OPEN){
+        $assignees_open++;
       } elsif ($assignment->status eq ASSIGNMENT_SKIPPED){
         $assignees_skip++;
-      } else {
-        $assignees_open++;
+      } elsif ($assignment->status eq ASSIGNMENT_DELETED){
+        $assignees_deleted++;
+      } elsif ($assignment->status eq ASSIGNMENT_DONE){
+        $assignees_done++;
       }
     }
   }
 
   return {
-    assignees_total => $assignees_total || '',
-    assignees_open  => $assignees_open  || '',
-    assignees_skip  => $assignees_skip  || '',
-    assignees_done  => $assignees_done  || '',
+    assignees_total   => $assignees_total || '',
+    assignees_open    => $assignees_open  || '',
+    assignees_skip    => $assignees_skip  || '',
+    assignees_deleted => $assignees_deleted || '',
+    assignees_done    => $assignees_done  || '',
   };
 }
 

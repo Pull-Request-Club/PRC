@@ -195,6 +195,8 @@ sub status_string {
     return "Open";
   } elsif ($status == ASSIGNMENT_SKIPPED){
     return "Skipped";
+  } elsif ($status == ASSIGNMENT_DELETED){
+    return "Deleted";
   } elsif ($status == ASSIGNMENT_DONE){
     return "Done";
   } else {
@@ -217,6 +219,8 @@ sub status_color {
   if ($status == ASSIGNMENT_OPEN){
     return "primary";
   } elsif ($status == ASSIGNMENT_SKIPPED){
+    return "secondary";
+  } elsif ($status == ASSIGNMENT_DELETED){
     return "secondary";
   } elsif ($status == ASSIGNMENT_DONE){
     return "success";
