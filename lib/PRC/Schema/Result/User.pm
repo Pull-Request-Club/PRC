@@ -502,9 +502,10 @@ sub received_assignment_count {
 
   my $counts = {
     total     => int(@assignments)                                                 || 0,
-    done      => (scalar(grep {$_->status == ASSIGNMENT_DONE}    @assignments))    || 0,
-    skipped   => (scalar(grep {$_->status == ASSIGNMENT_SKIPPED} @assignments))    || 0,
     open      => (scalar(grep {$_->status == ASSIGNMENT_OPEN}    @assignments))    || 0,
+    skipped   => (scalar(grep {$_->status == ASSIGNMENT_SKIPPED} @assignments))    || 0,
+    deleted   => (scalar(grep {$_->status == ASSIGNMENT_DELETED} @assignments))    || 0,
+    done      => (scalar(grep {$_->status == ASSIGNMENT_DONE}    @assignments))    || 0,
   };
 
   my $score = 5 * $counts->{total} + 20 * $counts->{done} - 1 * $counts->{skipped};
