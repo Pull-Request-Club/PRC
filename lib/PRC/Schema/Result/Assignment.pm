@@ -221,7 +221,7 @@ sub status_color {
   } elsif ($status == ASSIGNMENT_SKIPPED){
     return "secondary";
   } elsif ($status == ASSIGNMENT_DELETED){
-    return "secondary";
+    return "warning";
   } elsif ($status == ASSIGNMENT_DONE){
     return "success";
   } else {
