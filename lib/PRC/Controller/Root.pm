@@ -112,9 +112,9 @@ sub legal :Local :Args(0) {
   my ($self, $c) = @_;
 
   my $user = $c->user;
-  my $never_accepted_any_terms_before = $user->has_never_accepted_any_terms;
 
   if ($user && !$user->has_accepted_latest_terms){
+    my $never_accepted_any_terms_before = $user->has_never_accepted_any_terms;
     my $form = PRC::Form::AcceptLegal->new;
     $form->process(params => $c->req->params);
     $c->stash({ form => $form });
