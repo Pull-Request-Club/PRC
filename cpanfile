@@ -26,7 +26,7 @@ requires 'MIME::Base64::URLSafe';
 requires 'Moose';
 requires 'MooseX::NonMoose';
 requires 'namespace::autoclean';
-requires 'Net::SSLeay' => '1.88';
+requires 'Net::SSLeay';
 requires 'String::Random';
 requires 'Task::Catalyst::Tutorial';
 requires 'Test2::V0';
