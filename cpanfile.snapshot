@@ -972,7 +972,6 @@ DISTRIBUTIONS
       Config::Any::XML undef
       Config::Any::YAML undef
     requirements:
-      Config::General 2.47
       Module::Pluggable::Object 3.6
   Config-General-2.63
     pathname: T/TL/TLINDEN/Config-General-2.63.tar.gz
@@ -1039,12 +1038,6 @@ DISTRIBUTIONS
       Crypt::CBC 2.33
     requirements:
       Digest::MD5 2.00
-      ExtUtils::MakeMaker 0
-  Crypt-DES-2.07
-    pathname: D/DP/DPARIS/Crypt-DES-2.07.tar.gz
-    provides:
-      Crypt::DES 2.07
-    requirements:
       ExtUtils::MakeMaker 0
   CryptX-0.068
     pathname: M/MI/MIK/CryptX-0.068.tar.gz
@@ -2475,13 +2468,14 @@ DISTRIBUTIONS
       File::HomeDir::Windows 1.004
     requirements:
       Carp 0
-      Cwd 3.12
+      Cwd 3
       ExtUtils::MakeMaker 0
       File::Basename 0
       File::Path 2.01
-      File::Spec 3.12
+      File::Spec 3
       File::Temp 0.19
       File::Which 0.05
+      Mac::SystemDirectory 0.04
       POSIX 0
       perl 5.008003
   File-Listing-6.04
@@ -3597,6 +3591,17 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
+  Mac-SystemDirectory-0.13
+    pathname: E/ET/ETHER/Mac-SystemDirectory-0.13.tar.gz
+    provides:
+      Mac::SystemDirectory 0.13
+    requirements:
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      XSLoader 0
+      perl 5.006
+      strict 0
+      warnings 0
   MailTools-2.20
     pathname: M/MA/MARKOV/MailTools-2.20.tar.gz
     provides:
@@ -4591,11 +4596,11 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
-  Net-SSLeay-1.88
-    pathname: C/CH/CHRISN/Net-SSLeay-1.88.tar.gz
+  Net-SSLeay-1.90
+    pathname: C/CH/CHRISN/Net-SSLeay-1.90.tar.gz
     provides:
-      Net::SSLeay 1.88
-      Net::SSLeay::Handle 1.88
+      Net::SSLeay 1.90
+      Net::SSLeay::Handle 1.90
     requirements:
       ExtUtils::MakeMaker 0
       MIME::Base64 0
