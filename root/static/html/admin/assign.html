@@ -38,6 +38,7 @@
       <tr>
         <th scope="col">Repo</th>
         <th scope="col">Given</th>
+        <th scope="col">Done</th>
         <th scope="col">User</th>
         <th scope="col">Org</th>
         <th scope="col">Name</th>
@@ -51,6 +52,7 @@
       <tr>
         <td>[% repo.repo_id -%]</td>
         <td>[% repo.assignment_count -%]</td>
+        <td>[% repo.done_assignment_count -%]</td>
         <td>[% repo.user_name -%]</td>
         <td>[% repo.org_name -%]</td>
         <td><a href="https://github.com/[% repo.name -%]" target="_blank">[% repo.name -%]</a></td>

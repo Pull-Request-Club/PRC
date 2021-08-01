@@ -229,6 +229,7 @@ sub assign :Path('/admin/assign') :Args(0) {
     issues    => $_->github_open_issues_count,
     stars     => $_->github_stargazers_count,
     assignment_count => scalar($_->assignments),
+    done_assignment_count => scalar(grep {$_->status_string eq 'Done'} $_->assignments),
   }} @repos;
 
   $c->stash({
