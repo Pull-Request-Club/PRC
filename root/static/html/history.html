@@ -13,6 +13,7 @@
         <th scope="col">Date</th>
         <th scope="col">Maintainer</th>
         <th scope="col">Repository</th>
+        <th scope="col">Language</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
@@ -22,6 +23,7 @@
         <th scope="row">[% assignment.month_pretty -%]</th>
         <td>[% assignment.repo.user.github_login -%]</td>
         <td><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_full_name | html -%]</a></td>
+        <td>[% assignment.repo.github_language -%]</td>
         <td>[% assignment.status_string -%]</td>
       </tr>
     [% END -%]
@@ -47,6 +49,7 @@
         <th scope="col">Date</th>
         <th scope="col">Assignee</th>
         <th scope="col">Repository</th>
+        <th scope="col">Language</th>
         <th scope="col">Status</th>
       </tr>
     </thead>
@@ -56,6 +59,7 @@
         <th scope="row">[% assignment.month_pretty -%]</th>
         <td>[% assignment.user.github_login -%]</td>
         <td><a href="[% assignment.repo.github_html_url -%]" target="_blank">[% assignment.repo.github_full_name | html -%]</a></td>
+        <td>[% assignment.repo.github_language -%]</td>
         <td>[% assignment.status_string -%]</td>
       </tr>
     [% END -%]
