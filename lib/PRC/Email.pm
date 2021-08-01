@@ -2,6 +2,7 @@ package PRC::Email;
 use namespace::autoclean;
 
 use Email::SendGrid::V3;
+use Template;
 
 =encoding utf8
 
@@ -23,33 +24,52 @@ Does no checks for TOS and opt-in (yet).
 =cut
 
 sub send_new_assignment_email {
-  my ($self, $assignment, $new_user) = @_;
-  return undef unless $assignment;
-  my $user = $assignment->user;
+  my ($self, $assignment, $is_new_user) = @_;
   my $email_id = 1;
-
-  my $to = $user->github_email;
-  my $subject = 'Your ' . $assignment->month_pretty . ' Assignment';
-  my $unsub_link = PRC::Crypt->create_unsubscribe_link($user->user_id, $email_id);
-  my $body=  'Hi!' . ($new_user ? ' Welcome to Pull Request Club!' : '') .'<br><br>
-             You have a new assignment at Pull Request Club.<br><br>
-             Please login at <a href="https://pullrequest.club">pullrequest.club</a> to see its details.<br><br>
-             Kivanc @ Pull Request Club<br>
-             Kadikoy, Istanbul, Turkey 34720<br><br>
-             <a href="'.$unsub_link.'">Click to unsubscribe</a> from New Assignment emails.';
 
   my $sendgrid_api_key = PRC::Secrets->read('SG_API_KEY');
   return undef unless $sendgrid_api_key;
 
+  return undef unless $assignment;
+  my $repo = $assignment->repo;
+  return undef unless $repo;
+  my $user = $assignment->user;
+  return undef unless $user;
+  my $user_id = $user->user_id;
+
+
+  my $body;
+  my $to = $user->github_email;
+  my $subject = 'Your ' . $assignment->month_pretty . ' Assignment';
+  my $unsub_link = PRC::Crypt->create_unsubscribe_link($user_id, $email_id);
+
+  my $tt = Template->new({
+      INCLUDE_PATH => 'root/static/html/email',
+      INTERPOLATE  => 1,
+  }) || die "$Template::ERROR\n";
+
+  $tt->process(
+    'new-assignment.html',
+    {
+      unsub_link   => $unsub_link,
+      is_new_user  => $is_new_user,
+      month_pretty => $assignment->month_pretty,
+      user_github_login     => $user->github_login,
+      repo_github_html_url  => $repo->github_html_url,
+      repo_github_full_name => $repo->github_full_name,
+    },
+    \$body
+  );
+
   Email::SendGrid::V3->new(api_key => $sendgrid_api_key)
-    ->from('"Pull Request Club" <noreply@pullrequest.club>')
+    ->from('"Pull Request Club" <hello@pullrequest.club>')
     ->reply_to('kyzn@cpan.org')
     ->subject($subject)
     ->add_content('text/html', $body)
     ->add_envelope( to => [ $to ] )
     ->send;
 
-  $self->log_email($user,$email_id,$assignment->assignment_id);
+  $self->log_email($user, $email_id, $assignment->assignment_id);
 }
 
 =head2 send_open_reminder_email
@@ -61,32 +81,49 @@ Does no checks for TOS and opt-in (yet).
 
 sub send_open_reminder_email {
   my ($self, $assignment) = @_;
-  my $user = $assignment->user;
   my $email_id = 3;
-
-  my $to = $user->github_email;
-  my $subject = 'Reminder: Your ' . $assignment->month_pretty . ' Assignment';
-  my $unsub_link = PRC::Crypt->create_unsubscribe_link($user->user_id, $email_id);
-  my $body= 'Hi!<br><br>
-             You seem to have an open assignment at Pull Request Club.<br>
-             In order to receive new assignments you should finish or skip your current assignment.<br><br>
-             Please login at <a href="https://pullrequest.club">pullrequest.club</a> to see details.<br><br>
-             Kivanc @ Pull Request Club<br>
-             Kadikoy, Istanbul, Turkey 34720<br><br>
-             <a href="'.$unsub_link.'">Click to unsubscribe</a> from Open Reminder emails.';
 
   my $sendgrid_api_key = PRC::Secrets->read('SG_API_KEY');
   return undef unless $sendgrid_api_key;
 
+  return undef unless $assignment;
+  my $repo = $assignment->repo;
+  return undef unless $repo;
+  my $user = $assignment->user;
+  return undef unless $user;
+  my $user_id = $user->user_id;
+
+  my $body;
+  my $to = $user->github_email;
+  my $subject = 'Reminder: You have an open assignment';
+  my $unsub_link = PRC::Crypt->create_unsubscribe_link($user_id, $email_id);
+
+  my $tt = Template->new({
+      INCLUDE_PATH => 'root/static/html/email',
+      INTERPOLATE  => 1,
+  }) || die "$Template::ERROR\n";
+
+  $tt->process(
+    'open-reminder.html',
+    {
+      unsub_link   => $unsub_link,
+      month_pretty => $assignment->month_pretty,
+      user_github_login     => $user->github_login,
+      repo_github_html_url  => $repo->github_html_url,
+      repo_github_full_name => $repo->github_full_name,
+    },
+    \$body
+  );
+
   Email::SendGrid::V3->new(api_key => $sendgrid_api_key)
-    ->from('"Pull Request Club" <noreply@pullrequest.club>')
+    ->from('"Pull Request Club" <hello@pullrequest.club>')
     ->reply_to('kyzn@cpan.org')
     ->subject($subject)
     ->add_content('text/html', $body)
     ->add_envelope( to => [ $to ] )
     ->send;
 
-  $self->log_email($user,$email_id,$assignment->assignment_id);
+  $self->log_email($user, $email_id, $assignment->assignment_id);
 }
 
 =head2 log_email

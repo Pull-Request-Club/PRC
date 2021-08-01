@@ -29,6 +29,7 @@ requires 'namespace::autoclean';
 requires 'Net::SSLeay';
 requires 'String::Random';
 requires 'Task::Catalyst::Tutorial';
+requires 'Template';
 requires 'Test2::V0';
 requires 'Try::Tiny';
 requires 'WWW::Mechanize';

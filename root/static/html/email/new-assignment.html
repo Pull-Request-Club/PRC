@@ -1,0 +1,23 @@
+<h2>Hi [% user_github_login -%]!</h2>
+
+[% IF is_new_user -%]
+
+Welcome to the Pull Request Club! We're super happy that you joined us.<br>
+<br>
+We went ahead and gave out your first assignment. It's a tutorial that will walk you through your first contribution.<br>
+
+[% ELSE -%]
+
+Your <b>[% month_pretty -%]</b> assignment is ready at Pull Request Club! Here's a link directly to GitHub:<br>
+<h2><a href="[% repo_github_html_url -%]" target="_blank">[% repo_github_full_name | html -%]</a></h2>
+
+[% END -%]
+
+<br>
+Go to <a href="https://pullrequest.club/my-assignment">My Assignment tab</a> to see more details.
+Feel free to click reply if you have any questions. We hope you have fun!<br>
+<br>
+Kivanc @ Pull Request Club<br>
+Tokyo, Japan<br>
+<br>
+<sub><a href="[% unsub_link -%]">Click here to unsubscribe</a> from future New Assignment emails.</sub>
