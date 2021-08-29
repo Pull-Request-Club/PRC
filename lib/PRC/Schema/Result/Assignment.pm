@@ -179,6 +179,7 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F1OarE7Is58XJBIUr3l/ng
 
 use PRC::Constants;
+use PRC::Event;
 
 =head1 METHODS
 
@@ -266,6 +267,7 @@ sub mark_as_skipped {
   $assignment->update({
     status => ASSIGNMENT_SKIPPED,
   });
+  PRC::Event->log_no_c($assignment->user, 'SUCCESS_SKIP_ASSIGNMENT');
 }
 
 =head2 mark_as_done
@@ -279,6 +281,7 @@ sub mark_as_done {
   $assignment->update({
     status => ASSIGNMENT_DONE,
   });
+  PRC::Event->log_no_c($assignment->user, 'SUCCESS_DONE_ASSIGNMENT');
 }
 
 __PACKAGE__->meta->make_immutable;

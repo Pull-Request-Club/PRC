@@ -4,6 +4,7 @@ extends 'HTML::FormHandler';
 with 'HTML::FormHandler::Field::Role::RequestToken';
 
 use namespace::autoclean;
+use PRC::Event;
 use PRC::GitHub;
 
 has '+widget_wrapper' => ( default => 'Bootstrap3' );
@@ -32,6 +33,7 @@ sub validate {
 
   # Confirm PR here
   unless (PRC::GitHub->confirm_pr($repo, $assignee, $form->assignment)){
+    PRC::Event->log_no_c($assignee, 'ERROR_NO_PR');
     $form->add_form_error($message);
   }
 }

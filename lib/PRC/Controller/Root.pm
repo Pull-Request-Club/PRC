@@ -6,6 +6,7 @@ BEGIN { extends 'Catalyst::Controller' }
 
 use PRC::Constants 'LATEST_LEGAL_DATE';
 use PRC::Form::AcceptLegal;
+use PRC::Event;
 
 #
 # Sets the actions in this controller to be registered with no prefix
@@ -27,6 +28,7 @@ sub auto :Private {
   my $user = $c->user;
 
   unless (my $has_seen_cookie_notice = $c->session->{has_seen_cookie_notice}){
+    PRC::Event->log($c, 'SHOW_COOKIE');
     $c->stash->{show_cookie_notice}       = 1;
     $c->session->{has_seen_cookie_notice} = 1;
   }
@@ -76,6 +78,7 @@ sub hello :Local :Args(0) {
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_HELLO');
   $c->stash({
     template => 'static/html/hello.html',
   });
@@ -92,6 +95,7 @@ Show some information about PRC + help users.
 sub help :Local :Args(0) {
   my ($self, $c) = @_;
 
+  PRC::Event->log($c, 'VIEW_HELP');
   $c->stash({
     template => 'static/html/help.html',
   });
@@ -139,6 +143,7 @@ sub legal :Local :Args(0) {
     $c->stash({ accepted_date => $user->tos_agree_time->ymd });
   }
 
+  PRC::Event->log($c, 'VIEW_LEGAL');
   $c->stash({
     template       => 'static/html/legal.html',
     effective_date => LATEST_LEGAL_DATE->ymd,
@@ -154,6 +159,7 @@ Standard 404 error page
 sub default :Path {
   my ( $self, $c ) = @_;
 
+  PRC::Event->log($c, 'VIEW_404');
   $c->response->body('Page not found.');
   $c->response->status(404);
 }

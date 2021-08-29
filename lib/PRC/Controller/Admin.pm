@@ -35,11 +35,13 @@ sub auto :Private {
   my $user = $c->user;
 
   if ($user && ($user->github_id == 1781335) && ($user->github_login eq 'kyzn')){
+    PRC::Event->log($c, "ADMIN_OK");
     $c->stash({ show_admin_navbar => 1, hide_navbar => 1, hide_footer => 1 });
     return 1;
   }
 
   # Default to 404
+  PRC::Event->log($c, "ADMIN_NG");
   $c->response->body('Page not found.');
   $c->response->status(404);
   $c->detach;
@@ -96,6 +98,7 @@ sub numbers :Path('/admin/numbers') :Args(0) {
     assignment_done    => scalar(grep {$_->status == ASSIGNMENT_DONE} @assignments),
   };
 
+  PRC::Event->log($c, 'VIEW_ADMIN_NUMBERS');
   $c->stash({
     template   => 'static/html/admin/numbers.html',
     active_tab => 'numbers',
@@ -138,6 +141,7 @@ sub users :Path('/admin/users') :Args(0) {
     %{_get_assignee_counts($_,@assignments)},
   }} @users;
 
+  PRC::Event->log($c, 'VIEW_ADMIN_USERS');
   $c->stash({
     users      => \@users,
     template   => 'static/html/admin/users.html',
@@ -156,6 +160,7 @@ sub user :Path('/admin/user') :Args(1) {
   my @taken = $user->assignments_taken;
   my @given = $user->assignments_given;
 
+  PRC::Event->log($c, 'VIEW_ADMIN_USER_ID');
   $c->stash({
     taken       => \@taken,
     given       => \@given,
@@ -232,6 +237,7 @@ sub assign :Path('/admin/assign') :Args(0) {
     done_assignment_count => scalar(grep {$_->status_string eq 'Done'} $_->assignments),
   }} @repos;
 
+  PRC::Event->log($c, 'VIEW_ADMIN_ASSIGN');
   $c->stash({
     users      => \@users,
     repos      => \@repos,
@@ -279,6 +285,7 @@ sub assignments :Path('/admin/assignments') :Args(0) {
     push @{$assignments_per_month->{$assignment->{month}}}, $assignment;
   }
 
+  PRC::Event->log($c, 'VIEW_ADMIN_ASSIGNMENTS');
   $c->stash({
     assignments_per_month => $assignments_per_month,
     template   => 'static/html/admin/assignments.html',
@@ -308,6 +315,7 @@ sub assignment :Path('/admin/assignment') :Args(1) {
 
   if($c->req->params->{submit_new_assignment_email} && $new_assignment_email_form->validated){
     PRC::Email->send_new_assignment_email($assignment);
+    PRC::Event->log($c, 'SUCCESS_NEW_ASSIGNMENT_EMAIL');
     $c->session({ alert_success => 'New Assignment email sent.' });
     $c->response->redirect('/admin/assignment/'.$id,303);
     $c->detach;
@@ -315,11 +323,13 @@ sub assignment :Path('/admin/assignment') :Args(1) {
 
   if($c->req->params->{submit_open_reminder_email} && $open_reminder_email_form->validated){
     PRC::Email->send_open_reminder_email($assignment);
+    PRC::Event->log($c, 'SUCCESS_OPEN_REMINDER_EMAIL');
     $c->session({ alert_success => 'Open Reminder email sent.' });
     $c->response->redirect('/admin/assignment/'.$id,303);
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_ADMIN_ASSIGNMENT_ID');
   $c->stash({
     assignment => $assignment,
     template   => 'static/html/admin/assignment.html',

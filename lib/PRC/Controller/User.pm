@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Constants;
+use PRC::Event;
 
 use PRC::Form::DoneConfirm;
 use PRC::Form::SkipConfirm;
@@ -144,6 +145,7 @@ sub settings :Path('/settings') :Args(0) {
     # If we are coming back from GitHub additional scope confirmation, reload org repos
     if (delete $c->session->{fetch_org_reauth_done}){
       $user->fetch_org_repos;
+      PRC::Event->log($c, 'SUCCESS_ORG_REPO_LOADED');
       $c->session({ alert_success => 'Your organizational repositories are loaded.' });
       $c->session({ setting_tab   => 'organizational' });
       # Reload
@@ -157,6 +159,7 @@ sub settings :Path('/settings') :Args(0) {
     $reload_personal_repos_form->process(params => $c->req->params);
     if($c->req->params->{submit_reload_personal_repos} && $reload_personal_repos_form->validated){
       $user->fetch_personal_repos;
+      PRC::Event->log($c, 'SUCCESS_PER_REPO_RELOADED');
       $c->session({ alert_success => 'Your personal repositories are reloaded.' });
       $c->session({ setting_tab   => 'personal' });
       # Reload
@@ -175,6 +178,7 @@ sub settings :Path('/settings') :Args(0) {
         my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
         $repo->update({ accepting_assignees => $is_selected });
       }
+      PRC::Event->log($c, 'SUCCESS_PER_REPO_UPDATED');
       $c->session({ alert_success => 'Your selected personal repositories are updated.'});
       $c->session({ setting_tab   => 'personal' });
       # Reload
@@ -193,6 +197,7 @@ sub settings :Path('/settings') :Args(0) {
       $c->detach;
       # Continue with the scope
       $user->fetch_org_repos;
+      PRC::Event->log($c, 'SUCCESS_ORG_REPO_RELOADED');
       $c->session({ alert_success => 'Your organizational repositories are reloaded.' });
       $c->session({ setting_tab   => 'organizational' });
       # Reload
@@ -211,6 +216,7 @@ sub settings :Path('/settings') :Args(0) {
         my $is_selected = (any {$_ eq $github_id} @$selected_repos) ? 1 : 0;
         $repo->update({ accepting_assignees => $is_selected });
       }
+      PRC::Event->log($c, 'SUCCESS_ORG_REPO_UPDATED');
       $c->session({ alert_success => 'Your selected organizational repositories are updated.'});
       $c->session({ setting_tab   => 'organizational' });
       # Reload
@@ -234,6 +240,7 @@ sub settings :Path('/settings') :Args(0) {
         is_receiving_assignments => $new_values->{is_receiving_assignments},
         is_syncing_forked_repos  => $new_values->{is_syncing_forked_repos},
       });
+      PRC::Event->log($c, 'SUCCESS_GEN_SET_UPDATED');
       $c->session->{alert_success} = 'Your settings are updated.';
       $c->session({ setting_tab   => 'general' });
       # Reload
@@ -248,6 +255,7 @@ sub settings :Path('/settings') :Args(0) {
     if($c->req->params->{submit_languages} && $languages_form->validated){
       my $selected_langs = $languages_form->values->{lang_select};
       $user->update_langs($selected_langs);
+      PRC::Event->log($c, 'SUCCESS_PREF_LANG_UPDATED');
       $c->session({alert_success => 'Your preferred languages are updated.'});
       $c->session({ setting_tab   => 'languages' });
       # Reload
@@ -262,6 +270,7 @@ sub settings :Path('/settings') :Args(0) {
     if($c->req->params->{submit_emails} && $emails_form->validated){
       my $selected_emails = $emails_form->values->{email_select};
       $user->update_emails($selected_emails);
+      PRC::Event->log($c, 'SUCCESS_PREF_EMAIL_UPDATED');
       $c->session({alert_success => 'Your email preferences are updated.'});
       $c->session({ setting_tab   => 'emails' });
       # Reload
@@ -271,6 +280,7 @@ sub settings :Path('/settings') :Args(0) {
 
   } # end TOS check
 
+  PRC::Event->log($c, 'VIEW_SETTINGS');
   $c->stash({
     template   => 'static/html/settings.html',
     active_tab => 'settings',
@@ -291,6 +301,7 @@ sub my_assignment :Path('/my-assignment') :Args(0) {
   $c->forward('add_announcement');
   my $user = $c->user;
 
+  PRC::Event->log($c, 'VIEW_MY_ASSIGNMENT');
   $c->stash({
     assignment => $user->open_assignment,
     opted_in   => $user->is_receiving_assignments,
@@ -326,6 +337,7 @@ sub history :Path('/history') :Args(0) {
   my @taken = $user->assignments_taken;
   my @given = $user->assignments_given;
 
+  PRC::Event->log($c, 'VIEW_HISTORY');
   $c->stash({
     taken       => \@taken,
     given       => \@given,
@@ -354,6 +366,7 @@ sub skip_confirm :Path('/skip-confirm') :Args(0) {
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_SKIP_CONFIRM');
   $c->stash({
     template => 'static/html/skip-confirm.html',
     form     => $form,
@@ -380,6 +393,7 @@ sub done_confirm :Path('/done-confirm') :Args(0) {
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_DONE_CONFIRM');
   $c->stash({
     template => 'static/html/done-confirm.html',
     form     => $form,
@@ -405,6 +419,7 @@ sub deactivate_confirm :Path('/deactivate-confirm') :Args(0) {
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_DEACT_CONFIRM');
   $c->stash({
     template => 'static/html/deactivate-confirm.html',
     form     => $form,
@@ -430,6 +445,7 @@ sub delete_confirm :Path('/delete-confirm') :Args(0) {
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_DEL_CONFIRM');
   $c->stash({
     template => 'static/html/deactivate-confirm.html',
     form     => $form,

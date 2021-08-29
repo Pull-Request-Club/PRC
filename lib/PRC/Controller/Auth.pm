@@ -6,6 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use DateTime;
 use PRC::Email;
+use PRC::Event;
 use PRC::Form::Reactivate;
 use PRC::GitHub;
 
@@ -32,6 +33,7 @@ sub login :Path('/login') :Args(0) {
 
   # TODO: add a "state" and keep it in session
 
+  PRC::Event->log($c, 'VIEW_LOGIN');
   my $redirect_url = $c->user_exists ? '/' : PRC::GitHub->authenticate_url;
   $c->response->redirect($redirect_url,303);
   $c->detach;
@@ -46,6 +48,7 @@ A private action that sets an error message and detaches to '/'.
 sub login_error :Private {
   my ($self, $c, $error) = @_;
 
+  PRC::Event->log($c, 'ERROR_LOGIN');
   $error ||= 'Login was not successful, please try again.';
   $c->session->{alert_danger} = $error;
   $c->response->redirect('/',303);
@@ -62,6 +65,7 @@ sub callback :Path('/callback') :Args(0) {
   my ($self, $c) = @_;
 
   # TODO: rate limit this endpoint.
+  PRC::Event->log($c, 'VIEW_CALLBACK');
 
   my $code         = $c->req->params->{code}               or $c->forward('login_error');
   my $access_token = PRC::GitHub->access_token($code)      or $c->forward('login_error');
@@ -100,6 +104,7 @@ sub callback :Path('/callback') :Args(0) {
     $user->update($db_args);
   } else {
     $user = $rs->create($db_args);
+    PRC::Event->log($c, 'SUCCESS_CREATE_USER');
     # If that didn't work, kick out
     $c->forward('login_error') unless $user;
   }
@@ -127,6 +132,7 @@ sub logout :Path('/logout') :Args(0) {
 
   my $has_seen_cookie_notice = $c->session->{has_seen_cookie_notice};
 
+  PRC::Event->log($c, 'VIEW_LOGOUT');
   $c->delete_session;
   $c->logout;
 
@@ -164,6 +170,7 @@ sub reactivate :Path('/reactivate') :Args(0) {
     $c->detach;
   }
 
+  PRC::Event->log($c, 'VIEW_REACTIVATE');
   $c->stash({
     template => 'static/html/reactivate.html',
     form     => $form,

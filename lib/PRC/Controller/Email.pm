@@ -6,6 +6,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 
 use PRC::Constants;
 use PRC::Crypt;
+use PRC::Event;
 use PRC::Form::UnsubConfirm;
 
 =encoding utf8
@@ -27,6 +28,7 @@ Catalyst Controller.
 sub unsub :Path('/unsub') :Args(2) {
   my ($self, $c, $ciphertext, $hmac) = @_;
 
+  PRC::Event->log($c, 'VIEW_UNSUB');
   $c->stash({
     hide_navbar => 1,
     hide_footer => 1,
@@ -34,12 +36,14 @@ sub unsub :Path('/unsub') :Args(2) {
   });
 
   unless ($ciphertext && $hmac){
+    PRC::Event->log($c, 'ERROR_UNSUB_MISSING_ARG');
     $c->stash({ msg => "I can't confirm your unsubscribe link." });
     $c->detach;
   }
 
   my $data = PRC::Crypt->_decrypt_data({ciphertext => $ciphertext, hmac => $hmac});
   unless ($data){
+    PRC::Event->log($c, 'ERROR_UNSUB_BAD_ARG');
     $c->stash({ msg => "I can't confirm your unsubscribe link." });
     $c->detach;
   }
@@ -51,6 +55,7 @@ sub unsub :Path('/unsub') :Args(2) {
 
   my $current_time = time();
   unless ($current_time < $data->{expire_time}){
+    PRC::Event->log($c, 'ERROR_UNSUB_EXPIRED');
     $c->stash({ msg => "I can't confirm your unsubscribe link." });
     $c->detach;
   }
@@ -68,6 +73,7 @@ sub unsub :Path('/unsub') :Args(2) {
 
     if ($row){
       $row->delete;
+      PRC::Event->log($c, 'SUCCESS_UNSUB');
     }
 
     $c->stash({ msg => "You are now unsubscribed from $email_print_name emails." });

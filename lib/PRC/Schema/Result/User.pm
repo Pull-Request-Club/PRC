@@ -310,6 +310,7 @@ __PACKAGE__->has_many(
 
 use DateTime;
 use PRC::Constants;
+use PRC::Event;
 use PRC::GitHub;
 use List::Util qw/any first/;
 
@@ -338,6 +339,7 @@ sub activate {
     is_deactivated        => 0,
     scheduled_delete_time => undef,
   });
+  PRC::Event->log_no_c($user, 'SUCCESS_ACTIVATE');
 }
 
 =head2 deactivate
@@ -352,6 +354,7 @@ sub deactivate {
     is_deactivated => 1,
     github_token   => undef,
   });
+  PRC::Event->log_no_c($user, 'SUCCESS_DEACTIVATE');
 }
 
 =head2 schedule_deletion
@@ -367,6 +370,7 @@ sub schedule_deletion {
     github_token          => undef,
     scheduled_delete_time => DateTime->now->add(days=>30)->datetime,
   });
+  PRC::Event->log_no_c($user, 'SUCCESS_SCHEDULE_DEL');
 }
 
 =head2 has_accepted_latest_terms
@@ -408,6 +412,7 @@ sub accept_latest_terms {
     tos_agree_time     => DateTime->now->datetime,
     tos_agreed_version => LATEST_LEGAL_DATE,
   });
+  PRC::Event->log_no_c($user, 'SUCCESS_ACCEPT_TOS');
 }
 
 =head2 can_receive_assignments
