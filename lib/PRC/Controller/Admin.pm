@@ -107,6 +107,24 @@ sub numbers :Path('/admin/numbers') :Args(0) {
 
 }
 
+=head2 /admin/events
+
+List events.
+
+=cut
+
+sub events :Path('/admin/events') :Args(0) {
+  my ($self, $c) = @_;
+  PRC::Event->log($c, 'VIEW_ADMIN_EVENTS');
+  my @events = reverse $c->model('PRCDB::Event')->all;
+
+  $c->stash({
+    template   => 'static/html/admin/events.html',
+    active_tab => 'events',
+    events => \@events,
+  });
+}
+
 =head2 /admin/users
 
 List users.
