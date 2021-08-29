@@ -1,0 +1,24 @@
+<div class="container">
+  <br>
+  <table class="table table-hover table-striped table-sm">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">User</th>
+        <th scope="col">Time</th>
+        <th scope="col">Event</th>
+      </tr>
+    </thead>
+    <tbody>
+    [% FOREACH event IN events_to_display -%]
+      <tr>
+        <td>[% event.event_id -%]</td>
+        <td>[% IF event.user_id > 0 -%]<a href="/admin/user/[% event.user_id -%]">[% event.user_id -%]</a>[% ELSE -%]Logged Out[% END -%]</td>
+        <td>[% event.create_time -%]</td>
+        <td>[% event.event_string -%]</td>
+      </tr>
+    [% END -%]
+    </tbody>
+  </table>
+  <br>
+</div>

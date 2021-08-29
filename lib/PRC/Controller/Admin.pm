@@ -116,12 +116,17 @@ List events.
 sub events :Path('/admin/events') :Args(0) {
   my ($self, $c) = @_;
   PRC::Event->log($c, 'VIEW_ADMIN_EVENTS');
-  my @events = reverse $c->model('PRCDB::Event')->all;
+  my @all_events = reverse $c->model('PRCDB::Event')->all;
+  my @logged_in_events  = grep {$_->user_id}  @all_events;
+  my @logged_out_events = grep {!$_->user_id} @all_events;
 
   $c->stash({
     template   => 'static/html/admin/events.html',
     active_tab => 'events',
-    events => \@events,
+    events_tab => 'logged_in',
+    all_events => \@all_events,
+    logged_in_events  => \@logged_in_events,
+    logged_out_events => \@logged_out_events,
   });
 }
 
