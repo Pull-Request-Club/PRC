@@ -13,7 +13,7 @@
     [% FOREACH event IN events -%]
       <tr>
         <td>[% event.event_id -%]</td>
-        <td>[% IF event.user_id > 0 -%]<a href="/admin/user/[% user.user_id -%]">[% event.user_id -%]</a>[% ELSE -%]Logged Out[% END -%]</td>
+        <td>[% IF event.user_id > 0 -%]<a href="/admin/user/[% event.user_id -%]">[% event.user_id -%]</a>[% ELSE -%]Logged Out[% END -%]</td>
         <td>[% event.create_time -%]</td>
         <td>[% event.event_string -%]</td>
       </tr>
