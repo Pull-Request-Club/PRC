@@ -74,10 +74,16 @@
 [% END -%]
 [% IF alert_info -%]
 <div class="alert alert-info alert-dismissable fade show" role="alert">
-  [% alert_info | html -%]
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  [% IF alert_info_no_html_filter_i_swear_there_is_no_user_input -%]
+    [% alert_info -%]
+  [% ELSE -%]
+    [% alert_info | html -%]
+  [% END -%]
+  [% IF !alert_info_hide_close_button -%]
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  [% END -%]
 </div>
 [% END -%]
 [% IF alert_warning -%]

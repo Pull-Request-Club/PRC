@@ -102,6 +102,20 @@ sub add_announcement :Private {
     $c->stash->{alert_info} = "Now you can select your preferred languages! Click \"Settings\" above to get started.";
   }
 
+  # Hacktoberfest
+  if ( DateTime->now > DateTime->new({year=>2021,month=>9, day=>30})
+    && DateTime->now < DateTime->new({year=>2021,month=>11,day=>1 })
+  ){
+    $c->stash->{alert_info_no_html_filter_i_swear_there_is_no_user_input} = 1;
+    $c->stash->{alert_info_hide_close_button} = 1;
+    $c->stash->{alert_info} = "<h2>⚠️ An important note for Hacktoberfest ⚠️</h2>
+    <ol>
+    <li>Some maintainers do not participate in Hacktoberfest. Please be respectful for them.</li>
+    <li>Please understand that some pull requests do not count towards Hacktoberfest. Our welcome assignment (where you add your name to a file) is one example.</li>
+    <li>Learn more about Hacktoberfest Values at <a href=\"https://hacktoberfest.digitalocean.com/resources\" target=\"_blank\">this link</a>. Let's try to make valuable contributions and have fun!</li>
+    </ol>";
+  }
+
 }
 
 
