@@ -7,6 +7,7 @@ BEGIN { extends 'Catalyst::Controller'; }
 use PRC::Constants;
 use PRC::Email;
 use PRC::Form::Admin::NewAssignmentEmail;
+use PRC::Form::Admin::NewFeatureEmail;
 use PRC::Form::Admin::OpenReminderEmail;
 use List::Util qw/any first/;
 
@@ -426,6 +427,40 @@ sub _get_repo_counts {
     all_repos_total         => $all_repos_tot || '',
     all_repos_opted_in      => $all_repos_opt || '',
   };
+}
+
+=head2 /admin/email
+
+Send email to users
+
+=cut
+
+sub email :Path('/admin/email') :Args(0) {
+  my ($self, $c) = @_;
+
+  my $new_feature_email_form = PRC::Form::Admin::NewFeatureEmail->new;
+  $c->stash({ new_feature_email_form => $new_feature_email_form });
+  $new_feature_email_form->process(params => $c->req->params);
+
+  if($c->req->params->{submit_new_feature_email} && $new_feature_email_form->validated){
+    my @user_ids = split(',', $new_feature_email_form->values->{user_ids});
+    foreach my $user_id (@user_ids){
+      my $user = $c->model('PRCDB::User')->find($user_id);
+      use DDP; warn np $user;
+      next unless $user;
+      PRC::Email->send_new_feature_email($user);
+      PRC::Event->log($c, 'SUCCESS_NEW_FEATURE_EMAIL');
+    }
+    $c->session({ alert_success => 'New Feature emails sent.' });
+    $c->response->redirect('/admin/email', 303);
+    $c->detach;
+  }
+
+  PRC::Event->log($c, 'VIEW_ADMIN_EMAIL');
+  $c->stash({
+    form     => $new_feature_email_form,
+    template => 'static/html/admin/email.html',
+  });
 }
 
 __PACKAGE__->meta->make_immutable;
