@@ -19,7 +19,7 @@ We are always looking forward to your contributions.
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Contributing](CONTRIBUTING.md)
 
-See the [wiki](https://github.com/kyzn/PRC/wiki) for further development instructions.
+See the [wiki](https://github.com/Pull-Request-Club/PRC/wiki) for further development instructions.
 
 # License
 
