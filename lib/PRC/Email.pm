@@ -149,7 +149,7 @@ sub send_new_feature_email {
 
   my $body;
   my $to = $user->github_email;
-  my $subject = 'Pull Request Club T-shirt Survey';
+  my $subject = 'Reminder: Pull Request Club T-shirt Survey';
   my $unsub_link = PRC::Crypt->create_unsubscribe_link($user_id, $email_id);
 
   my $tt = Template->new({
