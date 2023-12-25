@@ -17,3 +17,4 @@ add-email-log 2020-06-30T20:02:33Z Kivanc Yazan <kyzn@cpan.org> # Add email-log 
 add-user-sync-forked 2020-07-15T09:26:33Z Kivanc Yazan <kyzn@cpan.org> # Add user.is_syncing_forked_repos
 repo-add-drop-cols 2020-07-15T11:25:13Z Kivanc Yazan <kyzn@cpan.org> # Add repo fork cols, drop unused URL cols
 add-event-table 2021-08-28T20:26:58Z Kivanc Yazan <kyzn@cpan.org> # Add event table
+add-timeout-email 2023-12-25T09:30:52Z Kivanc Yazan <kyzn@cpan.org> # Add row for timeout email
