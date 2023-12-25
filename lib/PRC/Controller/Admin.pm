@@ -9,6 +9,7 @@ use PRC::Email;
 use PRC::Form::Admin::NewAssignmentEmail;
 use PRC::Form::Admin::NewFeatureEmail;
 use PRC::Form::Admin::OpenReminderEmail;
+use PRC::Form::Admin::TimeoutEmail;
 use List::Util qw/any first/;
 
 =encoding utf8
@@ -338,6 +339,10 @@ sub assignment :Path('/admin/assignment') :Args(1) {
   $c->stash({ open_reminder_email_form => $open_reminder_email_form });
   $open_reminder_email_form->process(params => $c->req->params);
 
+  my $timeout_email_form = PRC::Form::TimeoutEmail->new;
+  $c->stash({ timeout_email_form => $timeout_email_form });
+  $timeout_email_form->process(params => $c->req->params);
+
   if($c->req->params->{submit_new_assignment_email} && $new_assignment_email_form->validated){
     PRC::Email->send_new_assignment_email($assignment);
     PRC::Event->log($c, 'SUCCESS_NEW_ASSIGNMENT_EMAIL');
@@ -350,6 +355,14 @@ sub assignment :Path('/admin/assignment') :Args(1) {
     PRC::Email->send_open_reminder_email($assignment);
     PRC::Event->log($c, 'SUCCESS_OPEN_REMINDER_EMAIL');
     $c->session({ alert_success => 'Open Reminder email sent.' });
+    $c->response->redirect('/admin/assignment/'.$id,303);
+    $c->detach;
+  }
+
+  if($c->req->params->{submit_timeout_email} && $timeout_email_form->validated){
+    PRC::Email->send_timeout_email($assignment);
+    PRC::Event->log($c, 'SUCCESS_TIMEOUT_EMAIL');
+    $c->session({ alert_success => 'Timeout email sent.' });
     $c->response->redirect('/admin/assignment/'.$id,303);
     $c->detach;
   }
