@@ -19,7 +19,6 @@ This is a library to send emails through SendGrid Web API.
 =head2 send_new_assignment_email
 
 Takes in assignment. Sends new assignment email.
-Does no checks for TOS and opt-in (yet).
 
 =cut
 
@@ -35,8 +34,9 @@ sub send_new_assignment_email {
   return undef unless $repo;
   my $user = $assignment->user;
   return undef unless $user;
+  return undef unless $user->has_accepted_latest_terms;
+  return undef unless $user->is_subscribed_to($email_id);
   my $user_id = $user->user_id;
-
 
   my $body;
   my $to = $user->github_email;
@@ -75,7 +75,6 @@ sub send_new_assignment_email {
 =head2 send_open_reminder_email
 
 Takes in assignment. Sends open reminder email.
-Does no checks for TOS and opt-in (yet).
 
 =cut
 
@@ -91,6 +90,8 @@ sub send_open_reminder_email {
   return undef unless $repo;
   my $user = $assignment->user;
   return undef unless $user;
+  return undef unless $user->has_accepted_latest_terms;
+  return undef unless $user->is_subscribed_to($email_id);
   my $user_id = $user->user_id;
 
   my $body;
