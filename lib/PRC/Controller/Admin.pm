@@ -96,6 +96,7 @@ sub numbers :Path('/admin/numbers') :Args(0) {
     assignment_open    => scalar(grep {$_->status == ASSIGNMENT_OPEN} @assignments),
     assignment_skip    => scalar(grep {$_->status == ASSIGNMENT_SKIPPED} @assignments),
     assignment_deleted => scalar(grep {$_->status == ASSIGNMENT_DELETED} @assignments),
+    assignment_timeout => scalar(grep {$_->status == ASSIGNMENT_TIMEOUT} @assignments),
     assignment_done    => scalar(grep {$_->status == ASSIGNMENT_DONE} @assignments),
   };
 
@@ -382,6 +383,7 @@ sub _get_assignee_counts {
   my $assignees_open    = 0;
   my $assignees_skip    = 0;
   my $assignees_deleted = 0;
+  my $assignees_timeout = 0;
   my $assignees_done    = 0;
 
   foreach my $assignment (@assignments){
@@ -393,6 +395,8 @@ sub _get_assignee_counts {
         $assignees_skip++;
       } elsif ($assignment->status eq ASSIGNMENT_DELETED){
         $assignees_deleted++;
+      } elsif ($assignment->status eq ASSIGNMENT_TIMEOUT){
+        $assignees_timeout++;
       } elsif ($assignment->status eq ASSIGNMENT_DONE){
         $assignees_done++;
       }
@@ -404,6 +408,7 @@ sub _get_assignee_counts {
     assignees_open    => $assignees_open  || '',
     assignees_skip    => $assignees_skip  || '',
     assignees_deleted => $assignees_deleted || '',
+    assignees_timeout => $assignees_timeout || '',
     assignees_done    => $assignees_done  || '',
   };
 }

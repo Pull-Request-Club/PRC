@@ -23,6 +23,7 @@ use constant { LATEST_LEGAL_DATE => DateTime->new(
 use constant ASSIGNMENT_OPEN    => 0;
 use constant ASSIGNMENT_SKIPPED => 1;
 use constant ASSIGNMENT_DELETED => 2;
+use constant ASSIGNMENT_TIMEOUT => 3;
 use constant ASSIGNMENT_DONE    => 10;
 
 our @EXPORT = qw/
@@ -31,6 +32,7 @@ our @EXPORT = qw/
   ASSIGNMENT_OPEN
   ASSIGNMENT_SKIPPED
   ASSIGNMENT_DELETED
+  ASSIGNMENT_TIMEOUT
   ASSIGNMENT_DONE
 /;
 

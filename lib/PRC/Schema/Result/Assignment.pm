@@ -198,6 +198,8 @@ sub status_string {
     return "Skipped";
   } elsif ($status == ASSIGNMENT_DELETED){
     return "Deleted";
+  } elsif ($status == ASSIGNMENT_TIMEOUT){
+    return "Timeout";
   } elsif ($status == ASSIGNMENT_DONE){
     return "Done";
   } else {
@@ -208,9 +210,12 @@ sub status_string {
 =head2 status_color
 
 Returns bootstrap class that represents color for assignment.
-Open    = Blue  = Primary
-Skipped = Grey  = Secondary
-Done    = Green = Success
+Open    = Blue   = Primary
+Skipped = Grey   = Secondary
+Deleted = Yellow = Warning
+Timeout = White  = White
+Done    = Green  = Success
+Other   = Red    = Danger
 
 =cut
 
@@ -223,10 +228,12 @@ sub status_color {
     return "secondary";
   } elsif ($status == ASSIGNMENT_DELETED){
     return "warning";
+  } elsif ($status == ASSIGNMENT_TIMEOUT){
+    return "white";
   } elsif ($status == ASSIGNMENT_DONE){
     return "success";
   } else {
-    return "info" ;
+    return "danger" ;
   }
 }
 
