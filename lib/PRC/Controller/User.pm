@@ -95,16 +95,9 @@ sub add_announcement :Private {
   my $user = $c->user;
   return 1 unless $user;
 
-  # Now you can select preferred languages (until mid November)
-  if (!$user->has_any_active_user_langs
-    && DateTime->now < DateTime->new({year=>2019,month=>11,day=>15})
-  ){
-    $c->stash->{alert_info} = "Now you can select your preferred languages! Click \"Settings\" above to get started.";
-  }
-
   # Hacktoberfest
-  if ( DateTime->now > DateTime->new({year=>2021,month=>9, day=>30})
-    && DateTime->now < DateTime->new({year=>2021,month=>11,day=>1 })
+  if ( DateTime->now > DateTime->new({year=>2025,month=>9, day=>30})
+    && DateTime->now < DateTime->new({year=>2025,month=>11,day=>1 })
   ){
     $c->stash->{alert_info_no_html_filter_i_swear_there_is_no_user_input} = 1;
     $c->stash->{alert_info_hide_close_button} = 1;
@@ -114,6 +107,15 @@ sub add_announcement :Private {
     <li>Please understand that some pull requests do not count towards Hacktoberfest. Our welcome assignment (where you add your name to a file) is one example.</li>
     <li>Learn more about Hacktoberfest Values at <a href=\"https://hacktoberfest.digitalocean.com/resources\" target=\"_blank\">this link</a>. Let's try to make valuable contributions and have fun!</li>
     </ol>";
+  }
+
+  # 2024 report
+  if ( DateTime->now > DateTime->new({year=>2025,month=>5, day=>24})
+    && DateTime->now < DateTime->new({year=>2025,month=>8,day=>1 })
+  ){
+    $c->stash->{alert_info_no_html_filter_i_swear_there_is_no_user_input} = 1;
+    $c->stash->{alert_info_hide_close_button} = 0;
+    $c->stash->{alert_info} = "<a href=\"https://kyzn.org/pull-request-club-2024-report/\" target=\"_blank\">Pull Request Club 2024 report</a> is now available! Thanks for being a member of the Pull Request Club!";
   }
 
 }
